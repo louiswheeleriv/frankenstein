@@ -1,12 +1,18 @@
 package com.example.frankenstein;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Performance {
 
 	long performance_id;
 	String description;
-	long stage_id;
 	int startTime;
-	long production_id;
+	
+	List<Actor> actors = new ArrayList<Actor>();
+	List<Crew> crew = new ArrayList<Crew>();
+	Stage stage = new Stage();
+	Production production = new Production();
 	
 	public Performance(){
 		
@@ -28,12 +34,12 @@ public class Performance {
 		this.description = description;
 	}
 
-	public long getStageId() {
-		return stage_id;
+	public Stage getStage() {
+		return stage;
 	}
 
-	public void setStageId(long stage_id) {
-		this.stage_id = stage_id;
+	public void setStage(Stage stage) {
+		this.stage = stage;
 	}
 
 	public int getStartTime() {
@@ -44,12 +50,28 @@ public class Performance {
 		this.startTime = startTime;
 	}
 
-	public long getProductionId() {
-		return production_id;
+	public Production getProduction() {
+		return production;
 	}
 
-	public void setProductionId(long production_id) {
-		this.production_id = production_id;
+	public void setProduction(Production production) {
+		this.production = production;
+	}
+	
+	public List<Actor> getActors(){
+		return actors;
+	}
+	
+	public void setActors(List<Actor> actors){
+		this.actors = actors;
+	}
+	
+	public List<Crew> getCrew(){
+		return crew;
+	}
+	
+	public void setCrew(List<Crew> crew){
+		this.crew = crew;
 	}
 	
 }
