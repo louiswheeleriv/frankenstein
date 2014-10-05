@@ -62,7 +62,7 @@ DATABASES = {
         'NAME': 'macharir',
         'USER': 'macharir',
         'PASSWORD': '',
-        'HOST': 'macharir@tomcat.cs.lafayette.edu',
+        'HOST': 'tomcat.cs.lafayette.edu',
         'PORT': '5432',
     }
 }
