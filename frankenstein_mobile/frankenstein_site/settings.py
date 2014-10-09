@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-
+TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
@@ -36,6 +36,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'frankenstein_site',
+    'api',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -48,9 +51,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'frankenstein_mobile.urls'
+ROOT_URLCONF = 'frankenstein_site.urls'
 
-WSGI_APPLICATION = 'frankenstein_mobile.wsgi.application'
+WSGI_APPLICATION = 'frankenstein_site.wsgi.application'
 
 
 # Database
@@ -58,12 +61,8 @@ WSGI_APPLICATION = 'frankenstein_mobile.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'macharir',
-        'USER': 'macharir',
-        'PASSWORD': '',
-        'HOST': 'macharir@tomcat.cs.lafayette.edu',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
