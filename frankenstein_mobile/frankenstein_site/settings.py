@@ -37,7 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'frankenstein_api',
+    'frankenstein_site',
+    'api',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -50,9 +51,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'frankenstein_mobile.urls'
+ROOT_URLCONF = 'frankenstein_site.urls'
 
-WSGI_APPLICATION = 'frankenstein_mobile.wsgi.application'
+WSGI_APPLICATION = 'frankenstein_site.wsgi.application'
 
 
 # Database
