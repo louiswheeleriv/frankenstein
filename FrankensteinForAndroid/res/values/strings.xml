@@ -9,6 +9,9 @@
     <string name="title_activity_search">Frankenstein for Android</string>
     <string name="title_activity_result">Results</string>
     
+    <string name="result_searchResults">Search results:</string>
+    <string name="result_selectionInfo">Selection info:</string>
+    
     <string-array name="search_types">
         <item>a production</item>
         <item>a stage</item>
@@ -17,5 +20,7 @@
         <item>a significant plot event</item>
         <item>a specific time</item>
     </string-array>
+    
+    <string name="example_json_results">{"performances":[{"performanceId":"1", "info":"Info about performance 1", "stageId":"2", "productionId":"1", "startTime":"10/10/2014, 16:00"},{"performanceId":"2", "info":"Info about performance 2", "stageId":"1", "productionId":"1", "startTime":"10/10/2014, 16:30"},{"performanceId":"3", "info":"Info about performance 3", "stageId":"2", "productionId":"1", "startTime":"10/10/2014, 19:30"},{"performanceId":"4", "info":"Info about performance 4", "stageId":"3", "productionId":"1", "startTime":"10/11/2014, 16:00"},{"performanceId":"5", "info":"Info about performance 5", "stageId":"1", "productionId":"1", "startTime":"10/11/2014, 18:30"}]}</string>
 
 </resources>
