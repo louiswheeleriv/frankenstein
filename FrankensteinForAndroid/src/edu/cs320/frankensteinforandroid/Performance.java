@@ -71,7 +71,9 @@ public class Performance implements Parcelable{
 	}
 	
 	public String toTitleString(){
-		return ("id: " + performanceId + ", stageId: " + stage.getStageId() + ", time: " + startTime.toString());
+		return ("id: " + performanceId + "\n" + 
+				"stageId: " + stage.getStageId() + "\n" + 
+				"time: " + startTime.toString());
 	}
 
 	@Override

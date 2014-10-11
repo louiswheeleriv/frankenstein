@@ -25,11 +25,6 @@ public class ResultActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_result);
 		
-		if (savedInstanceState == null) {
-			getSupportFragmentManager().beginTransaction().add(R.id.container, new PlaceholderFragment()).commit();
-		}
-		
-		/* TODO: This code populates the list with dummy data, but it currently doesn't work
 		Intent intent = getIntent();
 		String searchType = intent.getStringExtra(SearchActivity.EXTRA_SEARCHTYPE);
 		String inputValue = intent.getStringExtra(SearchActivity.EXTRA_INPUTVALUE);
@@ -42,7 +37,6 @@ public class ResultActivity extends ActionBarActivity {
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, performanceTitles);
 		
 		listView.setAdapter(adapter);
-		*/
 	}
 
 	@Override
@@ -62,23 +56,6 @@ public class ResultActivity extends ActionBarActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_result,
-					container, false);
-			return rootView;
-		}
 	}
 	
 	public List<Performance> parsePerformances(String jsonString){
