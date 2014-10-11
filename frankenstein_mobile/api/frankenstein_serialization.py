@@ -31,9 +31,9 @@ class PerformanceSerializer(serializers.ModelSerializer):
     performance_stage = StageSerializer(many=False)
     performance_crews = CrewSerializer(many=True)
     performance_actors = ActorSerializer(many=True)
-
+    performance_production = ProductionSerializer(many=False)
 
     class Meta:
         model = Performance
-        fields = ('id', 'performance_stage', 'performance_info', 'performance_start_time', 'performance_production',
-                  'performance_actors', 'performance_crews')
+        fields = ('id', 'performance_info', 'performance_start_time', 'performance_production',
+                  'performance_stage','performance_actors', 'performance_crews')
