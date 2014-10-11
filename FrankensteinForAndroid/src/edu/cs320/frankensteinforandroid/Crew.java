@@ -1,5 +1,9 @@
 package edu.cs320.frankensteinforandroid;
 
+import org.json.JSONObject;
+
+import android.util.Log;
+
 public class Crew {
 
 	long crewId;
@@ -44,6 +48,28 @@ public class Crew {
 
 	public void setResponsibilities(String responsibilities) {
 		this.responsibilities = responsibilities;
+	}
+	
+	public String getFullInfo(){
+		return ("Crew ID: " + crewId + "\n" +
+				"Name: " + name + "\n" +
+				"Bio: " + bio + "\n" +
+				"Responsibilities: " + responsibilities);
+	}
+	
+	public static Crew parseCrewFromJSON(JSONObject jsonObject){
+		try{
+			long jsonId = jsonObject.getLong("id");
+			String jsonName = jsonObject.getString("crew_name");
+			String jsonBio = jsonObject.getString("crew_bio");
+			String jsonResponsibilities = jsonObject.getString("crew_responsibility");
+			
+			Crew crew = new Crew(jsonId, jsonName, jsonBio, jsonResponsibilities);
+			return crew;
+		}catch(Exception e){
+			Log.d("ERROR", e.getMessage());
+		}
+		return null;
 	}
 	
 }

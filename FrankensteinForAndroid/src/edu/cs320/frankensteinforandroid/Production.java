@@ -1,5 +1,9 @@
 package edu.cs320.frankensteinforandroid;
 
+import org.json.JSONObject;
+
+import android.util.Log;
+
 public class Production {
 
 	long productionId;
@@ -34,6 +38,26 @@ public class Production {
 
 	public void setInfo(String info) {
 		this.info = info;
+	}
+	
+	public String getFullInfo(){
+		return ("Production ID: " + productionId + "\n" +
+				"Name: " + name + "\n" +
+				"Info: " + info);
+	}
+	
+	public static Production parseProductionFromJSON(JSONObject jsonObject){
+		try{
+			long jsonId = jsonObject.getLong("id");
+			String jsonName = jsonObject.getString("production_name");
+			String jsonInfo = jsonObject.getString("production_description");
+			
+			Production production = new Production(jsonId, jsonName, jsonInfo);
+			return production;
+		}catch(Exception e){
+			Log.d("ERROR", e.getMessage());
+		}
+		return null;
 	}
 	
 }

@@ -4,18 +4,25 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONArray;
+
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.os.Build;
 
 public class ResultActivity extends ActionBarActivity {
@@ -30,13 +37,24 @@ public class ResultActivity extends ActionBarActivity {
 		String inputValue = intent.getStringExtra(SearchActivity.EXTRA_INPUTVALUE);
 		String resultList = intent.getStringExtra(SearchActivity.EXTRA_RESULTLIST);
 		
-		List<Performance> performances = parsePerformances(resultList);
-		List<String> performanceTitles = getPerformanceTitlesFromPerformances(performances);
+		//List<Performance> performances = parseJSON(resultList);
+		List<Performance> performances = parseJSON(getString(R.string.example_json_results));
 		
-		ListView listView = (ListView) findViewById(R.id.listView_searchResults);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, performanceTitles);
+		final ListView listView = (ListView) findViewById(R.id.listView_result_searchResults);
+		ArrayAdapter<Performance> adapter = new ArrayAdapter<Performance>(this, android.R.layout.simple_list_item_1, performances);
 		
 		listView.setAdapter(adapter);
+		
+		listView.setClickable(true);
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+		  @Override
+		  public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+			  Object o = listView.getItemAtPosition(position);
+			  TextView selectionInfo = (TextView) findViewById(R.id.textView_result_selectionInfo);
+			  selectionInfo.setText(getFullInfoAboutObject(o));
+		  }
+		});
 	}
 
 	@Override
@@ -58,37 +76,44 @@ public class ResultActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public List<Performance> parsePerformances(String jsonString){
-		// TODO: Finish this function once we know the format
-		// Currently just returns a made up list
+	/**
+	 * This function determines the type of listItem and returns its information
+	 */
+	public String getFullInfoAboutObject(Object listItem){
+		String listItemInfo = "";
 		
-		List<Performance> performances = new ArrayList<Performance>();
-		
-		Production production = new Production(1, "Frankenstein", "production info");
-		Stage stage1 = new Stage(1, "location 1", "stage1 description");
-		Stage stage2 = new Stage(2, "location 2", "stage2 description");
-		Date date1 = new Date();
-		Date date2 = new Date();
-		date2.setHours(date2.getHours() + 3);
-		Date date3 = new Date();
-		date3.setHours(date3.getHours() + 6);
-		
-		performances.add(new Performance(1, "Info about performance 1", stage1, production, date1));
-		performances.add(new Performance(2, "Info about performance 2", stage1, production, date2));
-		performances.add(new Performance(3, "Info about performance 3", stage2, production, date1));
-		performances.add(new Performance(4, "Info about performance 4", stage1, production, date3));
-		performances.add(new Performance(5, "Info about performance 5", stage2, production, date2));
-		
-		return performances;
-	}
-	
-	public List<String> getPerformanceTitlesFromPerformances(List<Performance> performances){
-		List<String> performanceTitles = new ArrayList<String>();
-		
-		for(int i = 0; i < performances.size(); i++){
-			performanceTitles.add(performances.get(i).toTitleString());
+		if(listItem instanceof Performance){
+			listItemInfo = ((Performance) listItem).getFullInfo();
+		}else if(listItem instanceof Production){
+			listItemInfo = ((Production) listItem).getFullInfo();
+		}else if(listItem instanceof Stage){
+			listItemInfo = ((Stage) listItem).getFullInfo();
+		}else if(listItem instanceof Actor){
+			listItemInfo = ((Actor) listItem).getFullInfo();
+		}else if(listItem instanceof Crew){
+			listItemInfo = ((Crew) listItem).getFullInfo();
 		}
 		
-		return performanceTitles;
+		return listItemInfo;
+	}
+	
+	public List<Performance> parseJSON(String jsonString){
+		List<Performance> performances = new ArrayList<Performance>();
+		JSONArray jsonArray;
+		
+		try {
+			JSONObject jsonObject = new JSONObject(jsonString);
+			jsonArray = jsonObject.getJSONArray("performances");
+			
+			for(int i = 0; i < jsonArray.length(); i++){
+				JSONObject jsonObj = jsonArray.getJSONObject(i);
+				performances.add(Performance.parsePerformanceFromJSON(jsonObj));
+			}
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return performances;
 	}
 }

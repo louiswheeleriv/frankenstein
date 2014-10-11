@@ -1,9 +1,16 @@
 package edu.cs320.frankensteinforandroid;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
+import org.json.JSONObject;
+import org.json.JSONArray;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 public class Performance implements Parcelable{
 
@@ -13,12 +20,21 @@ public class Performance implements Parcelable{
 	Production production;
 	Date startTime;
 	
-	public Performance(long performanceId, String info, Stage stage, Production production, Date startTime){
+	List<Actor> actors;
+	List<Crew> crew;
+	
+	public Performance(){
+		
+	}
+	
+	public Performance(long performanceId, String info, Stage stage, Production production, Date startTime, List<Actor> actors, List<Crew> crew){
 		this.performanceId = performanceId;
 		this.info = info;
 		this.stage = stage;
 		this.production = production;
 		this.startTime = startTime;
+		this.actors = actors;
+		this.crew = crew;
 	}
 
 	public long getPerformanceId() {
@@ -60,8 +76,24 @@ public class Performance implements Parcelable{
 	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
+
+	public List<Actor> getActors() {
+		return actors;
+	}
+
+	public void setActors(List<Actor> actors) {
+		this.actors = actors;
+	}
+
+	public List<Crew> getCrew() {
+		return crew;
+	}
+
+	public void setCrew(List<Crew> crew) {
+		this.crew = crew;
+	}
 	
-	public String toString(){
+	public String getFullInfo(){
 		return ("Performance ID: " + performanceId + "\n" +
 				"Production: " + production.getName() + "\n" +
 				"Info: " + info + "\n" +
@@ -70,10 +102,47 @@ public class Performance implements Parcelable{
 				"Start Time: " + startTime.toString());
 	}
 	
-	public String toTitleString(){
+	@Override
+	public String toString(){
 		return ("id: " + performanceId + "\n" + 
 				"stageId: " + stage.getStageId() + "\n" + 
 				"time: " + startTime.toString());
+	}
+	
+	public static Performance parsePerformanceFromJSON(JSONObject jsonObject){
+		try{
+			
+			long jsonId = jsonObject.getLong("id");
+			String jsonInfo = jsonObject.getString("performance_info");
+			JSONObject jsonStageObject = jsonObject.getJSONObject("performance_stage");
+			JSONObject jsonProductionObject = jsonObject.getJSONObject("performance_production");
+			String jsonStartTimeString = jsonObject.getString("performance_start_time");
+			JSONArray jsonActorArray = jsonObject.getJSONArray("performance_actors");
+			JSONArray jsonCrewArray = jsonObject.getJSONArray("performance_crews");
+			
+			Stage jsonStage = Stage.parseStageFromJSON(jsonStageObject);
+			Production jsonProduction = Production.parseProductionFromJSON(jsonProductionObject);
+			Date jsonStartTime = DateParser.parse(jsonStartTimeString);
+			
+			List<Actor> jsonActors = new ArrayList<Actor>();
+			for(int i = 0; i < jsonActorArray.length(); i++){
+				JSONObject jsonActorObject = jsonActorArray.getJSONObject(i);
+				jsonActors.add(Actor.parseActorFromJSON(jsonActorObject));
+			}
+			
+			List<Crew> jsonCrew = new ArrayList<Crew>();
+			for(int i = 0; i < jsonCrewArray.length(); i++){
+				JSONObject jsonCrewObject = jsonCrewArray.getJSONObject(i);
+				jsonCrew.add(Crew.parseCrewFromJSON(jsonCrewObject));
+			}
+			
+			Performance perf = new Performance(jsonId, jsonInfo, jsonStage, jsonProduction, jsonStartTime, jsonActors, jsonCrew);
+			return perf;
+			
+		}catch(Exception e){
+			Log.d("ERROR", e.getMessage());
+		}
+		return null;
 	}
 
 	@Override

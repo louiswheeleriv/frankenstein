@@ -21,6 +21,80 @@
         <item>a specific time</item>
     </string-array>
     
-    <string name="example_json_results">{"performances":[{"performanceId":"1", "info":"Info about performance 1", "stageId":"2", "productionId":"1", "startTime":"10/10/2014, 16:00"},{"performanceId":"2", "info":"Info about performance 2", "stageId":"1", "productionId":"1", "startTime":"10/10/2014, 16:30"},{"performanceId":"3", "info":"Info about performance 3", "stageId":"2", "productionId":"1", "startTime":"10/10/2014, 19:30"},{"performanceId":"4", "info":"Info about performance 4", "stageId":"3", "productionId":"1", "startTime":"10/11/2014, 16:00"},{"performanceId":"5", "info":"Info about performance 5", "stageId":"1", "productionId":"1", "startTime":"10/11/2014, 18:30"}]}</string>
+    <string name="example_json_results">
+        {"performances":
+        	[
+        		{"id":1,
+        			"performance_stage":{
+        				"id":1,
+        				"stage_location":\"Farinon\",
+        				"stage_description":\"The food is close by!\"
+        			},
+        			"performance_info":\"For the student community\",
+        			"performance_start_time":\"2014-10-09T03:00:43Z\",
+        			"performance_production":{
+        				"id":1,
+        				"production_name":\"Frankenstein\",
+        				"production_description":\"A spook-tacular drama\"
+        			},
+        			"performance_actors":[{
+        				"id":1,
+        				"actor_name":\"John Smith\",
+        				"actor_bio":\"The first example actor\"
+        			},{
+        				"id":2,
+        				"actor_name":\"Joe Sample\",
+        				"actor_bio":\"The second example actor\"
+        			}],
+        			"performance_crews":[{
+        				"id":1,
+        				"crew_name":\"Michael Bay\",
+        				"crew_responsibility":\"Director\",
+        				"crew_bio":\"He is the director\"
+        			},{
+        				"id":2,
+        				"crew_name":\"Jim Lighting\",
+        				"crew_responsibility":\"Lighting\",
+        				"crew_bio":\"He is the lighting guy\"
+        			}]	
+        		},
+        		
+        		{"id":2,
+        			"performance_stage":{
+        				"id":1,
+        				"stage_location":\"Farinon\",
+        				"stage_description":\"The food is close by!\"
+        			},
+        			"performance_info":\"For the student community\",
+        			"performance_start_time":\"2014-10-09T08:00:43Z\",
+        			"performance_production":{
+        				"id":1,
+        				"production_name":\"Frankenstein\",
+        				"production_description":\"A spook-tacular drama\"
+        			},
+        			"performance_actors":[{
+        				"id":1,
+        				"actor_name":\"John Smith\",
+        				"actor_bio":\"The first example actor\"
+        			},{
+        				"id":2,
+        				"actor_name":\"Joe Sample\",
+        				"actor_bio":\"The second example actor\"
+        			}],
+        			"performance_crews":[{
+        				"id":1,
+        				"crew_name":\"Michael Bay\",
+        				"crew_responsibility":\"Director\",
+        				"crew_bio":\"He is the director\"
+        			},{
+        				"id":2,
+        				"crew_name":\"Jim Lighting\",
+        				"crew_responsibility":\"Lighting\",
+        				"crew_bio":\"He is the lighting guy\"
+        			}]	
+        		}
+        	]
+        }
+   </string>
 
 </resources>
