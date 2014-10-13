@@ -74,11 +74,13 @@ public class SearchActivity extends ActionBarActivity {
 			URL serverURL = new URL(SERVER_ADDRESS + "/?" + searchType + "=" + inputValue);
 			URLConnection connection = serverURL.openConnection();
 			
+			/*
 			connection.setDoOutput(true);
             OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
             String message = searchType + "|" + inputValue;
             out.write(message);
             out.close();
+            */
             
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String serverResponse = in.readLine();
