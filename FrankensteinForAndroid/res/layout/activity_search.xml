@@ -1,94 +1,104 @@
-<!--
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="edu.cs320.frankensteinforandroid.SearchActivity"
     tools:ignore="MergeRootFrame" >
-    -->
-    
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    xmlns:tools="http://schemas.android.com/tools"
-	    android:id="@+id/container"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    tools:context="edu.cs320.frankensteinforandroid.SearchActivity"
-	    tools:ignore="MergeRootFrame"
-	    android:orientation="vertical">
-    
-	    <View
-	        android:layout_width="match_parent"
-	        android:layout_height="60dp"
-	        android:layout_weight="0" />
-	    
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="60dp"
-	        android:layout_weight="0" 
-	        android:orientation="horizontal">
-	
-	        <TextView
-	            android:id="@+id/textView1"
-	            android:layout_width="match_parent"
-	            android:layout_height="match_parent"
-	            android:layout_weight="3"
-	            android:gravity="center"
-	            android:text="Search for: "
-	            android:textAppearance="?android:attr/textAppearanceLarge" />
-	        
-	        <Spinner
-		        android:id="@+id/spinner_searchType"
-		        android:layout_width="match_parent"
-		        android:layout_height="match_parent"
-		        android:layout_weight="2"
-		        android:entries="@array/search_types" />
-	        
-	    </LinearLayout>
-	
-	    <EditText
-	        android:id="@+id/edit_searchValue"
-	        android:layout_width="match_parent"
-	        android:layout_height="70dp"
-	        android:layout_weight="0"
-	        android:ems="10"
-	        android:hint="@string/hint_edit_searchValue" >
-	
-	        <requestFocus />
-	    </EditText>
-	
-	    <LinearLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="70dp"
-	        android:layout_weight="0"
-	        android:orientation="horizontal">
-	        
-	        <Button
-		        android:id="@+id/button_search"
-		        android:layout_width="match_parent"
-		        android:layout_height="match_parent"
-		        android:layout_weight="1"
-		        android:layout_marginLeft="30dp"
-		        android:layout_marginRight="15dp"
-		        android:layout_gravity="center_horizontal"
-		        android:onClick="searchButtonClicked"
-		        android:text="@string/title_button_search" />
-	        
-	        <Button
-		        android:id="@+id/button_show_all"
-		        android:layout_width="match_parent"
-		        android:layout_height="match_parent"
-		        android:layout_weight="1"
-		        android:layout_marginLeft="15dp"
-		        android:layout_marginRight="30dp"
-		        android:layout_gravity="center_horizontal"
-		        android:onClick="showAllButtonClicked"
-		        android:text="@string/title_button_show_all" />
-	        
-	    </LinearLayout>
-    
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_weight="0" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_weight="0"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:text="Search for: "
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <Spinner
+            android:id="@+id/spinner_searchType"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:entries="@array/search_types"/>
     </LinearLayout>
 
-<!-- 
-</FrameLayout>
--->
+    <EditText
+        android:id="@+id/editText_searchValue"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0"
+        android:ems="10"
+        android:hint="@string/hint_edit_searchValue" >
+
+        <requestFocus />
+    </EditText>
+    
+    <LinearLayout
+        android:id="@+id/linearLayout_timeSelection"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_weight="0"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TimePicker
+            android:id="@+id/timePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center" />
+
+	    <DatePicker
+	        android:id="@+id/datePicker"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_weight="1"
+            android:layout_gravity="center"
+            android:calendarViewShown="false" />
+	    
+	</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_weight="0"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/button_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="15dp"
+            android:layout_weight="1"
+            android:onClick="searchButtonClicked"
+            android:text="@string/title_button_search" />
+
+        <Button
+            android:id="@+id/button_show_all"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="30dp"
+            android:layout_weight="1"
+            android:onClick="showAllButtonClicked"
+            android:text="@string/title_button_show_all" />
+    </LinearLayout>
+
+</LinearLayout>

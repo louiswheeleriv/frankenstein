@@ -20,7 +20,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.os.Build;
 
@@ -36,6 +39,27 @@ public class SearchActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
+		
+		Spinner spinner = (Spinner) findViewById(R.id.spinner_searchType);
+		spinner.setOnItemSelectedListener(new OnItemSelectedListener(){
+			@Override
+		    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+				Spinner spinner = (Spinner) findViewById(R.id.spinner_searchType);
+				LinearLayout timeSelection = (LinearLayout) findViewById(R.id.linearLayout_timeSelection);
+				EditText searchValue = (EditText) findViewById(R.id.editText_searchValue);
+				
+				if(spinner.getSelectedItemPosition() == 5){
+					searchValue.setVisibility(View.GONE);
+					timeSelection.setVisibility(View.VISIBLE);
+				}else{
+					searchValue.setVisibility(View.VISIBLE);
+					timeSelection.setVisibility(View.GONE);
+				}
+		    }
+
+		    @Override
+		    public void onNothingSelected(AdapterView<?> parentView) {}
+		});
 	}
 
 	@Override
@@ -63,7 +87,7 @@ public class SearchActivity extends ActionBarActivity {
 
 		// Get information input by user
 		Spinner spinner = (Spinner) findViewById(R.id.spinner_searchType);
-		EditText editText = (EditText) findViewById(R.id.edit_searchValue);
+		EditText editText = (EditText) findViewById(R.id.editText_searchValue);
 
 		String searchType = spinner.getSelectedItem().toString();
 		String inputValue = editText.getText().toString();
