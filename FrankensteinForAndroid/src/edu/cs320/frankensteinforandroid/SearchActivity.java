@@ -70,9 +70,8 @@ public class SearchActivity extends ActionBarActivity {
 		String resultList = "";
 		
 		// Send information to Django server, which will return JSON object(s)
-		/* TODO: ACTIVATE WHEN SERVER IS WORKING
 		try{
-			URL serverURL = new URL(SERVER_ADDRESS);
+			URL serverURL = new URL(SERVER_ADDRESS + "/?" + searchType + "=" + inputValue);
 			URLConnection connection = serverURL.openConnection();
 			
 			connection.setDoOutput(true);
@@ -88,7 +87,6 @@ public class SearchActivity extends ActionBarActivity {
 		}catch(Exception e){
 			Log.d("SERVER_ERROR", e.getMessage());
 		}
-		*/
 		
 		// Start ResultActivity
 		intent.putExtra(EXTRA_SEARCHTYPE, searchType);
