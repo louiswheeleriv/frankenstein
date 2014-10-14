@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,7 +26,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.os.Build;
 
-public class ResultActivity extends ActionBarActivity {
+public class ResultActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

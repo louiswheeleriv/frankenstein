@@ -94,19 +94,34 @@ public class Performance implements Parcelable{
 	}
 	
 	public String getFullInfo(){
-		return ("Performance ID: " + performanceId + "\n" +
-				"Production: " + production.getName() + "\n" +
-				"Info: " + info + "\n" +
-				"Location: " + stage.getLocation() + "\n" +
-				"Stage Info: " + stage.getInfo() + "\n" +
-				"Start Time: " + startTime.toString());
+		String fullInfo = ("PERFORMANCE INFO\n" + info + "\n\n" +
+				"STAGE\nLocation: " + stage.getLocation() + "\n" +
+				"Info: " + stage.getInfo() + "\n\n" +
+				"TIME\n" + startTime + "\n\n" +
+				"ACTORS\n");
+		
+		for(int i = 0; i < actors.size(); i++){
+			Actor a = actors.get(i);
+			fullInfo += ("Name: " + a.getName() + "\n" +
+						 "Bio: " + a.getBio() + "\n\n");
+		}
+		
+		fullInfo += "CREW\n";
+		
+		for(int i = 0; i < crew.size(); i++){
+			Crew c = crew.get(i);
+			fullInfo += ("Name: " + c.getName() + "\n" +
+						 "Job: " + c.getResponsibilities() + "\n" +
+						 "Bio: " + c.getBio() + "\n\n");
+		}
+		
+		return fullInfo;
 	}
 	
 	@Override
 	public String toString(){
-		return ("id: " + performanceId + "\n" + 
-				"stageId: " + stage.getStageId() + "\n" + 
-				"time: " + startTime.toString());
+		return ("Location: " + stage.getLocation() + "\n" +
+				"Time: " + startTime.toString());
 	}
 	
 	public static Performance parsePerformanceFromJSON(JSONObject jsonObject){

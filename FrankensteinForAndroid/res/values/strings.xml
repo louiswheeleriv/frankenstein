@@ -9,6 +9,9 @@
     <string name="title_activity_search">Frankenstein for Android</string>
     <string name="title_activity_result">Results</string>
     
+    <string name="search_title_1">Lafayette College presents...</string>
+    <string name="search_title_2">Frankenstein</string>
+    
     <string name="result_searchResults">Search results:</string>
     <string name="result_selectionInfo">Selection info:</string>
     

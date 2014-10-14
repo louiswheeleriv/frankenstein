@@ -12,6 +12,7 @@ import java.util.List;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.os.Build;
 
-public class SearchActivity extends ActionBarActivity {
+public class SearchActivity extends Activity {
 
 	public final static String EXTRA_SEARCHTYPE = "edu.cs320.frankensteinforandroid.SEARCHTYPE";
 	public final static String EXTRA_INPUTVALUE = "edu.cs320.frankensteinforandroid.INPUTVALUE";
