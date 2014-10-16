@@ -34,7 +34,7 @@ public class SearchActivity extends Activity {
 	public final static String EXTRA_INPUTVALUE = "edu.cs320.frankensteinforandroid.INPUTVALUE";
 	public final static String EXTRA_RESULTLIST = "edu.cs320.frankensteinforandroid.RESULTLIST";
 	
-	public final static String SERVER_ADDRESS = "";
+	public final static String SERVER_ADDRESS = "http://localhost:5678";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
