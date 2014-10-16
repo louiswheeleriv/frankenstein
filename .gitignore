@@ -2,3 +2,4 @@ gen/**
 bin/**
 *.idea
 *.pyc
+*.project
