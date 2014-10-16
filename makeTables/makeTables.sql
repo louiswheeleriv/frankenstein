@@ -120,6 +120,7 @@ CREATE TABLE PerfActor
 (
 	PerformanceID		INT references Performance(PerformanceID),
 	ActorID 				INT references Actor(ActorID),
+	Role 				text,
 	AppearanceTime 	time
 );
 
