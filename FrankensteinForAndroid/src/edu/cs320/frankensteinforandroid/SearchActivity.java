@@ -1,13 +1,22 @@
 package edu.cs320.frankensteinforandroid;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -34,7 +43,8 @@ public class SearchActivity extends Activity {
 	public final static String EXTRA_INPUTVALUE = "edu.cs320.frankensteinforandroid.INPUTVALUE";
 	public final static String EXTRA_RESULTLIST = "edu.cs320.frankensteinforandroid.RESULTLIST";
 	
-	public final static String SERVER_ADDRESS = "http://localhost:5678";
+	public final static String SERVER_ADDRESS = "http://127.0.0.1:8000";
+	//public final static String SERVER_ADDRESS = "http://www.google.com";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,22 +100,34 @@ public class SearchActivity extends Activity {
 		Spinner spinner = (Spinner) findViewById(R.id.spinner_searchType);
 		EditText editText = (EditText) findViewById(R.id.editText_searchValue);
 
-		String searchType = spinner.getSelectedItem().toString();
+		String searchType = getSearchableParameter(spinner.getSelectedItem().toString());
 		String inputValue = editText.getText().toString();
 		String resultList = "";
 		
 		// Send information to Django server, which will return JSON object(s)
 		try{
-			URL serverURL = new URL(SERVER_ADDRESS + "/?" + searchType + "=" + inputValue);
-			URLConnection connection = serverURL.openConnection();
+			//String serverUrl = (SERVER_ADDRESS + "/?" + searchType + "=" + inputValue);
+			URL serverUrl = new URL(SERVER_ADDRESS + "/?" + searchType + "=" + inputValue);
+			HttpURLConnection connection = (HttpURLConnection) serverUrl.openConnection();
 			
 			/*
-			connection.setDoOutput(true);
-            OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
-            String message = searchType + "|" + inputValue;
-            out.write(message);
-            out.close();
-            */
+			HttpClient httpClient = new DefaultHttpClient();
+			HttpGet httpGet = new HttpGet(serverUrl);
+			HttpResponse response;
+			
+			response = httpClient.execute(httpGet);
+			HttpEntity entity = response.getEntity();
+			
+			if(entity != null){
+				InputStream instream = entity.getContent();
+				String result = convertStreamToString(instream);
+				instream.close();
+			}
+			*/
+			
+			int responseCode = connection.getResponseCode();
+			Log.d("INFORMATION", "\nSending 'GET' request to URL : " + serverUrl);
+			Log.d("INFORMATION", "Response Code : " + responseCode);
             
             BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String serverResponse = in.readLine();
@@ -121,5 +143,59 @@ public class SearchActivity extends Activity {
 		intent.putExtra(EXTRA_RESULTLIST, resultList);
 		startActivity(intent);
 		
+	}
+	
+	 private static String convertStreamToString(InputStream is) {
+		    /*
+		     * To convert the InputStream to String we use the BufferedReader.readLine()
+		     * method. We iterate until the BufferedReader return null which means
+		     * there's no more data to read. Each line will appended to a StringBuilder
+		     * and returned as String.
+		     */
+		    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+		    StringBuilder sb = new StringBuilder();
+
+		    String line = null;
+		    try {
+		        while ((line = reader.readLine()) != null) {
+		            sb.append(line + "\n");
+		        }
+		    } catch (IOException e) {
+		        e.printStackTrace();
+		    } finally {
+		        try {
+		            is.close();
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        }
+		    }
+		    return sb.toString();
+		}
+	
+	public String getSearchableParameter(String s){
+		String searchType = "";
+		
+		switch(s){
+		case "a production":
+			searchType = "production";
+			break;
+		case "a stage":
+			searchType = "stage";
+			break;
+		case "an actor":
+			searchType = "actor";
+			break;
+		case "a stage crew member":
+			searchType = "crew";
+			break;
+		case "a significant plot event":
+			searchType = "event";
+			break;
+		case "a specific time":
+			searchType = "time";
+			break;
+		}
+		
+		return searchType;
 	}
 }
