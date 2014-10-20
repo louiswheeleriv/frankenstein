@@ -192,7 +192,7 @@ public class DataUtils {
 			int firstPerformanceIndex = 0;
 			
 			for(int i = 1; i < inputPerformances.size(); i++){
-				if(inputPerformances.get(firstPerformanceIndex).getStartTime().compareTo(inputPerformances.get(i).getStartTime()) == 1){
+				if(inputPerformances.get(firstPerformanceIndex).getStartTime().compareTo(inputPerformances.get(i).getStartTime()) > 0){
 					firstPerformanceIndex = i;
 				}
 			}
@@ -210,7 +210,7 @@ public class DataUtils {
 			int firstActorIndex = 0;
 			
 			for(int i = 1; i < inputActors.size(); i++){
-				if(inputActors.get(firstActorIndex).getName().compareTo(inputActors.get(i).getName()) == 1){
+				if(inputActors.get(firstActorIndex).getName().compareTo(inputActors.get(i).getName()) > 0){
 					firstActorIndex = i;
 				}
 			}
@@ -228,7 +228,7 @@ public class DataUtils {
 			int firstCrewIndex = 0;
 			
 			for(int i = 1; i < inputCrew.size(); i++){
-				if(inputCrew.get(firstCrewIndex).getName().compareTo(inputCrew.get(i).getName()) == 1){
+				if(inputCrew.get(firstCrewIndex).getName().compareTo(inputCrew.get(i).getName()) > 0){
 					firstCrewIndex = i;
 				}
 			}
