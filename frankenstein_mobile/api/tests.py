@@ -9,7 +9,7 @@ class PerformanceTest(TestCase):
         test_production = Production.objects.create(name='test_production', info='test_prod_info')
         actor1 = Actor.objects.create(name='test_actor_1', bio='born to test')
         actor2 = Actor.objects.create(name='test_actor_2', actor_bio='born to rest')
-        crew1 = Crew.objects.create(crew_name='krew_1', crew_bio='Team B guy', responsiblities='Director')
+        crew1 = Crew.objects.create(name='krew_1', bio='Team B guy', responsiblities='Director')
         crew2 = Crew.objects.create(crew_name='krew_2', crew_bio='Team C guy', responsiblities='Producer')
         test_performance = Performance.objects.create(performance_stage=test_stage, performance_info="test_perf_info",
                                                       performance_start_time=datetime.now(),
