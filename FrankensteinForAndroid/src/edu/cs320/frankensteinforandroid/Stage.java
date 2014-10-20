@@ -46,18 +46,4 @@ public class Stage {
 				"Info: " + info);
 	}
 	
-	public static Stage parseStageFromJSON(JSONObject jsonObject){
-		try{
-			long jsonId = jsonObject.getLong("id");
-			String jsonLocation = jsonObject.getString("stage_location");
-			String jsonInfo = jsonObject.getString("stage_description");
-			
-			Stage stage = new Stage(jsonId, jsonLocation, jsonInfo);
-			return stage;
-		}catch(Exception e){
-			Log.d("ERROR", e.getMessage());
-		}
-		return null;
-	}
-	
 }

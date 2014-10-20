@@ -39,7 +39,7 @@ public class ResultActivity extends Activity {
 		String resultList = intent.getStringExtra(SearchActivity.EXTRA_RESULTLIST);
 		
 		//List<Performance> performances = parseJSON(resultList);
-		List<Performance> performances = parseJSON(getString(R.string.example_json_results));
+		List<Performance> performances = DataUtils.parseJSONIntoPerformances(getString(R.string.example_json_results));
 		
 		final ListView listView = (ListView) findViewById(R.id.listView_result_searchResults);
 		ArrayAdapter<Performance> adapter = new ArrayAdapter<Performance>(this, android.R.layout.simple_list_item_1, performances);
@@ -96,25 +96,5 @@ public class ResultActivity extends Activity {
 		}
 		
 		return listItemInfo;
-	}
-	
-	public List<Performance> parseJSON(String jsonString){
-		List<Performance> performances = new ArrayList<Performance>();
-		JSONArray jsonArray;
-		
-		try {
-			JSONObject jsonObject = new JSONObject(jsonString);
-			jsonArray = jsonObject.getJSONArray("performances");
-			
-			for(int i = 0; i < jsonArray.length(); i++){
-				JSONObject jsonObj = jsonArray.getJSONObject(i);
-				performances.add(Performance.parsePerformanceFromJSON(jsonObj));
-			}
-			
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		
-		return performances;
 	}
 }

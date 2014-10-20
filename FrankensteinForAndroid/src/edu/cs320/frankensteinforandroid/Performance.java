@@ -123,42 +123,6 @@ public class Performance implements Parcelable{
 		return ("Location: " + stage.getLocation() + "\n" +
 				"Time: " + startTime.toString());
 	}
-	
-	public static Performance parsePerformanceFromJSON(JSONObject jsonObject){
-		try{
-			
-			long jsonId = jsonObject.getLong("id");
-			String jsonInfo = jsonObject.getString("performance_info");
-			JSONObject jsonStageObject = jsonObject.getJSONObject("performance_stage");
-			JSONObject jsonProductionObject = jsonObject.getJSONObject("performance_production");
-			String jsonStartTimeString = jsonObject.getString("performance_start_time");
-			JSONArray jsonActorArray = jsonObject.getJSONArray("performance_actors");
-			JSONArray jsonCrewArray = jsonObject.getJSONArray("performance_crews");
-			
-			Stage jsonStage = Stage.parseStageFromJSON(jsonStageObject);
-			Production jsonProduction = Production.parseProductionFromJSON(jsonProductionObject);
-			Date jsonStartTime = DateParser.parse(jsonStartTimeString);
-			
-			List<Actor> jsonActors = new ArrayList<Actor>();
-			for(int i = 0; i < jsonActorArray.length(); i++){
-				JSONObject jsonActorObject = jsonActorArray.getJSONObject(i);
-				jsonActors.add(Actor.parseActorFromJSON(jsonActorObject));
-			}
-			
-			List<Crew> jsonCrew = new ArrayList<Crew>();
-			for(int i = 0; i < jsonCrewArray.length(); i++){
-				JSONObject jsonCrewObject = jsonCrewArray.getJSONObject(i);
-				jsonCrew.add(Crew.parseCrewFromJSON(jsonCrewObject));
-			}
-			
-			Performance perf = new Performance(jsonId, jsonInfo, jsonStage, jsonProduction, jsonStartTime, jsonActors, jsonCrew);
-			return perf;
-			
-		}catch(Exception e){
-			Log.d("ERROR", e.getMessage());
-		}
-		return null;
-	}
 
 	@Override
 	public int describeContents() {

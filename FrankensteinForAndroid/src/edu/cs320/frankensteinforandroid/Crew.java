@@ -57,19 +57,4 @@ public class Crew {
 				"Responsibilities: " + responsibilities);
 	}
 	
-	public static Crew parseCrewFromJSON(JSONObject jsonObject){
-		try{
-			long jsonId = jsonObject.getLong("id");
-			String jsonName = jsonObject.getString("crew_name");
-			String jsonBio = jsonObject.getString("crew_bio");
-			String jsonResponsibilities = jsonObject.getString("crew_responsibility");
-			
-			Crew crew = new Crew(jsonId, jsonName, jsonBio, jsonResponsibilities);
-			return crew;
-		}catch(Exception e){
-			Log.d("ERROR", e.getMessage());
-		}
-		return null;
-	}
-	
 }

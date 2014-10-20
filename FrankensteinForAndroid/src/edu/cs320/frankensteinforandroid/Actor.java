@@ -46,18 +46,4 @@ public class Actor {
 				"Bio: " + bio);
 	}
 	
-	public static Actor parseActorFromJSON(JSONObject jsonObject){
-		try{
-			long jsonId = jsonObject.getLong("id");
-			String jsonName = jsonObject.getString("actor_name");
-			String jsonBio = jsonObject.getString("actor_bio");
-			
-			Actor actor = new Actor(jsonId, jsonName, jsonBio);
-			return actor;
-		}catch(Exception e){
-			Log.d("ERROR", e.getMessage());
-		}
-		return null;
-	}
-	
 }

@@ -46,18 +46,4 @@ public class Production {
 				"Info: " + info);
 	}
 	
-	public static Production parseProductionFromJSON(JSONObject jsonObject){
-		try{
-			long jsonId = jsonObject.getLong("id");
-			String jsonName = jsonObject.getString("production_name");
-			String jsonInfo = jsonObject.getString("production_description");
-			
-			Production production = new Production(jsonId, jsonName, jsonInfo);
-			return production;
-		}catch(Exception e){
-			Log.d("ERROR", e.getMessage());
-		}
-		return null;
-	}
-	
 }
