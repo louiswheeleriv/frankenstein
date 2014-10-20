@@ -35,6 +35,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.os.Build;
 
 public class SearchActivity extends Activity {
@@ -43,8 +44,8 @@ public class SearchActivity extends Activity {
 	public final static String EXTRA_INPUTVALUE = "edu.cs320.frankensteinforandroid.INPUTVALUE";
 	public final static String EXTRA_RESULTLIST = "edu.cs320.frankensteinforandroid.RESULTLIST";
 	
-	//public final static String SERVER_ADDRESS = "http://127.0.0.1:8000";
-	public final static String SERVER_ADDRESS = "http://echo.jsontest.com/key/value/one/two";
+	public final static String SERVER_ADDRESS = "http://127.0.0.1:8000";
+	//public final static String SERVER_ADDRESS = "http://date.jsontest.com";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,13 +58,13 @@ public class SearchActivity extends Activity {
 		    public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 				Spinner spinner = (Spinner) findViewById(R.id.spinner_searchType);
 				LinearLayout timeSelection = (LinearLayout) findViewById(R.id.linearLayout_timeSelection);
-				EditText searchValue = (EditText) findViewById(R.id.editText_searchValue);
+				EditText inputValue = (EditText) findViewById(R.id.editText_inputValue);
 				
 				if(spinner.getSelectedItemPosition() == 5){
-					searchValue.setVisibility(View.GONE);
+					inputValue.setVisibility(View.GONE);
 					timeSelection.setVisibility(View.VISIBLE);
 				}else{
-					searchValue.setVisibility(View.VISIBLE);
+					inputValue.setVisibility(View.VISIBLE);
 					timeSelection.setVisibility(View.GONE);
 				}
 		    }
@@ -95,82 +96,59 @@ public class SearchActivity extends Activity {
 	public void searchButtonClicked(View view){
 		
 		Intent intent = new Intent(this, ResultActivity.class);
+		
+		// Send information to Django server, which will return JSON object(s)
+		new Thread(){
 
-		// Get information input by user
+			@Override
+			public void run(){
+				try{
+					// Get information input by user
+					Spinner spinner = (Spinner) findViewById(R.id.spinner_searchType);
+					EditText editText = (EditText) findViewById(R.id.editText_inputValue);
+
+					String searchType = getSearchableParameter(spinner.getSelectedItem().toString());
+					String inputValue = editText.getText().toString();
+					String resultList = "";
+					
+					//URL serverUrl = new URL(SERVER_ADDRESS + "/?" + searchType + "=" + inputValue);
+					URL serverUrl = new URL(SERVER_ADDRESS);
+					HttpURLConnection connection = (HttpURLConnection) serverUrl.openConnection();
+		            
+		            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		            TextView text = (TextView) findViewById(R.id.textView_jsonResponseHidden);
+		            
+		            String line = "";
+		            while((line = in.readLine()) != null){
+		            	resultList += line;
+		            }
+		            
+		            Log.d("RESPONSE", resultList);
+		            
+		            text.setText(resultList);
+		            in.close();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+			
+		}.start();
+		
 		Spinner spinner = (Spinner) findViewById(R.id.spinner_searchType);
-		EditText editText = (EditText) findViewById(R.id.editText_searchValue);
+		EditText editText = (EditText) findViewById(R.id.editText_inputValue);
+		TextView jsonResponseTextView = (TextView) findViewById(R.id.textView_jsonResponseHidden);
 
 		String searchType = getSearchableParameter(spinner.getSelectedItem().toString());
 		String inputValue = editText.getText().toString();
-		String resultList = "";
-		
-		// Send information to Django server, which will return JSON object(s)
-		try{
-			//String serverUrl = (SERVER_ADDRESS + "/?" + searchType + "=" + inputValue);
-			URL serverUrl = new URL(SERVER_ADDRESS);
-			HttpURLConnection connection = (HttpURLConnection) serverUrl.openConnection();
-			
-			/*
-			HttpClient httpClient = new DefaultHttpClient();
-			HttpGet httpGet = new HttpGet(serverUrl);
-			HttpResponse response;
-			
-			response = httpClient.execute(httpGet);
-			HttpEntity entity = response.getEntity();
-			
-			if(entity != null){
-				InputStream instream = entity.getContent();
-				String result = convertStreamToString(instream);
-				instream.close();
-			}
-			*/
-			
-			int responseCode = connection.getResponseCode();
-			Log.d("INFORMATION", "\nSending 'GET' request to URL : " + serverUrl);
-			Log.d("INFORMATION", "Response Code : " + responseCode);
-            
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String serverResponse = in.readLine();
-            in.close();
-            
-		}catch(Exception e){
-			Log.d("SERVER_ERROR", e.getMessage());
-		}
+		String jsonResponse = (String) jsonResponseTextView.getText();
 		
 		// Start ResultActivity
 		intent.putExtra(EXTRA_SEARCHTYPE, searchType);
 		intent.putExtra(EXTRA_INPUTVALUE, inputValue);
-		intent.putExtra(EXTRA_RESULTLIST, resultList);
+		intent.putExtra(EXTRA_RESULTLIST, jsonResponse);
 		startActivity(intent);
 		
 	}
-	
-	 private static String convertStreamToString(InputStream is) {
-		    /*
-		     * To convert the InputStream to String we use the BufferedReader.readLine()
-		     * method. We iterate until the BufferedReader return null which means
-		     * there's no more data to read. Each line will appended to a StringBuilder
-		     * and returned as String.
-		     */
-		    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-		    StringBuilder sb = new StringBuilder();
-
-		    String line = null;
-		    try {
-		        while ((line = reader.readLine()) != null) {
-		            sb.append(line + "\n");
-		        }
-		    } catch (IOException e) {
-		        e.printStackTrace();
-		    } finally {
-		        try {
-		            is.close();
-		        } catch (IOException e) {
-		            e.printStackTrace();
-		        }
-		    }
-		    return sb.toString();
-		}
 	
 	public String getSearchableParameter(String s){
 		String searchType = "";

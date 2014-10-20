@@ -181,4 +181,62 @@ public class DataUtils {
 
 	}
 	
+	//
+	// Sorting functions
+	//
+	
+	public static ArrayList sortPerformanceList(List<Performance> inputPerformances){
+		ArrayList<Performance> sortedPerformances = new ArrayList<Performance>();
+		
+		while(!inputPerformances.isEmpty()){
+			int firstPerformanceIndex = 0;
+			
+			for(int i = 1; i < inputPerformances.size(); i++){
+				if(inputPerformances.get(firstPerformanceIndex).getStartTime().compareTo(inputPerformances.get(i).getStartTime()) == 1){
+					firstPerformanceIndex = i;
+				}
+			}
+			
+			sortedPerformances.add(inputPerformances.remove(firstPerformanceIndex));
+		}
+		
+		return sortedPerformances;
+	}
+	
+	public static ArrayList sortActorList(List<Actor> inputActors){
+		ArrayList<Actor> sortedActors = new ArrayList<Actor>();
+		
+		while(!inputActors.isEmpty()){
+			int firstActorIndex = 0;
+			
+			for(int i = 1; i < inputActors.size(); i++){
+				if(inputActors.get(firstActorIndex).getName().compareTo(inputActors.get(i).getName()) == 1){
+					firstActorIndex = i;
+				}
+			}
+			
+			sortedActors.add(inputActors.remove(firstActorIndex));
+		}
+		
+		return sortedActors;
+	}
+	
+	public static ArrayList sortCrewList(List<Crew> inputCrew){
+		ArrayList<Crew> sortedCrew = new ArrayList<Crew>();
+		
+		while(!inputCrew.isEmpty()){
+			int firstCrewIndex = 0;
+			
+			for(int i = 1; i < inputCrew.size(); i++){
+				if(inputCrew.get(firstCrewIndex).getName().compareTo(inputCrew.get(i).getName()) == 1){
+					firstCrewIndex = i;
+				}
+			}
+			
+			sortedCrew.add(inputCrew.remove(firstCrewIndex));
+		}
+		
+		return sortedCrew;
+	}
+	
 }

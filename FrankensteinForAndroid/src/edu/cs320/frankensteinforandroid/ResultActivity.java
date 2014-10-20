@@ -32,30 +32,89 @@ public class ResultActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_result);
-		
-		Intent intent = getIntent();
-		String searchType = intent.getStringExtra(SearchActivity.EXTRA_SEARCHTYPE);
-		String inputValue = intent.getStringExtra(SearchActivity.EXTRA_INPUTVALUE);
-		String resultList = intent.getStringExtra(SearchActivity.EXTRA_RESULTLIST);
-		
-		//List<Performance> performances = parseJSON(resultList);
+
+		// Determine what type of search the user did, display data appropriately
+
+		//List<Performance> performances = parseJSONIntoPerformances(resultList);
 		List<Performance> performances = DataUtils.parseJSONIntoPerformances(getString(R.string.example_json_results));
-		
+
+		ArrayAdapter adapter = getAdapterForList(performances);
+
 		final ListView listView = (ListView) findViewById(R.id.listView_result_searchResults);
-		ArrayAdapter<Performance> adapter = new ArrayAdapter<Performance>(this, android.R.layout.simple_list_item_1, performances);
-		
 		listView.setAdapter(adapter);
-		
 		listView.setClickable(true);
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-		  @Override
-		  public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-			  Object o = listView.getItemAtPosition(position);
-			  TextView selectionInfo = (TextView) findViewById(R.id.textView_result_selectionInfo);
-			  selectionInfo.setText(getFullInfoAboutObject(o));
-		  }
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+				Object o = listView.getItemAtPosition(position);
+				TextView selectionInfo = (TextView) findViewById(R.id.textView_result_selectionInfo);
+				selectionInfo.setText(getFullInfoAboutObject(o));
+			}
 		});
+	}
+
+	public ArrayAdapter getAdapterForList(List<Performance> performances){
+		Intent intent = getIntent();
+		String searchType = intent.getStringExtra(SearchActivity.EXTRA_SEARCHTYPE);
+		String inputValue = intent.getStringExtra(SearchActivity.EXTRA_INPUTVALUE);
+
+		if(searchType.equals("actor")){
+			List<Actor> actors = new ArrayList<Actor>();
+
+			for(int i = 0; i < performances.size(); i++){
+				List<Actor> actorsInThisPerformance = performances.get(i).getActors();
+
+				for(int j = 0; j < actorsInThisPerformance.size(); j++){
+
+					if(actorsInThisPerformance.get(j).getName().toLowerCase().contains(inputValue.toLowerCase())){
+						boolean alreadyInList = false;
+
+						for(int k = 0; k < actors.size(); k++){
+							if(actors.get(k).getName().equalsIgnoreCase(actorsInThisPerformance.get(j).getName())){
+								alreadyInList = true;
+							}
+						}
+
+						if(!alreadyInList){
+							actors.add(actorsInThisPerformance.get(j));
+						}
+					}
+				}
+			}
+
+			ArrayAdapter<Actor> adapter = new ArrayAdapter<Actor>(this, android.R.layout.simple_list_item_1, DataUtils.sortActorList(actors));
+			return adapter;
+		}else if(searchType.equals("crew")){
+			List<Crew> crew = new ArrayList<Crew>();
+
+			for(int i = 0; i < performances.size(); i++){
+				List<Crew> crewInThisPerformance = performances.get(i).getCrew();
+
+				for(int j = 0; j < crewInThisPerformance.size(); j++){
+
+					if(crewInThisPerformance.get(j).getName().toLowerCase().contains(inputValue.toLowerCase())){
+						boolean alreadyInList = false;
+
+						for(int k = 0; k < crew.size(); k++){
+							if(crew.get(k).getName().equalsIgnoreCase(crewInThisPerformance.get(j).getName())){
+								alreadyInList = true;
+							}
+						}
+
+						if(!alreadyInList){
+							crew.add(crewInThisPerformance.get(j));
+						}
+					}
+				}
+			}
+
+			ArrayAdapter<Crew> adapter = new ArrayAdapter<Crew>(this, android.R.layout.simple_list_item_1, DataUtils.sortCrewList(crew));
+			return adapter;
+		}else{
+			ArrayAdapter<Performance> adapter = new ArrayAdapter<Performance>(this, android.R.layout.simple_list_item_1, DataUtils.sortPerformanceList(performances));
+			return adapter;
+		}
 	}
 
 	@Override
@@ -76,13 +135,13 @@ public class ResultActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	/**
 	 * This function determines the type of listItem and returns its information
 	 */
 	public String getFullInfoAboutObject(Object listItem){
 		String listItemInfo = "";
-		
+
 		if(listItem instanceof Performance){
 			listItemInfo = ((Performance) listItem).getFullInfo();
 		}else if(listItem instanceof Production){
@@ -94,7 +153,7 @@ public class ResultActivity extends Activity {
 		}else if(listItem instanceof Crew){
 			listItemInfo = ((Crew) listItem).getFullInfo();
 		}
-		
+
 		return listItemInfo;
 	}
 }

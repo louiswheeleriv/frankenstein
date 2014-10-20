@@ -50,11 +50,14 @@ public class Crew {
 		this.responsibilities = responsibilities;
 	}
 	
+	public String toString(){
+		return name;
+	}
+	
 	public String getFullInfo(){
-		return ("Crew ID: " + crewId + "\n" +
-				"Name: " + name + "\n" +
+		return ("Name: " + name + "\n" +
 				"Bio: " + bio + "\n" +
-				"Responsibilities: " + responsibilities);
+				"Job: " + responsibilities);
 	}
 	
 }

@@ -251,7 +251,7 @@ int id action_context_bar 0x7f05001d
 int id action_menu_divider 0x7f050016
 int id action_menu_presenter 0x7f050017
 int id action_mode_close_button 0x7f050024
-int id action_settings 0x7f05004d
+int id action_settings 0x7f05004e
 int id activity_chooser_view_content 0x7f050025
 int id always 0x7f05000b
 int id beginning 0x7f050011
@@ -265,7 +265,7 @@ int id default_activity_button 0x7f050028
 int id dialog 0x7f05000e
 int id disableHome 0x7f050008
 int id dropdown 0x7f05000f
-int id editText_searchValue 0x7f050047
+int id editText_inputValue 0x7f050047
 int id edit_query 0x7f050030
 int id end 0x7f050013
 int id expand_activities_button 0x7f050026
@@ -309,6 +309,7 @@ int id split_action_bar 0x7f05001e
 int id submit_area 0x7f050039
 int id tabMode 0x7f050002
 int id textView1 0x7f050045
+int id textView_jsonResponseHidden 0x7f05004d
 int id textView_result_searchResultsLabel 0x7f05003f
 int id textView_result_selectionInfo 0x7f050043
 int id textView_result_selectionInfoLabel 0x7f050040
@@ -364,7 +365,7 @@ int string abc_shareactionprovider_share_with_application 0x7f0a000b
 int string action_settings 0x7f0a000e
 int string app_name 0x7f0a000d
 int string example_json_results 0x7f0a0018
-int string hint_edit_searchValue 0x7f0a000f
+int string hint_edit_inputValue 0x7f0a000f
 int string result_searchResults 0x7f0a0016
 int string result_selectionInfo 0x7f0a0017
 int string search_title_1 0x7f0a0014

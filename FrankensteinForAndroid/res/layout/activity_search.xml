@@ -16,31 +16,6 @@
         android:layout_weight="0"
         android:src="@drawable/frankenstein_title" />
 
-    <!--
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:layout_weight="0"
-        android:text="@string/search_title_1"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_gravity="center"
-        android:layout_weight="0"
-        android:text="@string/search_title_2"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:fontFamily=""
-        android:textColor="@color/color_green"
-        android:textSize="30sp" />
-    -->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -65,13 +40,13 @@
     </LinearLayout>
 
     <EditText
-        android:id="@+id/editText_searchValue"
+        android:id="@+id/editText_inputValue"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0"
         android:ems="10"
-        android:hint="@string/hint_edit_searchValue" >
+        android:hint="@string/hint_edit_inputValue" >
 
         <requestFocus />
     </EditText>
@@ -129,5 +104,10 @@
             android:onClick="showAllButtonClicked"
             android:text="@string/title_button_show_all" />
     </LinearLayout>
+    
+    <TextView android:id="@+id/textView_jsonResponseHidden"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
 </LinearLayout>

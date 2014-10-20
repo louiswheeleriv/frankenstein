@@ -40,9 +40,12 @@ public class Actor {
 		this.bio = bio;
 	}
 	
+	public String toString(){
+		return name;
+	}
+	
 	public String getFullInfo(){
-		return ("Actor ID: " + actorId + "\n" +
-				"Name: " + name + "\n" +
+		return ("Name: " + name + "\n" +
 				"Bio: " + bio);
 	}
 	
