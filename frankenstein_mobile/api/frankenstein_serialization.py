@@ -1,49 +1,53 @@
 __author__ = 'Raymond Macharia <raymond.machira@gmail.com>'
 
 from rest_framework import serializers
-from api.models import Stage, Actor, Performance, Production, Crew, Perfactor
+from api.models import Stage, Actor, Performance, Production, Crew, PerfActor
 
 
 class ActorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Actor
-        fields = ('name', 'bio')
+        fields = ('actor_name', 'actor_bio')
 
 
 class PerfActorSerializer(serializers.HyperlinkedModelSerializer):
-    # name = serializers.Field(source='actorid.name')
-    # bio = serializers.Field(source='actorid.bio')
-    actor = ActorSerializer(source='actorid')
+    name = serializers.Field(source='actor_name')
+    bio = serializers.Field(source='actor_bio')
+    role = serializers.Field(source='actor.role')
+
+    # appearance_time = serializers.Field(source='appearance_time')
+    # actor = ActorSerializer(many=False)
 
     class Meta:
-        model = Perfactor
-        fields = ('actor', 'appearancetime')
+        model = PerfActor
+        fields = ('name','bio','role')
 
 
 class StageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stage
-        fields = ('location', 'description')
+        fields = ('stage_location', 'stage_description')
 
 
 class ProductionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Production
-        fields = ('name', 'info')
+        fields = ('production_name', 'production_info')
 
 
 class CrewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Crew
-        fields = ('name', 'bio')
+        fields = ('crew_name', 'crew_bio')
 
 class PerformanceSerializer(serializers.ModelSerializer):
-    stageid = StageSerializer(many=False)
-    crews = CrewSerializer(many=True)
-    actor = PerfActorSerializer(source='actors',many=True)
-    productionid = ProductionSerializer(many=False)
+    performance_stage = StageSerializer(many=False)
+    # performance_crews = CrewSerializer(many=True)
+    # performance_actors = PerfActorSerializer(source = 'performance_actors', many=True,read_only=True)
+    performance_actors = serializers.RelatedField(many=True)
+    performance_production = ProductionSerializer(many=False)
 
     class Meta:
         model = Performance
-        fields = ('performanceid','info', 'starttime', 'productionid',
-                  'stageid', 'actor')
+        fields = ('performance_info', 'performance_start_time', 'performance_production',
+                  'performance_stage', 'performance_actors')

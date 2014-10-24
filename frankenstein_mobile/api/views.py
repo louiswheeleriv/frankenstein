@@ -1,4 +1,4 @@
-from api.models import Actor, Performance, Stage, Crew, Perfactor
+from api.models import Actor, Performance, Stage, Crew, PerfActor
 from api.frankenstein_serialization import ActorSerializer, PerformanceSerializer, StageSerializer, CrewSerializer, PerfActorSerializer
 from rest_framework import generics
 
@@ -12,11 +12,11 @@ class ActorDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ActorSerializer
 
 class PerfactorList(generics.ListAPIView):
-    queryset = Perfactor.objects.all()
+    queryset = PerfActor.objects.all()
     serializer_class = PerfActorSerializer
 
 class PerfactorDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Perfactor.objects.all()
+    queryset = PerfActor.objects.all()
     serializer_class = PerfActorSerializer
 
 class PerformanceList(generics.ListCreateAPIView):
