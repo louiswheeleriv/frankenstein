@@ -1,0 +1,26 @@
+{% load static %}
+<html>
+<head>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="{% static "frankenstein_site/css/style.css" %}">
+	<link rel="stylesheet" href="{% static "django_tables2/themes/paleblue/css/screen.css" %}">
+
+
+	{% block head %}
+    {% endblock %}
+</head>
+<body>
+
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container">
+			<a class="navbar-brand" href="/">Frankenstein</a>	
+			<p class="navbar-text">Navigate and explore the play Frankenstein in this interactive app to set off and design your experience the way YOU want to.</p>
+		</div>
+	</nav>
+
+	{% block content %}
+	{% endblock %}
+
+</body>
+</html>
