@@ -44,7 +44,7 @@ public class SearchActivity extends Activity {
 	public final static String EXTRA_INPUTVALUE = "edu.cs320.frankensteinforandroid.INPUTVALUE";
 	public final static String EXTRA_RESULTLIST = "edu.cs320.frankensteinforandroid.RESULTLIST";
 	
-	public final static String SERVER_ADDRESS = "http://127.0.0.1:8000";
+	public final static String SERVER_ADDRESS = "http://localhost:8000/api/performances/";
 	//public final static String SERVER_ADDRESS = "http://date.jsontest.com";
 	
 	@Override
