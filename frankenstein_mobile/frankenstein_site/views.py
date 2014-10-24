@@ -5,6 +5,7 @@ from django_tables2   import RequestConfig
 
 from api.models import Production, Stage, Actor, CrewResponsibility, Crew, Performance
 from api.tables import ActorTable, PerformanceTable, StageTable, CrewRespTable, CrewTable
+from api.forms import ActorForm
 
 def index(request):
     current_production = Production.objects.order_by('-id')[:5]
@@ -14,63 +15,95 @@ def index(request):
     })
     return HttpResponse(template.render(context))
 
-def results(request):
-    table = ActorTable(Actor.objects.all())
-    # table = PerformanceTable(Performance.objects.all())
-    # table = StageTable(Stage.objects.all())
-    # table = CrewRespTable(CrewResponsibility.objects.all())
-    # table = CrewTable(Crew.objects.all())
-
-    RequestConfig(request).configure(table)
-    return render(request, 'frankenstein_mobile/results.html', {'table': table})
-
-# def results(request):
-#     return render(request, "frankenstein_mobile/results.html", {"actors": Actor.objects.all()})
-
-# def search(request):
-#     latest_actor_list = Actor.objects.order_by('-id')[:5]
-#     template = loader.get_template('frankenstein_mobile/search.html')
-#     context = RequestContext(request, {
-#         'latest_actor_list': latest_actor_list,
-#     })
-#     return HttpResponse(template.render(context))
-
-# def results(request, question_id):
-#     response = "The results of search based on category %s."
-#     return HttpResponse(response % question_id)
-
-
-
-    # all_performances = Performance.objects.all()
-    # template = loader.get_template('frankenstein_mobile/results.html')
-    # context = RequestContext(request, {
-    #     'all_performances': all_performances,
-    # })
-    # return HttpResponse(template.render(context))
+###########################################################################
 
 def search_actor(request):
-    latest_actor_list = Actor.objects.order_by('-id')[:5]
+    current_production = Production.objects.order_by('-id')[:5]
     template = loader.get_template('frankenstein_mobile/search_actor.html')
     context = RequestContext(request, {
-        'latest_actor_list': latest_actor_list,
+        'current_production': current_production,
     })
     return HttpResponse(template.render(context))
+
+def results_actor(request):
+    if request.GET.get('q'):
+        message = request.GET['q']
+    else:
+        message = ''
+
+    table = ActorTable(Actor.objects.filter(actor_name=message))
+
+    RequestConfig(request).configure(table)
+    return render(request, 'frankenstein_mobile/results_actor.html', {'table': table})
+
+###########################################################################
 
 def search_crew(request):
-    latest_actor_list = Actor.objects.order_by('-id')[:5]
+    latest_crew_list = Crew.objects.order_by('-id')[:5]
     template = loader.get_template('frankenstein_mobile/search_crew.html')
     context = RequestContext(request, {
-        'latest_actor_list': latest_actor_list,
+        'latest_crew_list': latest_crew_list,
     })
     return HttpResponse(template.render(context))
 
+def results_crew(request):
+    if request.GET.get('q'):
+        message = request.GET['q']
+    else:
+        message = ''
+
+    table = CrewTable(Crew.objects.filter(crew_name=message))
+
+    RequestConfig(request).configure(table)
+    return render(request, 'frankenstein_mobile/results_crew.html', {'table': table})
+
+###########################################################################
+
 def search_stage(request):
-    latest_actor_list = Actor.objects.order_by('-id')[:5]
+    latest_stage_list = Stage.objects.order_by('-id')[:5]
     template = loader.get_template('frankenstein_mobile/search_stage.html')
     context = RequestContext(request, {
-        'latest_actor_list': latest_actor_list,
+        'latest_stage_list': latest_stage_list,
     })
     return HttpResponse(template.render(context))
+
+def results_stage(request):
+    if request.GET.get('q'):
+        message = request.GET['q']
+    else:
+        message = ''
+
+    table = StageTable(Stage.objects.filter(stage_location=message))
+
+    RequestConfig(request).configure(table)
+    return render(request, 'frankenstein_mobile/results_stage.html', {'table': table})
+
+###########################################################################
+
+def search_time(request):
+    latest_performance_list = Performance.objects.order_by('-id')[:5]
+    template = loader.get_template('frankenstein_mobile/search_time.html')
+    context = RequestContext(request, {
+        'latest_performance_list': latest_performance_list,
+    })
+    return HttpResponse(template.render(context))
+
+def results_time(request):
+    if request.GET.get('q'):
+        message = request.GET['q']
+    else:
+        message = ''
+
+    table = PerformanceTable(Performance.objects.filter(performance_start_time=message))
+
+    RequestConfig(request).configure(table)
+    return render(request, 'frankenstein_mobile/results_time.html', {'table': table})
+
+###########################################################################
+
+
+
+
 
 def search_performance(request):
     latest_actor_list = Actor.objects.order_by('-id')[:5]
@@ -80,10 +113,3 @@ def search_performance(request):
     })
     return HttpResponse(template.render(context))
 
-def search_time(request):
-    latest_actor_list = Actor.objects.order_by('-id')[:5]
-    template = loader.get_template('frankenstein_mobile/search_time.html')
-    context = RequestContext(request, {
-        'latest_actor_list': latest_actor_list,
-    })
-    return HttpResponse(template.render(context))

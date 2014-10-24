@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class Production(models.Model):
     production_name = models.CharField(max_length=200)
     production_info = models.CharField(max_length=200)
@@ -48,6 +47,7 @@ class Performance(models.Model):
     performance_production = models.ForeignKey(Production)
     performance_actors = models.ManyToManyField(Actor)
     performance_crews = models.ManyToManyField(Crew)
+
 
     def __unicode__(self):
             return 'Production: {0}, Stage: {1}, Start Time: {2}, Info: {3}, Actor: {4}, Crew: {5}'.format(self.performance_production, self.performance_stage,
