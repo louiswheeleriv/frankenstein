@@ -1,0 +1,17 @@
+{% extends "frankenstein_mobile/base.html" %}
+{% block content %}
+{% load static %}
+
+<div class="container">
+	<h1>Search By <b>Stage Name</b></h1>
+	<form role="form" action="results">
+		<div class="form-group">
+			<input type="text" class="form-control" id="searchDetail" placeholder="Stage Name">
+		</div>
+		<button type="submit" class="btn btn-default">Search</button>
+	</form>
+
+</div>
+
+
+{% endblock %}

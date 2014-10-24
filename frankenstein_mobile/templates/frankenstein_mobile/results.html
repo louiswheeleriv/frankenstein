@@ -1,0 +1,42 @@
+{% extends "frankenstein_mobile/base.html" %}
+{% block content %}
+{% load render_table from django_tables2 %}
+{% load static %}
+
+<div class="container">
+	<h1>Results</h1>
+		<table class="table" style="color:black;">
+			<div>
+				{% render_table table %}
+			</div>
+		</table>
+</div>
+
+
+
+<!-- <div class="table-responsive">
+	<table class="table">
+		<thead>
+			<tr>
+				<th data-field="name">Actor Name</th>
+				<th data-field="performance">Performance</th>
+				<th data-field="stage">Stage</th>
+				<th data-field="time">Time</th>
+			</tr>
+		</thead>
+		<tr>
+			<td>John Smith</td>
+			<td> Part 1 </td>
+			<td> Williams room 100 </td>
+			<td> 7:00pm </td>
+		</tr>
+		<tr>
+			<td>Jane Doe</td>
+			<td> Part 3 </td>
+			<td> Williams room 500 </td>
+			<td> 9:00pm </td>
+		</tr>
+	</table>
+</div>
+ -->
+{% endblock %}
