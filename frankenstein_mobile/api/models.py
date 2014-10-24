@@ -77,7 +77,7 @@ class Performance(models.Model):
 
     def __unicode__(self):
         return 'Production: {0}, Stage: {1}, Start Time: {2}, Info: {3}, Actor: {4}, Crew: {5}'.format(
-            self.productionid, self.stageid, self.starttime, self.info,self.actors.filter(pk=3) ,self.crews.all())
+            self.productionid, self.stageid, self.starttime, self.info,self.actors.all() ,self.crews.all())
             # self.productionid, self.stageid, self.starttime, self.info,self.actors, self.crews)
 
     class Meta:
