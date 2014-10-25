@@ -3,27 +3,17 @@ from django.http import HttpResponse
 from django.template import RequestContext, loader
 from django_tables2   import RequestConfig
 
-from api.models import Production, Stage, Actor, CrewResponsibility, Crew, Performance
-from api.tables import ActorTable, PerformanceTable, StageTable, CrewRespTable, CrewTable
-from api.forms import ActorForm
+from api.models import Production, Stage, Actor, Crew, Performance
+from api.tables import ActorTable, PerformanceTable, StageTable, CrewTable
+
 
 def index(request):
-    current_production = Production.objects.order_by('-id')[:5]
-    template = loader.get_template('frankenstein_mobile/index.html')
-    context = RequestContext(request, {
-        'current_production': current_production,
-    })
-    return HttpResponse(template.render(context))
+    return render(request, 'frankenstein_mobile/index.html')
 
 ###########################################################################
 
 def search_actor(request):
-    current_production = Production.objects.order_by('-id')[:5]
-    template = loader.get_template('frankenstein_mobile/search_actor.html')
-    context = RequestContext(request, {
-        'current_production': current_production,
-    })
-    return HttpResponse(template.render(context))
+    return render(request, 'frankenstein_mobile/search_actor.html')
 
 def results_actor(request):
     if request.GET.get('q'):
@@ -31,20 +21,18 @@ def results_actor(request):
     else:
         message = ''
 
-    table = ActorTable(Actor.objects.filter(actor_name=message))
+    if Actor.objects.filter(actor_name=message).exists():
+        table = ActorTable(Actor.objects.filter(actor_name=message))
 
-    RequestConfig(request).configure(table)
-    return render(request, 'frankenstein_mobile/results_actor.html', {'table': table})
+        RequestConfig(request).configure(table)
+        return render(request, 'frankenstein_mobile/results_actor.html', {'table': table})
+    else:
+        return render(request, 'frankenstein_mobile/results_notfound.html')
 
 ###########################################################################
 
 def search_crew(request):
-    latest_crew_list = Crew.objects.order_by('-id')[:5]
-    template = loader.get_template('frankenstein_mobile/search_crew.html')
-    context = RequestContext(request, {
-        'latest_crew_list': latest_crew_list,
-    })
-    return HttpResponse(template.render(context))
+    return render(request, 'frankenstein_mobile/search_crew.html')
 
 def results_crew(request):
     if request.GET.get('q'):
@@ -52,20 +40,19 @@ def results_crew(request):
     else:
         message = ''
 
-    table = CrewTable(Crew.objects.filter(crew_name=message))
+    if Crew.objects.filter(crew_name=message).exists():
+        table = CrewTable(Crew.objects.filter(crew_name=message))
 
-    RequestConfig(request).configure(table)
-    return render(request, 'frankenstein_mobile/results_crew.html', {'table': table})
+        RequestConfig(request).configure(table)
+        return render(request, 'frankenstein_mobile/results_crew.html', {'table': table})
+    else:
+        return render(request, 'frankenstein_mobile/results_notfound.html')
+
 
 ###########################################################################
 
 def search_stage(request):
-    latest_stage_list = Stage.objects.order_by('-id')[:5]
-    template = loader.get_template('frankenstein_mobile/search_stage.html')
-    context = RequestContext(request, {
-        'latest_stage_list': latest_stage_list,
-    })
-    return HttpResponse(template.render(context))
+    return render(request, 'frankenstein_mobile/search_stage.html')
 
 def results_stage(request):
     if request.GET.get('q'):
@@ -73,20 +60,19 @@ def results_stage(request):
     else:
         message = ''
 
-    table = StageTable(Stage.objects.filter(stage_location=message))
+    if Stage.objects.filter(stage_location=message).exists():
+        table = StageTable(Stage.objects.filter(stage_location=message))
 
-    RequestConfig(request).configure(table)
-    return render(request, 'frankenstein_mobile/results_stage.html', {'table': table})
+        RequestConfig(request).configure(table)
+        return render(request, 'frankenstein_mobile/results_stage.html', {'table': table})
+    else:
+        return render(request, 'frankenstein_mobile/results_notfound.html')
+
 
 ###########################################################################
 
 def search_time(request):
-    latest_performance_list = Performance.objects.order_by('-id')[:5]
-    template = loader.get_template('frankenstein_mobile/search_time.html')
-    context = RequestContext(request, {
-        'latest_performance_list': latest_performance_list,
-    })
-    return HttpResponse(template.render(context))
+    return render(request, 'frankenstein_mobile/search_time.html')
 
 def results_time(request):
     if request.GET.get('q'):
@@ -94,22 +80,36 @@ def results_time(request):
     else:
         message = ''
 
-    table = PerformanceTable(Performance.objects.filter(performance_start_time=message))
+    if Performance.objects.filter(performance_start_time=message).exists():
+        table = PerformanceTable(Performance.objects.filter(performance_start_time=message))
 
-    RequestConfig(request).configure(table)
-    return render(request, 'frankenstein_mobile/results_time.html', {'table': table})
+        RequestConfig(request).configure(table)
+        return render(request, 'frankenstein_mobile/results_time.html', {'table': table})
+    else:
+        return render(request, 'frankenstein_mobile/results_notfound.html')
+
 
 ###########################################################################
 
 
-
-
-
 def search_performance(request):
-    latest_actor_list = Actor.objects.order_by('-id')[:5]
+    performance_list = Performance.objects.values('performance_info')
     template = loader.get_template('frankenstein_mobile/search_performance.html')
     context = RequestContext(request, {
-        'latest_actor_list': latest_actor_list,
+        'performance_list': performance_list,
     })
     return HttpResponse(template.render(context))
 
+def results_performance(request):
+    if request.GET.get('q'):
+        message = request.GET['q']
+    else:
+        message = ''
+
+    if Performance.objects.filter(performance_info=message).exists():
+        table = PerformanceTable(Performance.objects.filter(performance_info=message))
+
+        RequestConfig(request).configure(table)
+        return render(request, 'frankenstein_mobile/results_performance.html', {'table': table})
+    else:
+        return render(request, 'frankenstein_mobile/results_notfound.html')
