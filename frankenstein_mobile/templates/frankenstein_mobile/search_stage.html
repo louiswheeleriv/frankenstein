@@ -1,9 +1,12 @@
+<!-- Search for the stage by location name. The page sends the results to the results_stage page. -->
+
 {% extends "frankenstein_mobile/base.html" %}
 {% block content %}
 {% load static %}
 
 <div class="container">
-	<h1>Search By <b>Crew Name</b></h1>
+	
+	<h1>Search By <b>Stage Name</b></h1>
 	<form role="form" action="results_stage">
 		<div class="form-group">
 			<input type="text" class="form-control" name="q" placeholder="Stage Name">

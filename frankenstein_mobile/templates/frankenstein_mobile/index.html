@@ -1,3 +1,5 @@
+<!-- The front page of the web app. Has all the buttons that links to each search page -->
+
 {% extends "frankenstein_mobile/base.html" %}
 {% block content %}
 {% load static %}
@@ -6,45 +8,39 @@
 	<h1 id="searchHeader">Search By...</h1>
 
 	<form role="form" action="" method="POST" id="post-form">
+
 		<div class="row">
-			<div class="col-xs-6 col-md-4">
+			<div class="col-xs-5 col-md-2">
 				<a class="btn btn-default" href="/search_actor" role="button">Actor Name</a>
 			</div>
-			<div class="col-xs-6 col-md-4">
+			<div class="col-xs-5 col-md-2">
 				<a class="btn btn-default" href="/search_crew" role="button">Crew Name</a>
 			</div>
-
 		</div>
 
 
 		<div class="row top-buffer">
-
-			<div class="col-xs-6 col-md-4">
+			<div class="col-xs-5 col-md-2">
 				<a class="btn btn-default" href="/search_stage" role="button">Stage Name</a>
 			</div>
-			<div class="col-xs-6 col-md-4">
+			<div class="col-xs-5 col-md-2">
 				<a class="btn btn-default" href="/search_performance" role="button">A Significant Plot Event</a>
 			</div>
-
 		</div>
 
 		<div class="row top-buffer">
-
-			<div class="col-xs-6 col-md-4">
+			<div class="col-xs-5 col-md-2">
 				<a class="btn btn-default" href="/search_time" role="button">A Specific Time</a>
 			</div>
-			<div class="col-xs-6 col-md-4">
+			<div class="col-xs-5 col-md-2">
 				<!-- <a class="btn btn-default" href="/results" role="button">All</a> -->
 			</div>
-
 		</div>
 
-
 	</form>
-
 </div>
 
 
- <script type="text/javascript" href="{% static "frankenstein_site/js/script.js" %}"></script>
+<script type="text/javascript" href="{% static "frankenstein_site/js/script.js" %}"></script>
 
 {% endblock %}

@@ -33,11 +33,3 @@ class CrewTable(tables.Table):
         fields = ('crew_name', 'crew_responsibility', 'crew_bio')
         sequence = ('crew_name', 'crew_responsibility', 'crew_bio')
 
-
-class CrewRespTable(tables.Table):
-    class Meta:
-        model = CrewResponsibility
-        # add class="paleblue" to <table> tag
-        attrs = {"class": "paleblue"}
-        fields = ('responsibility')
-        sequence = ('responsibility')
