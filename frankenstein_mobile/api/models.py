@@ -32,7 +32,7 @@ class PerfActor(models.Model):
     role = models.CharField(max_length=200)
 
     def __unicode__(self):
-        return 'Actor Performance. Name: {0}, Appearance Time: {1}, Role: {2}'.format(self.actorid, self.appearancetime,
+        return 'Actor Performance. Name: {0}, Appearance Time: {1}, Role: {2}'.format(self.actor, self.appearance_time,
                                                                                       self.role)
 
 
@@ -51,7 +51,6 @@ class PerfCrew(models.Model):
 
     def __unicode__(self):
         return 'Crew on Performance. Name: {0}, Responsibility: {1}'.format(self.crew, self.responsibilities)
-            # self.productionid, self.stageid, self.starttime, self.info,self.actors, self.crews)
 
 
 class Performance(models.Model):
@@ -59,10 +58,7 @@ class Performance(models.Model):
     performance_info = models.CharField(max_length=200)
     performance_start_time = models.DateTimeField()
     performance_production = models.ForeignKey(Production)
-    performance_actors = models.ManyToManyField(Actor, through=PerfActor)
-    performance_crews = models.ManyToManyField(Crew, through=PerfCrew)
 
     def __unicode__(self):
-            return 'Production: {0}, Stage: {1}, Start Time: {2}, Info: {3}, Actor: {4}, Crew: {5}'.format(
-                self.performance_production, self.performance_stage,self.performance_start_time, self.performance_info,
-                '', '')
+            return 'Production: {0}, Stage: {1}, Start Time: {2}, Info: {3}'.format(
+                self.performance_production, self.performance_stage,self.performance_start_time, self.performance_info)
