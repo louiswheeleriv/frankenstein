@@ -50,5 +50,5 @@ class Performance(models.Model):
 
     def __unicode__(self):
             return 'Production: {0}, Stage: {1}, Start Time: {2}, Info: {3}, Actor: {4}, Crew: {5}'.format(self.performance_production, self.performance_stage,
-                                                  self.performance_start_time, self.performance_info,
+                                                  self.performance_start_time.strftime('%m/%d/%Y'), self.performance_info,
                                                   '', '')
