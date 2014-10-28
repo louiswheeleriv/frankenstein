@@ -1,11 +1,13 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, QueryDict, HttpRequest
 from django.template import RequestContext, loader
 from django_tables2   import RequestConfig
 
+from api.frankenstein_serialization import PerformanceSerializer
 from api.models import Production, Stage, Actor, Crew, Performance
 from api.tables import ActorTable, PerformanceTable, StageTable, CrewTable
-
+from api.views import PerformanceList
+import json
 
 def index(request):
     return render(request, 'frankenstein_mobile/index.html')
@@ -21,13 +23,25 @@ def results_actor(request):
     else:
         message = ''
 
-    if Actor.objects.filter(actor_name=message).exists():
-        table = ActorTable(Actor.objects.filter(actor_name=message))
+    qdict = QueryDict('actor_name={0}&format=json'.format(message))
+    h = HttpRequest()
+    h.GET = qdict
+    h.QUERY_PARAMS = qdict
+    p = PerformanceList()
+    sx = PerformanceSerializer()
+    sx = PerformanceSerializer(p.get_queryset().get())
 
-        RequestConfig(request).configure(table)
-        return render(request, 'frankenstein_mobile/results_actor.html', {'table': table})
-    else:
-        return render(request, 'frankenstein_mobile/results_notfound.html')
+    # sx.data is the data!!!
+    results = sx.data
+    #return HttpResponse(json.dumps(results))
+    return render(request, 'frankenstein_mobile/results_actor.html', {'results': json.dumps(results)});
+    # if Actor.objects.filter(actor_name=message).exists():
+    #     table = ActorTable(Actor.objects.filter(actor_name=message))
+    #
+    #     RequestConfig(request).configure(table)
+    #     return render(request, 'frankenstein_mobile/results_actor.html', {'table': table})
+    # else:
+    #     return render(request, 'frankenstein_mobile/results_notfound.html')
 
 ###########################################################################
 

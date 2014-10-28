@@ -2,14 +2,17 @@
 
 {% extends "frankenstein_mobile/base.html" %}
 {% block content %}
-{% load render_table from django_tables2 %}
+<!-- {% load render_table from django_tables2 %} -->
 {% load static %}
 
 <div class="container">
 	<h1>Results</h1>
 		<table class="table" style="color:black;">
 			<div>
-				{% render_table table %}
+				<script type="text/javascript">
+					var data = {{ results|safe }};
+					alert(data.performance_info);
+				</script>
 			</div>
 		</table>
 </div>

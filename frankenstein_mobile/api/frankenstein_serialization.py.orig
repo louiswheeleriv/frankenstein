@@ -53,11 +53,17 @@ class PerformanceSerializer(serializers.ModelSerializer):
     performance_actors = PerfActorSerializer(source='perfactor_set', many=True)
     performance_production = ProductionSerializer(many=False)
 
+<<<<<<< HEAD
     def transform_performance_start_time(self, object, value):
         if value is not None:
             return value.strftime('%m/%d/%Y')
         else:
             return ''
+=======
+    def transform_performance_start_time(self,object,value):
+        return  value.strftime('%m/%d/%Y')
+
+>>>>>>> started fixing the issue with searching and json. Fixed it for actors. In the middle of fixing the others. Need raymond's code
 
     class Meta:
         model = Performance
