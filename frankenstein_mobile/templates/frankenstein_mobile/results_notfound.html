@@ -1,0 +1,13 @@
+<!-- The results page for the performance search. Shows results based on filter from page. Rendered through django-tables2 -->
+
+{% extends "frankenstein_mobile/base.html" %}
+{% block content %}
+{% load render_table from django_tables2 %}
+{% load static %}
+
+<div class="container">
+	<h1>No Results Match Your Search</h1>
+	<h2><a href="/">Try Again?</a></h2>
+</div>
+
+{% endblock %}

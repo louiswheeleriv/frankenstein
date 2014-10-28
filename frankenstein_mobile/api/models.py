@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class Production(models.Model):
     production_name = models.CharField(max_length=200)
     production_info = models.CharField(max_length=200)
