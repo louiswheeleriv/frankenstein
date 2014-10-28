@@ -35,8 +35,9 @@ public class ResultActivity extends Activity {
 
 		// Determine what type of search the user did, display data appropriately
 
-		//List<Performance> performances = parseJSONIntoPerformances(resultList);
-		List<Performance> performances = DataUtils.parseJSONIntoPerformances(getString(R.string.example_json_results));
+		Intent intent = getIntent();
+		List<Performance> performances = DataUtils.parseJSONIntoPerformances(intent.getStringExtra(SearchActivity.EXTRA_RESULTLIST));
+		//List<Performance> performances = DataUtils.parseJSONIntoPerformances(getString(R.string.example_json_results));
 
 		ArrayAdapter adapter = getAdapterForList(performances);
 

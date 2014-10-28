@@ -44,8 +44,9 @@ public class SearchActivity extends Activity {
 	public final static String EXTRA_INPUTVALUE = "edu.cs320.frankensteinforandroid.INPUTVALUE";
 	public final static String EXTRA_RESULTLIST = "edu.cs320.frankensteinforandroid.RESULTLIST";
 	
-	public final static String SERVER_ADDRESS = "http://localhost:8000/api/performances/";
-	//public final static String SERVER_ADDRESS = "http://date.jsontest.com";
+	public final static String SERVER_ADDRESS = "http://192.168.1.138:8000/api/performances/?";
+	public final static String SERVER_SUFFIX = "format=json";
+	public final static String SERVER_TEST = "http://139.147.27.214:8000/api/performances/?format=json";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +99,7 @@ public class SearchActivity extends Activity {
 		Intent intent = new Intent(this, ResultActivity.class);
 		
 		// Send information to Django server, which will return JSON object(s)
-		new Thread(){
-
+		Thread t = new Thread(new Runnable(){
 			@Override
 			public void run(){
 				try{
@@ -111,28 +111,40 @@ public class SearchActivity extends Activity {
 					String inputValue = editText.getText().toString();
 					String resultList = "";
 					
-					//URL serverUrl = new URL(SERVER_ADDRESS + "/?" + searchType + "=" + inputValue);
-					URL serverUrl = new URL(SERVER_ADDRESS);
+					URL serverUrl = new URL(SERVER_ADDRESS + searchType + "=" + inputValue + "&" + SERVER_SUFFIX);
+					//URL serverUrl = new URL(SERVER_TEST);
 					HttpURLConnection connection = (HttpURLConnection) serverUrl.openConnection();
-		            
+		            connection.setRequestMethod("GET");
+		            connection.setDoInput(true);
+		            connection.connect();
+					
 		            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 		            TextView text = (TextView) findViewById(R.id.textView_jsonResponseHidden);
 		            
 		            String line = "";
 		            while((line = in.readLine()) != null){
 		            	resultList += line;
+		            	Log.d("RESPONSE LINE", line);
 		            }
 		            
 		            Log.d("RESPONSE", resultList);
 		            
 		            text.setText(resultList);
 		            in.close();
+		            connection.disconnect();
+		            
 				}catch(Exception e){
 					e.printStackTrace();
 				}
 			}
-			
-		}.start();
+		});
+		
+		t.start();
+		try {
+			t.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		
 		Spinner spinner = (Spinner) findViewById(R.id.spinner_searchType);
 		EditText editText = (EditText) findViewById(R.id.editText_inputValue);
@@ -155,22 +167,22 @@ public class SearchActivity extends Activity {
 		
 		switch(s){
 		case "a production":
-			searchType = "production";
+			searchType = "production_id";
 			break;
 		case "a stage":
-			searchType = "stage";
+			searchType = "stage_location";
 			break;
 		case "an actor":
-			searchType = "actor";
+			searchType = "actor_name";
 			break;
 		case "a stage crew member":
-			searchType = "crew";
+			searchType = "crew_name";
 			break;
 		case "a significant plot event":
 			searchType = "event";
 			break;
 		case "a specific time":
-			searchType = "time";
+			searchType = "performance_start_time";
 			break;
 		}
 		
