@@ -53,6 +53,12 @@ class PerformanceSerializer(serializers.ModelSerializer):
     performance_actors = PerfActorSerializer(source='perfactor_set', many=True)
     performance_production = ProductionSerializer(many=False)
 
+    def transform_performance_start_time(self, object, value):
+        if value is not None:
+            return value.strftime('%m/%d/%Y')
+        else:
+            return ''
+
     class Meta:
         model = Performance
         fields = ('performance_info', 'performance_start_time', 'performance_production',
