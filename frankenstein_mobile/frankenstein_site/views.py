@@ -33,7 +33,6 @@ def results_actor(request):
 
     # sx.data is the data!!!
     results = sx.data
-    #return HttpResponse(json.dumps(results))
     return render(request, 'frankenstein_mobile/results_actor.html', {'results': json.dumps(results)});
     # if Actor.objects.filter(actor_name=message).exists():
     #     table = ActorTable(Actor.objects.filter(actor_name=message))
@@ -54,13 +53,25 @@ def results_crew(request):
     else:
         message = ''
 
-    if Crew.objects.filter(crew_name=message).exists():
-        table = CrewTable(Crew.objects.filter(crew_name=message))
+    qdict = QueryDict('crew_name={0}&format=json'.format(message))
+    h = HttpRequest()
+    h.GET = qdict
+    h.QUERY_PARAMS = qdict
+    p = PerformanceList()
+    sx = PerformanceSerializer()
+    sx = PerformanceSerializer(p.get_queryset().get())
 
-        RequestConfig(request).configure(table)
-        return render(request, 'frankenstein_mobile/results_crew.html', {'table': table})
-    else:
-        return render(request, 'frankenstein_mobile/results_notfound.html')
+    # sx.data is the data!!!
+    results = sx.data
+    return render(request, 'frankenstein_mobile/results_crew.html', {'results': json.dumps(results)});
+
+    # if Crew.objects.filter(crew_name=message).exists():
+    #     table = CrewTable(Crew.objects.filter(crew_name=message))
+    #
+    #     RequestConfig(request).configure(table)
+    #     return render(request, 'frankenstein_mobile/results_crew.html', {'table': table})
+    # else:
+    #     return render(request, 'frankenstein_mobile/results_notfound.html')
 
 
 ###########################################################################
