@@ -1,6 +1,5 @@
-
-**\bin\**
-**.pyc
-**\gen\**
-**.apk
-**.dex
+gen/**
+bin/**
+*.idea
+*.pyc
+*.project
