@@ -15,6 +15,9 @@ class PerfActorSerializer(serializers.HyperlinkedModelSerializer):
     bio = serializers.Field(source='actor.actor_bio')
     role = serializers.Field(source='role')
 
+    def transform_appearance_time(self, object, value):
+        return value.strftime('%H:%M') if value is not None else ''
+
     class Meta:
         model = PerfActor
         fields = ('name', 'bio', 'role', 'appearance_time', 'role')
@@ -54,10 +57,8 @@ class PerformanceSerializer(serializers.ModelSerializer):
     performance_production = ProductionSerializer(many=False)
 
     def transform_performance_start_time(self, object, value):
-        if value is not None:
-            return value.strftime('%m/%d/%Y')
-        else:
-            return ''
+        return value.strftime('%H:%M, %m/%d/%Y') if value is not None else ''
+
 
     class Meta:
         model = Performance

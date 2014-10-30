@@ -1,11 +1,11 @@
-<!-- The results page for the actors search. Shows results based on filter from page. Rendered through django-tables2 -->
+<!-- The results page for the actors search. Shows results based on filter from page. -->
 
 {% extends "frankenstein_mobile/base.html" %}
 {% block content %}
 {% load static %}
 
 <div class="container">
-	<h1>Results</h1>
+	<h1 id="pageHeader"> </h1>
 	<div id="theResults">
 		
 	</div> 
@@ -16,80 +16,106 @@
 <script type="text/javascript">
 		// get the data from the json object
 		var data = {{ results|safe }};
+		
+		// the name they searched with
+		var search_name = '{{ actor_name }}';
 
-		// get how many actors there are
-		var actor_length = data.performance_actors.length;
+		var pHeader = document.getElementById("pageHeader").innerHTML = "Performances with actor's named <em>" + search_name + "</em>.....";
 
-		// if there are no actors
-		if(actor_length == 0 ) {
-			// write no results try again
-		}
-		// if there are actors (query is successful)
-		if(actor_length > 0) {
+		// the main panel group div
+		var panelgroup = document.createElement("div");
+		panelgroup.id = "accordion";
+		panelgroup.className = "panel-group";
 
-			// the main panel group div
-			var panelgroup = document.createElement("div");
-			panelgroup.id = "accordion";
-			panelgroup.className = "panel-group";
+		// add it to the main results page
+		var res = document.getElementById("theResults");
+		res.appendChild(panelgroup);
 
-			// add it to the main results page
-			var res = document.getElementById("theResults");
-			res.appendChild(panelgroup);
+		for (var i = 0; i < data.length; i++) {
 
-			for (var i = 0; i < actor_length; i++) {
+			var pdefault = document.createElement("div");
+			pdefault.className = "panel panel-default";
 
-				var pdefault = document.createElement("div");
-				pdefault.className = "panel panel-default";
+			var panelheading = document.createElement("div");
+			panelheading.className = "panel-heading";
 
-				var panelheading = document.createElement("div");
-				panelheading.className = "panel-heading";
+			var ptitle = document.createElement("h4");
+			ptitle.className = "panel-title";
 
-				var ptitle = document.createElement("h4");
-				ptitle.className = "panel-title";
+			var header = document.createElement("a")
+			header.setAttribute("data-toggle", "collapse");
+			header.setAttribute("data-parent", "#accordion");
+			header.setAttribute("href", "#"+i);
 
-				var header = document.createElement("a")
-				header.setAttribute("data-toggle", "collapse");
-				header.setAttribute("data-parent", "#accordion");
-				header.setAttribute("href", "#"+i);
+			var headerText = document.createElement("div");
+			headerText.innerHTML = data[i].performance_info;
 
-				var headerText = document.createElement("div");
-				headerText.innerHTML = data.performance_actors[i].actor_name;
+			panelgroup.appendChild(pdefault);
+			pdefault.appendChild(panelheading);
+			panelheading.appendChild(ptitle);
+			ptitle.appendChild(header);
+			header.appendChild(headerText);
 
-				panelgroup.appendChild(pdefault);
-				pdefault.appendChild(panelheading);
-				panelheading.appendChild(ptitle);
-				ptitle.appendChild(header);
-				header.appendChild(headerText);
+			var panelCollapse = document.createElement("div");
+			panelCollapse.id = i;
+			panelCollapse.className = "panel-collapse collapse";
 
-				var panelCollapse = document.createElement("div");
-				panelCollapse.id = i;
-				panelCollapse.className = "panel-collapse collapse";
+			var panelbody = document.createElement("div");
+			panelbody.className = "panel-body";
 
-				var panelbody = document.createElement("div");
-				panelbody.className = "panel-body";
+			var paneltext = document.createElement("p");
+			paneltext.setAttribute("style", "color:white;");
+			paneltext.innerHTML = 
+				"<strong>Performance Info</strong>: " + data[i].performance_info + 
+				"<br><strong>Stage Location</strong>: " + data[i].performance_stage.stage_location +
+				"<br><strong>Start Time</strong>: " + data[i].performance_start_time
+			;
 
-				var paneltext = document.createElement("p");
-				paneltext.setAttribute("style", "color:white;")
-				paneltext.innerHTML = 
-					"<strong>Bio:</strong> " + data.performance_actors[i].actor_bio
-					+"<br>\
-					<strong>Role:</strong> " + data.performance_actors[i].actor_role
-					+"<br>\
-					<br>\
-					<strong>Performance:</strong> " + data.performance_info
-					+"<br>\
-					<strong>Performance Start Time:</strong> " + data.performance_start_time
-					+"<br>\
-					<strong>Stage Location:</strong> " + data.performance_stage.stage_location
-					+"<br>\ <strong>"
-					+ data.performance_actors[i].actor_name +"'s " + "Appearance Time:</strong> " + data.performance_actors[i].appearance_time
-					;
+			for(var j = 0; j < data[i].performance_actors.length; j++) {
 
-				panelgroup.appendChild(panelCollapse);
-				panelCollapse.appendChild(panelbody);
-				panelbody.appendChild(paneltext);
+				console.log("name is " + data[i].performance_actors[j].name);
+				console.log("bio is " + data[i].performance_actors[j].bio);
+				console.log("role is " + data[i].performance_actors[j].role);
+				paneltext.innerHTML = paneltext.innerHTML +
+					"<br><br><strong>Actor Name: </strong> " + data[i].performance_actors[j].name
+					+ "<br>\
+					<strong>Bio: </strong>" + data[i].performance_actors[j].bio
+					+ "<br>\
+					<strong>Role: </strong>" + data[i].performance_actors[j].role
+					+ "<br>\
+					<strong>Appearance Time: </strong>" + data[i].performance_actors[j].appearance_time
+				;
 			}
 
+			console.log("here?");
+
+			// var paneltable = document.createElement("table");
+			
+			// paneltable.innerHTML = 
+			// "<ul class="list-group">"
+			// "<li class="list-group-item"><strong>Performance Info</strong>: " + "<span class="pull-right">" + data[i].performance_info + "</span></li>" + 
+			// "<li class="list-group-item"><br><strong>Stage Location</strong>: " + data[i].performance_stage.stage_location + "</span></li>" + 
+			// "<li class="list-group-item"><br><strong>Start Time</strong>: " + data[i].performance_start_time +  "</span></li>" + 
+			// "</ul>"
+			// ;
+
+			// for(var j = 0; j < data[i].performance_actors.length; j++) {
+
+			// 	paneltable.innerHTML = paneltext.innerHTML +
+			// 		"<br><br><strong>Actor Name: </strong> " + data[i].performance_actors[j].name
+			// 		+ "<br>\
+			// 		<strong>Bio: </strong>" + data[i].performance_actors[j].bio
+			// 		+ "<br>\
+			// 		<strong>Role: </strong>" + data[i].performance_actors[j].role
+			// 		+ "<br>\
+			// 		<strong>Appearance Time: </strong>" + data[i].performance_actors[j].appearance_time
+			// 	;
+			// }
+
+
+			panelgroup.appendChild(panelCollapse);
+			panelCollapse.appendChild(panelbody);
+			panelbody.appendChild(paneltext);
 		}
 
 		</script>

@@ -50,7 +50,7 @@ with open('../makeTables/performance.csv') as perf_file:
 
 with open('../makeTables/perfactor.csv') as perfactr_file:
     for line in perfactr_file:
-        perf, actor, appearance_time, role = line.split(',')
+        perf, actor, role, appearance_time = line.split(',')
         pa = PerfActor(role = role, appearance_time = appearance_time)
         pa.performance = Performance.objects.order_by('?')[0]
         pa.actor = Actor.objects.order_by('?')[0]

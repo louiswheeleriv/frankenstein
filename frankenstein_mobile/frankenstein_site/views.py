@@ -5,6 +5,7 @@ from django.template import RequestContext, loader
 from api.frankenstein_serialization import PerformanceSerializer
 from api.models import Production, Stage, Actor, Crew, Performance
 from api.views import PerformanceList
+from dateutil.parser import  parse
 import json
 
 def index(request):
@@ -16,22 +17,46 @@ def search_actor(request):
     return render(request, 'frankenstein_mobile/search_actor.html')
 
 def results_actor(request):
-    if request.GET.get('q'):
-        message = request.GET['q']
-    else:
-        message = ''
+    queryset = Performance.objects.all()
+    actor_name = request.GET.get('actor_name', None)
+    production_name = request.GET.get('production_name', None)
+    stage_location = request.GET.get('stage_location', None)
+    time_query = request.GET.get('performance_start_time', None)
 
-    qdict = QueryDict('actor_name={0}&format=json'.format(message))
-    h = HttpRequest()
-    h.GET = qdict
-    h.QUERY_PARAMS = qdict
-    p = PerformanceList()
-    sx = PerformanceSerializer()
-    sx = PerformanceSerializer(p.get_queryset().get())
+    if actor_name is not None:
+        queryset = queryset.filter(perfactor__actor__actor_name__contains=actor_name)
+    if production_name is not None:
+        queryset = queryset.filter(performance_production__production_name__contains=production_name)
+    if stage_location is not None:
+        queryset = queryset.filter(performance_stage__production_name__contains=production_name)
+    if time_query is not None:
+        date_time = parse(time_query)
+        queryset = queryset.filter(performance_start_time=date_time)
+
+
+    # if request.GET.get('actor_name'):
+    #     message = request.GET['actor_name']
+    # else:
+    #     message = ''
+
+    # qdict = QueryDict('actor_name={0}&format=json'.format(message))
+    # h = HttpRequest()
+    # h.GET = qdict
+    # h.QUERY_PARAMS = qdict
+    # p = PerformanceList()
+    # p.request = h
+    # qs = p.get_queryset().get()
+    results = []
+    for perf in queryset.all():
+        sx = PerformanceSerializer(perf)
+        results.append(sx.data)
+
+    # sx = PerformanceSerializer()
 
     # sx.data is the data!!!
-    results = sx.data
-    return render(request, 'frankenstein_mobile/results_actor.html', {'results': json.dumps(results)});
+    # results = sx.data
+    message = request.GET['actor_name']
+    return render(request, 'frankenstein_mobile/results_actor.html', {'results': json.dumps(results), 'actor_name': message});
 
 ###########################################################################
 

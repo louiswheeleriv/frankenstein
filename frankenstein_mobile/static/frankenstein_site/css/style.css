@@ -68,6 +68,10 @@ h1 {
 	color: #cdcdcd;
 }
 
+.list-group-item span {
+ margin-top: -0.5em;
+}
+
 @media (max-width: 767px) {
 	.navbar-default .navbar-nav .open .dropdown-menu > li > a {
 		color: #ffffff;
