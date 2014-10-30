@@ -24,20 +24,32 @@ class Actor(models.Model):
         return "Name: {0}, Bio: {1}".format(self.actor_name, self.actor_bio)
 
 
-class CrewResponsibility(models.Model):
-    responsibility = models.CharField(max_length=200)
+class PerfActor(models.Model):
+    performance = models.ForeignKey('Performance')
+    actor = models.ForeignKey(Actor)
+    appearance_time = models.TimeField(blank=True, null=True)
+    role = models.CharField(max_length=200)
 
     def __unicode__(self):
-        return "Responsibility: {0}".format(self.responsibility)
+        return 'Actor Performance. Name: {0}, Appearance Time: {1}, Role: {2}'.format(self.actor, self.appearance_time,
+                                                                                      self.role)
 
 
 class Crew(models.Model):
     crew_name = models.CharField(max_length=200)
-    crew_responsibility = models.ForeignKey(CrewResponsibility)
     crew_bio = models.CharField(max_length=200)
 
     def __unicode__(self):
             return "Name: {0}, Bio: {1}".format(self.crew_name, self.crew_bio)
+
+
+class PerfCrew(models.Model):
+    performance = models.ForeignKey('Performance')
+    crew = models.ForeignKey(Crew)
+    responsibilities = models.CharField(max_length=200)
+
+    def __unicode__(self):
+        return 'Crew on Performance. Name: {0}, Responsibility: {1}'.format(self.crew, self.responsibilities)
 
 
 class Performance(models.Model):
@@ -45,10 +57,9 @@ class Performance(models.Model):
     performance_info = models.CharField(max_length=200)
     performance_start_time = models.DateTimeField()
     performance_production = models.ForeignKey(Production)
-    performance_actors = models.ManyToManyField(Actor)
-    performance_crews = models.ManyToManyField(Crew)
 
     def __unicode__(self):
-            return 'Production: {0}, Stage: {1}, Start Time: {2}, Info: {3}, Actor: {4}, Crew: {5}'.format(self.performance_production, self.performance_stage,
-                                                  self.performance_start_time, self.performance_info,
-                                                  '', '')
+            return 'Production: {0}, Stage: {1}, Start Time: {2}, Info: {3}'.format(
+                self.performance_production, self.performance_stage,
+                (self.performance_start_time.strftime('%m/%d/%Y') if self.performance_start_time is not None  else ''),
+                self.performance_info)

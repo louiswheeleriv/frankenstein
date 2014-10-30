@@ -69,12 +69,11 @@ CREATE TABLE Crew
 (
 	CrewID					serial primary key,
 	Name						varchar(50),
-	Responsiblities	varchar(50),
 	Bio							text
 );
 
 /*read from csv file*/
-\COPY Crew(Name,Responsiblities,Bio) from 'crew.csv' DELIMITERS ',' CSV ;
+\COPY Crew(Name,Bio) from 'crew.csv' DELIMITERS ',' CSV ;
 
 
 
@@ -104,12 +103,14 @@ CREATE TABLE Performance
 CREATE TABLE PerfCrew
 
 (
-	PerformanceID		INT references Performance(PerformanceID),
-	CrewID 	INT references Crew(CrewID)
+	PerfCrewID		serial primary key,
+	PerformanceID	INT references Performance(PerformanceID),
+	CrewID 			INT references Crew(CrewID),
+	Responsiblities	varchar(50)
 );
 
 /*read from csv file*/
-\COPY PerfCrew from 'perfcrew.csv' DELIMITERS ',' CSV;
+\COPY PerfCrew(PerformanceID,CrewID,Responsiblities) from 'perfcrew.csv' DELIMITERS ',' CSV;
 
 
 
