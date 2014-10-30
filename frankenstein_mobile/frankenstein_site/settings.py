@@ -39,7 +39,6 @@ INSTALLED_APPS = (
     'rest_framework',
     'frankenstein_site',
     'api',
-    'django_tables2',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
