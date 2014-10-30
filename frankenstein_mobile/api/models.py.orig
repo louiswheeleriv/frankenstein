@@ -68,4 +68,4 @@ class Performance(models.Model):
             return 'Production: {0}, Stage: {1}, Start Time: {2}, Info: {3}, Actor: {4}, Crew: {5}'.format(self.performance_production, self.performance_stage,
                                                   self.performance_start_time.strftime('%m/%d/%Y'), self.performance_info,
                                                   '', '')
->>>>>>> started fixing the issue with searching and json. Fixed it for actors. In the middle of fixing the others. Need raymond's code
+>>>>>>> 92990e2d77d10e4c69f7bfe39b377b8448e5e45b
