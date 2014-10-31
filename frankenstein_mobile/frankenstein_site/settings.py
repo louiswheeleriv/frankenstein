@@ -71,12 +71,24 @@ WSGI_APPLICATION = 'frankenstein_site.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'macharir',
+#         'USER': 'macharir',
+#         'PASSWORD': 'macharir',
+#         'HOST': 'localhost',
+#         'PORT': '',
+#     }
+# }
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'macharir',
-        'USER': 'macharir',
-        'PASSWORD': 'macharir',
+        'NAME': 'machira',
+        'USER': 'machira',
+        'PASSWORD': 'machira',
         'HOST': 'localhost',
         'PORT': '',
     }
