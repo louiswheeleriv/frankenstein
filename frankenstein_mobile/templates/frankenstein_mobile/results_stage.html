@@ -2,16 +2,147 @@
 
 {% extends "frankenstein_mobile/base.html" %}
 {% block content %}
-{% load render_table from django_tables2 %}
 {% load static %}
 
 <div class="container">
-	<h1>Results</h1>
-		<table class="table" style="color:black;">
-			<div>
-				{% render_table table %}
-			</div>
-		</table>
+	<h1 id="pageHeader"> </h1>
+	<div id="theResults">
+		
+	</div> 
 </div>
 
-{% endblock %}
+<script type="text/javascript">
+	// get the data from the json object
+	var data = {{ results|safe }};
+	
+	// the name they searched with
+	var search_name = '{{ stage_location }}';
+
+	var pHeader = document.getElementById("pageHeader").innerHTML = "Performances on stage <em>" + search_name + "</em>.....";
+
+	// // Grouping by Stage
+	// var name_matched_stage = [];
+
+	// if(data.length >= 1) {
+
+	// 	for (var i = 0; i < data.length; i++) {
+
+	// 		var currentStage = {
+	// 			location: data[i].performance_stage.stage_location, 
+	// 			description: data[i].performance_stage.stage_description, 
+	// 			performance: [i]};
+
+	// 			// console.log(data[i].performance_stage.stage_description);
+	// 			// console.log(data[i].performance_stage.stage_location);
+
+	// 			// if the current Stage has the same location as the search location
+	// 			if(currentStage.location.indexOf(search_name) > -1 ) {
+
+	// 				// if the list is not empty
+	// 				if(name_matched_stage.length != 0) {
+
+	// 					for(var k = 0; k < name_matched_stage.length; k++) {
+	// 						// if the name in the table is different, add it in
+	// 						if(currentStage.location != name_matched_stage[k].location) {
+	// 							name_matched_stage.push(currentStage);
+	// 						} else {
+	// 							// the two names are the same
+	// 							// if the performances are different
+	// 							if($.inArray(currentStage.performance[0], name_matched_stage[k].performance) == -1) {
+	// 								name_matched_stage[k].performance.push(i);
+	// 							}
+	// 						}
+	// 					}
+
+	// 				} else {
+	// 					name_matched_stage.push(currentStage);
+	// 				}
+
+	// 			}
+	// 	}
+
+		// the main panel group div
+		var panelgroup = document.createElement("div");
+		panelgroup.id = "accordion";
+		panelgroup.className = "panel-group";
+
+		// add it to the main results page
+		var res = document.getElementById("theResults");
+		res.appendChild(panelgroup);
+
+
+		for(var k = 0; k < data.length; k++) {
+
+			var pdefault = document.createElement("div");
+			pdefault.className = "panel panel-default";
+
+			var panelheading = document.createElement("div");
+			panelheading.className = "panel-heading";
+
+			var ptitle = document.createElement("h4");
+			ptitle.className = "panel-title";
+
+			var header = document.createElement("a")
+			header.setAttribute("data-toggle", "collapse");
+			header.setAttribute("data-parent", "#accordion");
+			header.setAttribute("href", "#"+k);
+
+			var headerText = document.createElement("div");		
+			headerText.innerHTML = name_matched_stage[k].location;
+
+			var panelCollapse = document.createElement("div");
+			panelCollapse.id = k;
+			panelCollapse.className = "panel-collapse collapse";
+
+			var panelbody = document.createElement("div");
+			panelbody.className = "panel-body";
+
+			var paneltext = document.createElement("p");
+			paneltext.setAttribute("style", "color:white;");
+
+
+			paneltext.innerHTML = 
+			"<br>\
+			<strong>Name: </strong>" + data[k].stage_location + 
+			"<br><strong>Bio: </strong>" + data[k].stage_description + "<br>"
+			;
+
+
+			for(var a = 0; a < name_matched_stage[k].performance.length; a++) {
+
+				if(name_matched_stage[k].performance[a] == i) {
+					var description = '';
+					if(data[i].performance_stage.stage_location == name_matched_stage[k].location) {
+						role = data[i].performance_stage.stage_description;
+					}
+				}
+
+				paneltext.innerHTML = paneltext.innerHTML + 
+				"<br><strong>Performance Info</strong>: " + data[i].performance_info + 
+				"<br><strong>Start Time</strong>: " + data[i].performance_start_time + 
+				"<br>"
+				;
+			}
+			
+		
+
+		panelgroup.appendChild(pdefault);
+		pdefault.appendChild(panelheading);
+		panelheading.appendChild(ptitle);
+		ptitle.appendChild(header);
+		header.appendChild(headerText);
+		panelgroup.appendChild(panelCollapse);
+		panelCollapse.appendChild(panelbody);
+		panelbody.appendChild(paneltext);
+	} else {
+		// add it to the main results page
+		var res = document.getElementById("theResults");
+		var nope = document.createElement("h3");
+		nope.setAttribute("style", "color:white;");
+		nope.innerHTML = search_name + " is currently not in any performances";
+		res.appendChild(nope);
+	}
+
+	</script>
+
+	{% endblock %}

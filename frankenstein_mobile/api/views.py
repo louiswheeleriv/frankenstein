@@ -28,12 +28,15 @@ class PerformanceList(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = Performance.objects.all()
         actor_name = self.request.QUERY_PARAMS.get('actor_name', None)
+        crew_name = self.request.QUERY_PARAMS.get('crew_name', None)
         production_name = self.request.QUERY_PARAMS.get('production_name', None)
         stage_location = self.request.QUERY_PARAMS.get('stage_location', None)
         time_query = self.request.QUERY_PARAMS.get('performance_start_time', None)
 
         if actor_name is not None:
             queryset = queryset.filter(perfactor__actor__actor_name__contains=actor_name)
+        if crew_name is not None:
+            queryset = queryset.filter(perfcrew___crew__crew_name__contains=crew_name)
         if production_name is not None:
             queryset = queryset.filter(performance_production__production_name__contains=production_name)
         if stage_location is not None:

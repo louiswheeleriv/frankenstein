@@ -14,41 +14,57 @@
 </div>
 
 <script type="text/javascript">
-		// get the data from the json object
-		var data = {{ results|safe }};
-		
-		// the name they searched with
-		var search_name = '{{ actor_name }}';
+	// get the data from the json object
+	var data = {{ results|safe }};
+	
+	// the name they searched with
+	var search_name = '{{ actor_name }}';
 
-		var pHeader = document.getElementById("pageHeader").innerHTML = "Performances with actor's named <em>" + search_name + "</em>.....";
+	var pHeader = document.getElementById("pageHeader").innerHTML = "Performances with actor's named <em>" + search_name + "</em>.....";
 
-		// Grouping by actor
-		var name_matched_actors = [];
+	// Grouping by actor
+	var name_matched_actors = [];
+
+	if(data.length >= 1) {
+	
 
 		for (var i = 0; i < data.length; i++) {
 
 			for(var j = 0; j < data[i].performance_actors.length; j++) {
 
-				var currentName = data[i].performance_actors[j].name;
-				console.log("current actor: " + currentName);
-				var currentActor = {name: data[i].performance_actors[j].name, performance: i};
+				var currentActor = {name: data[i].performance_actors[j].name, 
+					bio: data[i].performance_actors[j].bio, 
+					role: data[i].performance_actors[j].role, 
+					appearance_time: data[i].performance_actors[j].appearance_time,
+					performance: [i]};
 
+				// if the current actor has the same name as the search name
 				if(currentActor.name.indexOf(search_name) > -1 ) {
-					console.log("names match");
-					//&& $.inArray(currentActor.name, name_matched_actors) == -1
-					for(var k = 0; k < name_matched_actors.length; k++) {
-						console.log(name_matched_actors.length);
-						if(currentActor.name != name_matched_actors[k].name) {
-							name_matched_actors.push(currentActor);
-							console.log("A MATCH!");
+
+					// if the list is not empty
+					if(name_matched_actors.length != 0) {
+
+						for(var k = 0; k < name_matched_actors.length; k++) {
+							// if the name in the table is different, add it in
+							if(currentActor.name != name_matched_actors[k].name) {
+								name_matched_actors.push(currentActor);
+								// console.log("A MATCH!");
+							} else {
+								// the two names are the same
+								// if the performances are different
+								if($.inArray(currentActor.performance[0], name_matched_actors[k].performance) == -1) {
+									name_matched_actors[k].performance.push(i);
+								}
+							}
 						}
+
+					} else {
+						name_matched_actors.push(currentActor);
 					}
-					
+
 				}
-				console.log("");
 			}
 		}
-
 
 
 		// the main panel group div
@@ -61,7 +77,7 @@
 		res.appendChild(panelgroup);
 
 
-		for (var i = 0; i < data.length; i++) {
+		for(var k = 0; k < name_matched_actors.length; k++) {
 
 			var pdefault = document.createElement("div");
 			pdefault.className = "panel panel-default";
@@ -75,15 +91,14 @@
 			var header = document.createElement("a")
 			header.setAttribute("data-toggle", "collapse");
 			header.setAttribute("data-parent", "#accordion");
-			header.setAttribute("href", "#"+i);
+			header.setAttribute("href", "#"+k);
 
-
-			var headerText = document.createElement("div");
+			var headerText = document.createElement("div");		
 			//headerText.innerHTML = data[i].performance_actors[j].name;
-			headerText.innerHTML = data[i].performance_actors[0].name;
+			headerText.innerHTML = name_matched_actors[k].name;
 
 			var panelCollapse = document.createElement("div");
-			panelCollapse.id = i;
+			panelCollapse.id = k;
 			panelCollapse.className = "panel-collapse collapse";
 
 			var panelbody = document.createElement("div");
@@ -92,22 +107,38 @@
 			var paneltext = document.createElement("p");
 			paneltext.setAttribute("style", "color:white;");
 
-			
 
+			paneltext.innerHTML = 
+			"<br>\
+			<strong>Name: </strong>" + name_matched_actors[k].name + 
+			"<br><strong>Bio: </strong>" + name_matched_actors[k].bio + "<br>"
+			;
 
-			// paneltext.innerHTML = 
-			// + "<br>\
-			// <strong>Bio: </strong>" + data[i].performance_actors[j].bio
-			// + "<br>\
-			// <strong>Role: </strong>" + data[i].performance_actors[j].role
-			// + "<br>\
-			// <strong>Appearance Time: </strong>" + data[i].performance_actors[j].appearance_time
-			// ;
+			for(var i = 0; i < data.length; i++) {
 
+				for(var a = 0; a < name_matched_actors[k].performance.length; a++) {
 
+					if(name_matched_actors[k].performance[a] == i) {
+						var role = '';
+						var ap = '';
+						for(var j = 0; j < data[i].performance_actors.length; j++) {
+							if(data[i].performance_actors[j].name == name_matched_actors[k].name) {
+								role = data[i].performance_actors[j].role;
+								ap = data[i].performance_actors[j].appearance_time;
+							}
+						}
 
-
-
+						paneltext.innerHTML = paneltext.innerHTML + 
+						"<br><strong>Performance Info</strong>: " + data[i].performance_info + 
+						"<br><strong>Stage Location</strong>: " + data[i].performance_stage.stage_location +
+						"<br><strong>Start Time</strong>: " + data[i].performance_start_time + 
+						"<br><strong>" + search_name + "'s Role</strong>: " + role + 
+						"<br><strong>" + search_name + "'s Appearance Time</strong>: " + ap + 
+						"<br>"
+						;
+					}
+				}
+			}
 
 			panelgroup.appendChild(pdefault);
 			pdefault.appendChild(panelheading);
@@ -118,11 +149,15 @@
 			panelCollapse.appendChild(panelbody);
 			panelbody.appendChild(paneltext);
 		}
-		for(var k = 0; k < name_matched_actors.length; k++) {
-			console.log("the matches are: " + name_matched_actors[k].performance);
-		}
+	} else {
+		// add it to the main results page
+		var res = document.getElementById("theResults");
+		var nope = document.createElement("h3");
+		nope.setAttribute("style", "color:white;");
+		nope.innerHTML = search_name + " is currently not in any performances";
+		res.appendChild(nope);
+	}
+</script>
 
-		</script>
 
-
-		{% endblock %}
+{% endblock %}

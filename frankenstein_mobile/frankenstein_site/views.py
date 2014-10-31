@@ -14,7 +14,13 @@ def index(request):
 ###########################################################################
 
 def search_actor(request):
-    return render(request, 'frankenstein_mobile/search_actor.html')
+    actor_list = Actor.objects.values('actor_name')
+    template = loader.get_template('frankenstein_mobile/search_actor.html')
+    context = RequestContext(request, {
+        'actor_list': actor_list,
+    })
+    return HttpResponse(template.render(context))
+
 
 def results_actor(request):
     queryset = Performance.objects.all()
@@ -33,81 +39,82 @@ def results_actor(request):
         date_time = parse(time_query)
         queryset = queryset.filter(performance_start_time=date_time)
 
-
-    # if request.GET.get('actor_name'):
-    #     message = request.GET['actor_name']
-    # else:
-    #     message = ''
-
-    # qdict = QueryDict('actor_name={0}&format=json'.format(message))
-    # h = HttpRequest()
-    # h.GET = qdict
-    # h.QUERY_PARAMS = qdict
-    # p = PerformanceList()
-    # p.request = h
-    # qs = p.get_queryset().get()
     results = []
     for perf in queryset.all():
         sx = PerformanceSerializer(perf)
         results.append(sx.data)
 
-    # sx = PerformanceSerializer()
-
-    # sx.data is the data!!!
-    # results = sx.data
     message = request.GET['actor_name']
     return render(request, 'frankenstein_mobile/results_actor.html', {'results': json.dumps(results), 'actor_name': message});
 
 ###########################################################################
 
 def search_crew(request):
-    return render(request, 'frankenstein_mobile/search_crew.html')
+    crew_list = Crew.objects.values('crew_name')
+    template = loader.get_template('frankenstein_mobile/search_crew.html')
+    context = RequestContext(request, {
+        'crew_list': crew_list,
+    })
+    return HttpResponse(template.render(context))
 
 def results_crew(request):
-    if request.GET.get('q'):
-        message = request.GET['q']
-    else:
-        message = ''
+    queryset = Performance.objects.all()
+    crew_name = request.GET.get('crew_name', None)
+    production_name = request.GET.get('production_name', None)
+    stage_location = request.GET.get('stage_location', None)
+    time_query = request.GET.get('performance_start_time', None)
 
-    qdict = QueryDict('crew_name={0}&format=json'.format(message))
-    h = HttpRequest()
-    h.GET = qdict
-    h.QUERY_PARAMS = qdict
-    p = PerformanceList()
-    sx = PerformanceSerializer()
-    sx = PerformanceSerializer(p.get_queryset().get())
+    if crew_name is not None:
+        queryset = queryset.filter(perfcrew__crew__crew_name__contains=crew_name)
+    if production_name is not None:
+        queryset = queryset.filter(performance_production__production_name__contains=production_name)
+    if stage_location is not None:
+        queryset = queryset.filter(performance_stage__production_name__contains=production_name)
+    if time_query is not None:
+        date_time = parse(time_query)
+        queryset = queryset.filter(performance_start_time=date_time)
 
-    # sx.data is the data!!!
-    results = sx.data
-    return render(request, 'frankenstein_mobile/results_crew.html', {'results': json.dumps(results)});
+    results = []
+    for perf in queryset.all():
+        sx = PerformanceSerializer(perf)
+        results.append(sx.data)
 
-    # if Crew.objects.filter(crew_name=message).exists():
-    #     table = CrewTable(Crew.objects.filter(crew_name=message))
-    #
-    #     RequestConfig(request).configure(table)
-    #     return render(request, 'frankenstein_mobile/results_crew.html', {'table': table})
-    # else:
-    #     return render(request, 'frankenstein_mobile/results_notfound.html')
+    message = request.GET['crew_name']
+    return render(request, 'frankenstein_mobile/results_crew.html', {'results': json.dumps(results), 'crew_name': message});
+
 
 
 ###########################################################################
 
 def search_stage(request):
-    return render(request, 'frankenstein_mobile/search_stage.html')
+    stage_list = Stage.objects.values('stage_location')
+    template = loader.get_template('frankenstein_mobile/search_stage.html')
+    context = RequestContext(request, {
+        'stage_list': stage_list,
+    })
+    return HttpResponse(template.render(context))
 
 def results_stage(request):
-    if request.GET.get('q'):
-        message = request.GET['q']
-    else:
-        message = ''
+    queryset = Performance.objects.all()
+    production_name = request.GET.get('production_name', None)
+    stage_location = request.GET.get('stage_location', None)
+    time_query = request.GET.get('performance_start_time', None)
 
-    # if Stage.objects.filter(stage_location=message).exists():
-    #     table = StageTable(Stage.objects.filter(stage_location=message))
-    #
-    #     RequestConfig(request).configure(table)
-    #     return render(request, 'frankenstein_mobile/results_stage.html', {'table': table})
-    # else:
-    #     return render(request, 'frankenstein_mobile/results_notfound.html')
+    if production_name is not None:
+        queryset = queryset.filter(performance_production__production_name__contains=production_name)
+    if stage_location is not None:
+        queryset = queryset.filter(performance_stage__production_name__contains=production_name)
+    if time_query is not None:
+        date_time = parse(time_query)
+        queryset = queryset.filter(performance_start_time=date_time)
+
+    results = []
+    for perf in queryset.all():
+        sx = PerformanceSerializer(perf)
+        results.append(sx.data)
+
+    message = request.GET['stage']
+    return render(request, 'frankenstein_mobile/results_stage.html', {'results': json.dumps(results), 'stage_location': message});
 
 
 ###########################################################################

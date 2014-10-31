@@ -2,11 +2,10 @@
 
 {% extends "frankenstein_mobile/base.html" %}
 {% block content %}
-{% load render_table from django_tables2 %}
 {% load static %}
 
 <div class="container">
-<h1>Results</h1>
+	<h1 id="pageHeader"> </h1>
 	<div id="theResults">
 		
 	</div> 
@@ -18,81 +17,139 @@
 		// get the data from the json object
 		var data = {{ results|safe }};
 
-		// get how many actors there are
-		var actor_length = data.performance_crews.length;
 
-		// if there are no actors
-		if(actor_length == 0 ) {
-			// write no results try again
-		}
-		// if there are actors (query is successful)
-		if(actor_length > 0) {
+		// the name they searched with
+		var search_name = '{{ crew_name }}';
 
-			// the main panel group div
-			var panelgroup = document.createElement("div");
-			panelgroup.id = "accordion";
-			panelgroup.className = "panel-group";
+		var pHeader = document.getElementById("pageHeader").innerHTML = "Performances with crew member's named <em>" + search_name + "</em>.....";
 
-			// add it to the main results page
-			var res = document.getElementById("theResults");
-			res.appendChild(panelgroup);
+		// Grouping by crew
+		var name_matched_crews = [];
 
-			for (var i = 0; i < actor_length; i++) {
+		if(data.length >= 1) {
 
-				var pdefault = document.createElement("div");
-				pdefault.className = "panel panel-default";
+			for (var i = 0; i < data.length; i++) {
 
-				var panelheading = document.createElement("div");
-				panelheading.className = "panel-heading";
+				for(var j = 0; j < data[i].performance_crews.length; j++) {
 
-				var ptitle = document.createElement("h4");
-				ptitle.className = "panel-title";
+					var currentCrew = {name: data[i].performance_crews[j].name, 
+						bio: data[i].performance_crews[j].bio, 
+						responsibilities: data[i].performance_crews[j].responsibilities, 
+						performance: [i]};
 
-				var header = document.createElement("a")
-				header.setAttribute("data-toggle", "collapse");
-				header.setAttribute("data-parent", "#accordion");
-				header.setAttribute("href", "#"+i);
+				// if the current crew has the same name as the search name
+				if(currentCrew.name.indexOf(search_name) > -1 ) {
 
-				var headerText = document.createElement("div");
-				headerText.innerHTML = data.performance_crews[i].crew_name;
+					// if the list is not empty
+					if(name_matched_crews.length != 0) {
 
-				panelgroup.appendChild(pdefault);
-				pdefault.appendChild(panelheading);
-				panelheading.appendChild(ptitle);
-				ptitle.appendChild(header);
-				header.appendChild(headerText);
+						for(var k = 0; k < name_matched_crews.length; k++) {
+							// if the name in the table is different, add it in
+							if(currentCrew.name != name_matched_crews[k].name) {
+								name_matched_crews.push(currentCrew);
+								// console.log("A MATCH!");
+							} else {
+								// the two names are the same
+								// if the performances are different
+								if($.inArray(currentCrew.performance[0], name_matched_crews[k].performance) == -1) {
+									name_matched_crews[k].performance.push(i);
+								}
+							}
+						}
 
-				var panelCollapse = document.createElement("div");
-				panelCollapse.id = i;
-				panelCollapse.className = "panel-collapse collapse";
+					} else {
+						name_matched_crews.push(currentCrew);
+					}
 
-				var panelbody = document.createElement("div");
-				panelbody.className = "panel-body";
-
-				var paneltext = document.createElement("p");
-				paneltext.setAttribute("style", "color:white;")
-				paneltext.innerHTML = 
-					"<strong>Bio:</strong> " + data.performance_actors[i].crew_bio
-					+"<br>\
-					<strong>Responsibilities:</strong> " + data.performance_actors[i].crew_responsibilities
-					+"<br>\
-					<br>\
-					<strong>Performance:</strong> " + data.performance_info
-					+"<br>\
-					<strong>Performance Start Time:</strong> " + data.performance_start_time
-					+"<br>\
-					<strong>Stage Location:</strong> " + data.performance_stage.stage_location
-					+"<br>\ <strong>"
-					+ data.performance_crews[i].crew_name +"'s " + "Appearance Time:</strong> " + data.performance_crews[i].appearance_time
-					;
-
-				panelgroup.appendChild(panelCollapse);
-				panelCollapse.appendChild(panelbody);
-				panelbody.appendChild(paneltext);
+				}
 			}
-
 		}
 
-		</script>
+		// the main panel group div
+		var panelgroup = document.createElement("div");
+		panelgroup.id = "accordion";
+		panelgroup.className = "panel-group";
 
-{% endblock %}
+		// add it to the main results page
+		var res = document.getElementById("theResults");
+		res.appendChild(panelgroup);
+
+		for(var k = 0; k < name_matched_crews.length; k++) {
+
+			var pdefault = document.createElement("div");
+			pdefault.className = "panel panel-default";
+
+			var panelheading = document.createElement("div");
+			panelheading.className = "panel-heading";
+
+			var ptitle = document.createElement("h4");
+			ptitle.className = "panel-title";
+
+			var header = document.createElement("a")
+			header.setAttribute("data-toggle", "collapse");
+			header.setAttribute("data-parent", "#accordion");
+			header.setAttribute("href", "#"+k);
+
+			var headerText = document.createElement("div");		
+			//headerText.innerHTML = data[i].performance_crews[j].name;
+			headerText.innerHTML = name_matched_crews[k].name;
+
+			var panelCollapse = document.createElement("div");
+			panelCollapse.id = k;
+			panelCollapse.className = "panel-collapse collapse";
+
+			var panelbody = document.createElement("div");
+			panelbody.className = "panel-body";
+
+			var paneltext = document.createElement("p");
+			paneltext.setAttribute("style", "color:white;");
+
+
+			paneltext.innerHTML = 
+			"<br>\
+			<strong>Name: </strong>" + name_matched_crews[k].name + 
+			"<br><strong>Bio: </strong>" + name_matched_crews[k].bio + "<br>"
+			;
+
+			for(var i = 0; i < data.length; i++) {
+
+				for(var a = 0; a < name_matched_crews[k].performance.length; a++) {
+
+					if(name_matched_crews[k].performance[a] == i) {
+						var responsibilities = '';
+						for(var j = 0; j < data[i].performance_crews.length; j++) {
+							if(data[i].performance_crews[j].name == name_matched_crews[k].name) {
+								responsibilities = data[i].performance_crews[j].responsibilities;
+							}
+						}
+
+						paneltext.innerHTML = paneltext.innerHTML + 
+						"<br><strong>Performance Info</strong>: " + data[i].performance_info + 
+						"<br><strong>Stage Location</strong>: " + data[i].performance_stage.stage_location +
+						"<br><strong>Start Time</strong>: " + data[i].performance_start_time + 
+						"<br><strong>" + search_name + "'s Responsibilities</strong>: " + responsibilities + 
+						"<br>"
+						;
+					}
+				}
+			}
+			panelgroup.appendChild(pdefault);
+			pdefault.appendChild(panelheading);
+			panelheading.appendChild(ptitle);
+			ptitle.appendChild(header);
+			header.appendChild(headerText);
+			panelgroup.appendChild(panelCollapse);
+			panelCollapse.appendChild(panelbody);
+			panelbody.appendChild(paneltext);
+		}
+	} else {
+		// add it to the main results page
+		var res = document.getElementById("theResults");
+		var nope = document.createElement("h3");
+		nope.setAttribute("style", "color:white;");
+		nope.innerHTML = search_name + " is currently not in any performances";
+		res.appendChild(nope);
+	}
+	</script>
+
+	{% endblock %}
