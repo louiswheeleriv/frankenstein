@@ -27,14 +27,19 @@ class Actor(models.Model):
 class PerfActor(models.Model):
     performance = models.ForeignKey('Performance')
     actor = models.ForeignKey(Actor)
-    appearance_time = models.TimeField(blank=True, null=True)
+    appearance_time = models.IntegerField(default=0)
     role = models.CharField(max_length=200)
 
     def __unicode__(self):
         return 'Actor Performance. Name: {0}, Appearance Time: {1}, Role: {2}'.format(self.actor,
                                                                                       (self.appearance_time.strftime('%H:%M') if self.appearance_time is not None  else ''),
                                                                                       self.role)
+class SignificantEvent(models.Model):
+    description = models.CharField(max_length=200)
+    performance = models.ForeignKey('Performance')
 
+    def __unicode__(self):
+        return 'Significant Event: {0}'.format(self.description)
 
 class Crew(models.Model):
     crew_name = models.CharField(max_length=200)
