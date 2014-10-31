@@ -65,5 +65,5 @@ class PerformanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Performance
-        fields = ('performance_info', 'performance_start_time', 'performance_production',
+        fields = ( 'id' , 'performance_info', 'performance_start_time', 'performance_production',
                   'performance_stage', 'performance_actors', 'performance_crews', 'significant_events')
