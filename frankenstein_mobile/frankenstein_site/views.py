@@ -1,11 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse, QueryDict, HttpRequest
 from django.template import RequestContext, loader
-from django_tables2   import RequestConfig
 
 from api.frankenstein_serialization import PerformanceSerializer
 from api.models import Production, Stage, Actor, Crew, Performance
-from api.tables import ActorTable, PerformanceTable, StageTable, CrewTable
+# from api.tables import ActorTable, PerformanceTable, StageTable, CrewTable
 from api.views import PerformanceList
 import json
 
@@ -55,9 +54,9 @@ def results_crew(request):
         message = ''
 
     if Crew.objects.filter(crew_name=message).exists():
-        table = CrewTable(Crew.objects.filter(crew_name=message))
+        # table = CrewTable(Crew.objects.filter(crew_name=message))
 
-        RequestConfig(request).configure(table)
+        # RequestConfig(request).configure(table)
         return render(request, 'frankenstein_mobile/results_crew.html', {'table': table})
     else:
         return render(request, 'frankenstein_mobile/results_notfound.html')
@@ -75,9 +74,9 @@ def results_stage(request):
         message = ''
 
     if Stage.objects.filter(stage_location=message).exists():
-        table = StageTable(Stage.objects.filter(stage_location=message))
+        # table = StageTable(Stage.objects.filter(stage_location=message))
 
-        RequestConfig(request).configure(table)
+        # RequestConfig(request).configure(table)
         return render(request, 'frankenstein_mobile/results_stage.html', {'table': table})
     else:
         return render(request, 'frankenstein_mobile/results_notfound.html')
@@ -95,9 +94,9 @@ def results_time(request):
         message = ''
 
     if Performance.objects.filter(performance_start_time=message).exists():
-        table = PerformanceTable(Performance.objects.filter(performance_start_time=message))
+        # table = PerformanceTable(Performance.objects.filter(performance_start_time=message))
 
-        RequestConfig(request).configure(table)
+        # RequestConfig(request).configure(table)
         return render(request, 'frankenstein_mobile/results_time.html', {'table': table})
     else:
         return render(request, 'frankenstein_mobile/results_notfound.html')
@@ -121,9 +120,9 @@ def results_performance(request):
         message = ''
 
     if Performance.objects.filter(performance_info=message).exists():
-        table = PerformanceTable(Performance.objects.filter(performance_info=message))
+        # table = PerformanceTable(Performance.objects.filter(performance_info=message))
 
-        RequestConfig(request).configure(table)
+        # RequestConfig(request).configure(table)
         return render(request, 'frankenstein_mobile/results_performance.html', {'table': table})
     else:
         return render(request, 'frankenstein_mobile/results_notfound.html')

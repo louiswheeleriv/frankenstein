@@ -41,7 +41,7 @@ class CrewSerializer(serializers.ModelSerializer):
 class SignificantEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = SignificantEvent
-        fields = 'description'
+        fields = ('description',)
 
 
 class PerfCrewSerializer(serializers.ModelSerializer):
@@ -58,13 +58,10 @@ class PerformanceSerializer(serializers.ModelSerializer):
     performance_crews = PerfCrewSerializer(source='perfcrew_set', many=True)
     performance_actors = PerfActorSerializer(source='perfactor_set', many=True)
     performance_production = ProductionSerializer(many=False)
-    significant_events = SignificantEventSerializer(many=True)
+    significant_events = SignificantEventSerializer(source='significantevent_set', many=True)
 
     def transform_performance_start_time(self, object, value):
         return value.strftime('%m/%d/%Y') if value is not None else ''
-
-    def transform_performance_start_time(self,object,value):
-        return  value.strftime('%m/%d/%Y')
 
     class Meta:
         model = Performance
