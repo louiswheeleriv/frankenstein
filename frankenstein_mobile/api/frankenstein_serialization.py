@@ -66,7 +66,6 @@ class PerformanceSerializer(serializers.ModelSerializer):
     def transform_performance_start_time(self,object,value):
         return  value.strftime('%m/%d/%Y')
 
-
     class Meta:
         model = Performance
         fields = ('performance_info', 'performance_start_time', 'performance_production',
