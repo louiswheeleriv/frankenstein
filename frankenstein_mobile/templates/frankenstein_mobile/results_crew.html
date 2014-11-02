@@ -14,45 +14,53 @@
 </div>
 
 <script type="text/javascript">
-		// get the data from the json object
-		var data = {{ results|safe }};
+	// get the data from the json object
+	var data = {{ results|safe }};
 
+	// the name they searched with
+	var search_name = '{{ crew_name }}';
 
-		// the name they searched with
-		var search_name = '{{ crew_name }}';
+	var pHeader = document.getElementById("pageHeader").innerHTML = "Performances with crew's named <em>" + search_name + "</em>.....";
 
-		var pHeader = document.getElementById("pageHeader").innerHTML = "Performances with crew member's named <em>" + search_name + "</em>.....";
+	// Grouping by crew
+	var name_matched_crews = [];
 
-		// Grouping by crew
-		var name_matched_crews = [];
+	// if performances are available
+	if(data.length >= 1) {
 
-		if(data.length >= 1) {
+		for (var i = 0; i < data.length; i++) {
 
-			for (var i = 0; i < data.length; i++) {
+			for(var j = 0; j < data[i].performance_crews.length; j++) {
 
-				for(var j = 0; j < data[i].performance_crews.length; j++) {
+				var perf = {
+					id: data[i].id,
+					responsibilities: data[i].performance_crews[j].responsibilities,
+				};
 
-					var currentCrew = {name: data[i].performance_crews[j].name, 
-						bio: data[i].performance_crews[j].bio, 
-						responsibilities: data[i].performance_crews[j].responsibilities, 
-						performance: [i]};
+				var currentCrew = {
+					name: data[i].performance_crews[j].crew_name, 
+					bio: data[i].performance_crews[j].crew_bio, 
+					performance: [perf]										
+				};
 
 				// if the current crew has the same name as the search name
 				if(currentCrew.name.indexOf(search_name) > -1 ) {
-
-					// if the list is not empty
+					// if the list is not empty	
 					if(name_matched_crews.length != 0) {
 
 						for(var k = 0; k < name_matched_crews.length; k++) {
 							// if the name in the table is different, add it in
 							if(currentCrew.name != name_matched_crews[k].name) {
 								name_matched_crews.push(currentCrew);
-								// console.log("A MATCH!");
 							} else {
 								// the two names are the same
-								// if the performances are different
-								if($.inArray(currentCrew.performance[0], name_matched_crews[k].performance) == -1) {
-									name_matched_crews[k].performance.push(i);
+								for(var n = 0; n < currentCrew.performance.length; n++) {
+									//if the performances are different
+									if($.inArray(currentCrew.performance[n], name_matched_crews[k].performance) == -1) {
+
+										name_matched_crews[k].performance.push(currentCrew.performance[n]);
+									}
+
 								}
 							}
 						}
@@ -60,10 +68,16 @@
 					} else {
 						name_matched_crews.push(currentCrew);
 					}
-
 				}
 			}
 		}
+
+		for(var z = 0; z < name_matched_crews.length; z++) {
+			console.log("name_matched_crews: ");
+			console.log(name_matched_crews[z]);
+		}
+
+
 
 		// the main panel group div
 		var panelgroup = document.createElement("div");
@@ -73,6 +87,7 @@
 		// add it to the main results page
 		var res = document.getElementById("theResults");
 		res.appendChild(panelgroup);
+
 
 		for(var k = 0; k < name_matched_crews.length; k++) {
 
@@ -91,7 +106,6 @@
 			header.setAttribute("href", "#"+k);
 
 			var headerText = document.createElement("div");		
-			//headerText.innerHTML = data[i].performance_crews[j].name;
 			headerText.innerHTML = name_matched_crews[k].name;
 
 			var panelCollapse = document.createElement("div");
@@ -114,25 +128,22 @@
 			for(var i = 0; i < data.length; i++) {
 
 				for(var a = 0; a < name_matched_crews[k].performance.length; a++) {
+					console.log(name_matched_crews[k].performance[a]);
 
-					if(name_matched_crews[k].performance[a] == i) {
-						var responsibilities = '';
-						for(var j = 0; j < data[i].performance_crews.length; j++) {
-							if(data[i].performance_crews[j].name == name_matched_crews[k].name) {
-								responsibilities = data[i].performance_crews[j].responsibilities;
-							}
-						}
+					if(name_matched_crews[k].performance[a].id == data[i].id) {
+						var responsibilities = name_matched_crews[k].performance[a].responsibilities;
 
 						paneltext.innerHTML = paneltext.innerHTML + 
 						"<br><strong>Performance Info</strong>: " + data[i].performance_info + 
 						"<br><strong>Stage Location</strong>: " + data[i].performance_stage.stage_location +
 						"<br><strong>Start Time</strong>: " + data[i].performance_start_time + 
-						"<br><strong>" + search_name + "'s Responsibilities</strong>: " + responsibilities + 
+						"<br><strong>" + name_matched_crews[k].name + "'s Responsibilities</strong>: " + responsibilities + 
 						"<br>"
 						;
 					}
 				}
 			}
+
 			panelgroup.appendChild(pdefault);
 			pdefault.appendChild(panelheading);
 			panelheading.appendChild(ptitle);

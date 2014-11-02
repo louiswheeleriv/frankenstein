@@ -16,7 +16,7 @@
 <script type="text/javascript">
 	// get the data from the json object
 	var data = {{ results|safe }};
-	
+
 	// the name they searched with
 	var search_name = '{{ actor_name }}';
 
@@ -25,35 +25,43 @@
 	// Grouping by actor
 	var name_matched_actors = [];
 
+	// if performances are available
 	if(data.length >= 1) {
-	
 
 		for (var i = 0; i < data.length; i++) {
 
 			for(var j = 0; j < data[i].performance_actors.length; j++) {
 
-				var currentActor = {name: data[i].performance_actors[j].name, 
-					bio: data[i].performance_actors[j].bio, 
-					role: data[i].performance_actors[j].role, 
-					appearance_time: data[i].performance_actors[j].appearance_time,
-					performance: [i]};
+				var perf = {
+					id: data[i].id,
+					role: data[i].performance_actors[j].role,
+					appearance_time: data[i].performance_actors[j].appearance_time
+				};
+
+				var currentActor = {
+					name: data[i].performance_actors[j].actor_name, 
+					bio: data[i].performance_actors[j].actor_bio, 
+					performance: [perf]										
+				};
 
 				// if the current actor has the same name as the search name
 				if(currentActor.name.indexOf(search_name) > -1 ) {
-
-					// if the list is not empty
+					// if the list is not empty	
 					if(name_matched_actors.length != 0) {
 
 						for(var k = 0; k < name_matched_actors.length; k++) {
 							// if the name in the table is different, add it in
 							if(currentActor.name != name_matched_actors[k].name) {
 								name_matched_actors.push(currentActor);
-								// console.log("A MATCH!");
 							} else {
 								// the two names are the same
-								// if the performances are different
-								if($.inArray(currentActor.performance[0], name_matched_actors[k].performance) == -1) {
-									name_matched_actors[k].performance.push(i);
+								for(var n = 0; n < currentActor.performance.length; n++) {
+									//if the performances are different
+									if($.inArray(currentActor.performance[n], name_matched_actors[k].performance) == -1) {
+
+										name_matched_actors[k].performance.push(currentActor.performance[n]);
+									}
+
 								}
 							}
 						}
@@ -61,10 +69,15 @@
 					} else {
 						name_matched_actors.push(currentActor);
 					}
-
 				}
 			}
 		}
+
+		for(var z = 0; z < name_matched_actors.length; z++) {
+			console.log("name_matched_actors: ");
+			console.log(name_matched_actors[z]);
+		}
+
 
 
 		// the main panel group div
@@ -94,7 +107,6 @@
 			header.setAttribute("href", "#"+k);
 
 			var headerText = document.createElement("div");		
-			//headerText.innerHTML = data[i].performance_actors[j].name;
 			headerText.innerHTML = name_matched_actors[k].name;
 
 			var panelCollapse = document.createElement("div");
@@ -117,23 +129,18 @@
 			for(var i = 0; i < data.length; i++) {
 
 				for(var a = 0; a < name_matched_actors[k].performance.length; a++) {
+					console.log(name_matched_actors[k].performance[a]);
 
-					if(name_matched_actors[k].performance[a] == i) {
-						var role = '';
-						var ap = '';
-						for(var j = 0; j < data[i].performance_actors.length; j++) {
-							if(data[i].performance_actors[j].name == name_matched_actors[k].name) {
-								role = data[i].performance_actors[j].role;
-								ap = data[i].performance_actors[j].appearance_time;
-							}
-						}
+					if(name_matched_actors[k].performance[a].id == data[i].id) {
+						var role = name_matched_actors[k].performance[a].role;
+						var ap = name_matched_actors[k].performance[a].appearance_time;
 
 						paneltext.innerHTML = paneltext.innerHTML + 
 						"<br><strong>Performance Info</strong>: " + data[i].performance_info + 
 						"<br><strong>Stage Location</strong>: " + data[i].performance_stage.stage_location +
 						"<br><strong>Start Time</strong>: " + data[i].performance_start_time + 
-						"<br><strong>" + search_name + "'s Role</strong>: " + role + 
-						"<br><strong>" + search_name + "'s Appearance Time</strong>: " + ap + 
+						"<br><strong>" + name_matched_actors[k].name + "'s Role</strong>: " + role + 
+						"<br><strong>" + name_matched_actors[k].name + "'s Appearance Time</strong>: " + ap + 
 						"<br>"
 						;
 					}
@@ -157,7 +164,6 @@
 		nope.innerHTML = search_name + " is currently not in any performances";
 		res.appendChild(nope);
 	}
-</script>
+	</script>
 
-
-{% endblock %}
+	{% endblock %}
