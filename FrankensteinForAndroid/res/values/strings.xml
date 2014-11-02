@@ -8,13 +8,11 @@
     <string name="title_button_show_all">Show all</string>
     <string name="title_activity_search">Frankenstein for Android</string>
     <string name="title_activity_result">Results</string>
-    
     <string name="search_title_1">Lafayette College presents...</string>
     <string name="search_title_2">Frankenstein</string>
-    
     <string name="result_searchResults">Search results:</string>
     <string name="result_selectionInfo">Selection info:</string>
-    
+
     <string-array name="search_types">
         <item>a production</item>
         <item>a stage</item>
@@ -30,70 +28,70 @@
         		{"id":1,
         			"performance_stage":{
         				"id":1,
-        				"stage_location":\"Farinon\",
-        				"stage_description":\"The food is close by!\"
+        				"stage_location":"Farinon",
+        				"stage_description":"The food is close by!"
         			},
-        			"performance_info":\"For the student community\",
-        			"performance_start_time":\"2014-10-09T03:00:43Z\",
+        			"performance_info":"For the student community",
+        			"performance_start_time":"2014-10-09T03:00:43Z",
         			"performance_production":{
         				"id":1,
-        				"production_name":\"Frankenstein\",
-        				"production_description":\"A spook-tacular drama\"
+        				"production_name":"Frankenstein",
+        				"production_description":"A spook-tacular drama"
         			},
         			"performance_actors":[{
         				"id":1,
-        				"actor_name":\"John Smith\",
-        				"actor_bio":\"The first example actor\"
+        				"actor_name":"John Smith",
+        				"actor_bio":"The first example actor"
         			},{
         				"id":2,
-        				"actor_name":\"Joe Sample\",
-        				"actor_bio":\"The second example actor\"
+        				"actor_name":"Joe Sample",
+        				"actor_bio":"The second example actor"
         			}],
         			"performance_crews":[{
         				"id":1,
-        				"crew_name":\"Michael Bay\",
-        				"crew_responsibility":\"Director\",
-        				"crew_bio":\"He is the director\"
+        				"crew_name":"Michael Bay",
+        				"crew_responsibility":"Director",
+        				"crew_bio":"He is the director"
         			},{
         				"id":2,
-        				"crew_name":\"Jim Lighting\",
-        				"crew_responsibility":\"Lighting\",
-        				"crew_bio":\"He is the lighting guy\"
+        				"crew_name":"Jim Lighting",
+        				"crew_responsibility":"Lighting",
+        				"crew_bio":"He is the lighting guy"
         			}]	
         		},
         		
         		{"id":2,
         			"performance_stage":{
         				"id":1,
-        				"stage_location":\"Farinon\",
-        				"stage_description":\"The food is close by!\"
+        				"stage_location":"Farinon",
+        				"stage_description":"The food is close by!"
         			},
-        			"performance_info":\"For the student community\",
-        			"performance_start_time":\"2014-10-09T08:00:43Z\",
+        			"performance_info":"For the student community",
+        			"performance_start_time":"2014-10-09T08:00:43Z",
         			"performance_production":{
         				"id":1,
-        				"production_name":\"Frankenstein\",
-        				"production_description":\"A spook-tacular drama\"
+        				"production_name":"Frankenstein",
+        				"production_description":"A spook-tacular drama"
         			},
         			"performance_actors":[{
         				"id":1,
-        				"actor_name":\"John Smith\",
-        				"actor_bio":\"The first example actor\"
+        				"actor_name":"John Smith",
+        				"actor_bio":"The first example actor"
         			},{
         				"id":2,
-        				"actor_name":\"Joe Sample\",
-        				"actor_bio":\"The second example actor\"
+        				"actor_name":"Joe Sample",
+        				"actor_bio":"The second example actor"
         			}],
         			"performance_crews":[{
         				"id":1,
-        				"crew_name":\"Michael Bay\",
-        				"crew_responsibility":\"Director\",
-        				"crew_bio":\"He is the director\"
+        				"crew_name":"Michael Bay",
+        				"crew_responsibility":"Director",
+        				"crew_bio":"He is the director"
         			},{
         				"id":2,
-        				"crew_name":\"Jim Lighting\",
-        				"crew_responsibility":\"Lighting\",
-        				"crew_bio":\"He is the lighting guy\"
+        				"crew_name":"Jim Lighting",
+        				"crew_responsibility":"Lighting",
+        				"crew_bio":"He is the lighting guy"
         			}]	
         		}
         	]

@@ -1,42 +1,36 @@
 package edu.cs320.frankensteinforandroid;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONArray;
-
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.os.Build;
 
 public class ResultActivity extends Activity {
+
+	List<Performance> performances;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_result);
+		TextView selectionInfo = (TextView) findViewById(R.id.textView_result_selectionInfo);
+		selectionInfo.setMovementMethod(new ScrollingMovementMethod());
 
 		// Determine what type of search the user did, display data appropriately
 
 		Intent intent = getIntent();
-		List<Performance> performances = DataUtils.parseJSONIntoPerformances(intent.getStringExtra(SearchActivity.EXTRA_RESULTLIST));
+		performances = DataUtils.parseJSONIntoPerformances(intent.getStringExtra(SearchActivity.EXTRA_RESULTLIST));
 		//List<Performance> performances = DataUtils.parseJSONIntoPerformances(getString(R.string.example_json_results));
 
 		ArrayAdapter adapter = getAdapterForList(performances);
@@ -60,10 +54,11 @@ public class ResultActivity extends Activity {
 		String searchType = intent.getStringExtra(SearchActivity.EXTRA_SEARCHTYPE);
 		String inputValue = intent.getStringExtra(SearchActivity.EXTRA_INPUTVALUE);
 
-		if(searchType.equals("actor")){
-			List<Actor> actors = new ArrayList<Actor>();
+		if(searchType.equals("actor_name")){
+			List<Actor> actorsToDisplay = new ArrayList<Actor>();
 
 			for(int i = 0; i < performances.size(); i++){
+				
 				List<Actor> actorsInThisPerformance = performances.get(i).getActors();
 
 				for(int j = 0; j < actorsInThisPerformance.size(); j++){
@@ -71,23 +66,28 @@ public class ResultActivity extends Activity {
 					if(actorsInThisPerformance.get(j).getName().toLowerCase().contains(inputValue.toLowerCase())){
 						boolean alreadyInList = false;
 
-						for(int k = 0; k < actors.size(); k++){
-							if(actors.get(k).getName().equalsIgnoreCase(actorsInThisPerformance.get(j).getName())){
+						for(int k = 0; k < actorsToDisplay.size(); k++){
+							if(actorsToDisplay.get(k).getName().equalsIgnoreCase(actorsInThisPerformance.get(j).getName())){
 								alreadyInList = true;
+
+								actorsToDisplay.get(k).addRoleAndAppearanceTimeBulk(actorsInThisPerformance.get(j).getRoles(), actorsInThisPerformance.get(j).getAppearanceTimes());
+								break;
 							}
 						}
 
 						if(!alreadyInList){
-							actors.add(actorsInThisPerformance.get(j));
+							actorsToDisplay.add(actorsInThisPerformance.get(j));
 						}
+
 					}
 				}
 			}
 
-			ArrayAdapter<Actor> adapter = new ArrayAdapter<Actor>(this, android.R.layout.simple_list_item_1, DataUtils.sortActorList(actors));
+			ArrayAdapter<Actor> adapter = new ArrayAdapter<Actor>(this, android.R.layout.simple_list_item_1, DataUtils.sortActorList(actorsToDisplay));
 			return adapter;
-		}else if(searchType.equals("crew")){
-			List<Crew> crew = new ArrayList<Crew>();
+		}else if(searchType.equals("crew_name")){
+			
+			List<Crew> crewToDisplay = new ArrayList<Crew>();
 
 			for(int i = 0; i < performances.size(); i++){
 				List<Crew> crewInThisPerformance = performances.get(i).getCrew();
@@ -97,20 +97,23 @@ public class ResultActivity extends Activity {
 					if(crewInThisPerformance.get(j).getName().toLowerCase().contains(inputValue.toLowerCase())){
 						boolean alreadyInList = false;
 
-						for(int k = 0; k < crew.size(); k++){
-							if(crew.get(k).getName().equalsIgnoreCase(crewInThisPerformance.get(j).getName())){
+						for(int k = 0; k < crewToDisplay.size(); k++){
+							if(crewToDisplay.get(k).getName().equalsIgnoreCase(crewInThisPerformance.get(j).getName())){
 								alreadyInList = true;
+
+								crewToDisplay.get(k).addResponsibilityBulk(crewInThisPerformance.get(j).getResponsibilities());
+								break;
 							}
 						}
 
 						if(!alreadyInList){
-							crew.add(crewInThisPerformance.get(j));
+							crewToDisplay.add(crewInThisPerformance.get(j));
 						}
 					}
 				}
 			}
 
-			ArrayAdapter<Crew> adapter = new ArrayAdapter<Crew>(this, android.R.layout.simple_list_item_1, DataUtils.sortCrewList(crew));
+			ArrayAdapter<Crew> adapter = new ArrayAdapter<Crew>(this, android.R.layout.simple_list_item_1, DataUtils.sortCrewList(crewToDisplay));
 			return adapter;
 		}else{
 			ArrayAdapter<Performance> adapter = new ArrayAdapter<Performance>(this, android.R.layout.simple_list_item_1, DataUtils.sortPerformanceList(performances));
@@ -150,9 +153,9 @@ public class ResultActivity extends Activity {
 		}else if(listItem instanceof Stage){
 			listItemInfo = ((Stage) listItem).getFullInfo();
 		}else if(listItem instanceof Actor){
-			listItemInfo = ((Actor) listItem).getFullInfo();
+			listItemInfo = ((Actor) listItem).getActorPerformanceInfo(performances);
 		}else if(listItem instanceof Crew){
-			listItemInfo = ((Crew) listItem).getFullInfo();
+			listItemInfo = ((Crew) listItem).getCrewPerformanceInfo(performances);
 		}
 
 		return listItemInfo;

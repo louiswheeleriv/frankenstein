@@ -1,42 +1,22 @@
 package edu.cs320.frankensteinforandroid;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.os.Build;
 
 public class SearchActivity extends Activity {
 
@@ -44,9 +24,8 @@ public class SearchActivity extends Activity {
 	public final static String EXTRA_INPUTVALUE = "edu.cs320.frankensteinforandroid.INPUTVALUE";
 	public final static String EXTRA_RESULTLIST = "edu.cs320.frankensteinforandroid.RESULTLIST";
 	
-	public final static String SERVER_ADDRESS = "http://192.168.1.138:8000/api/performances/?";
+	public final static String SERVER_ADDRESS = "http://139.147.25.114:8000/api/performances/?";
 	public final static String SERVER_SUFFIX = "format=json";
-	public final static String SERVER_TEST = "http://139.147.27.214:8000/api/performances/?format=json";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +91,6 @@ public class SearchActivity extends Activity {
 					String resultList = "";
 					
 					URL serverUrl = new URL(SERVER_ADDRESS + searchType + "=" + inputValue + "&" + SERVER_SUFFIX);
-					//URL serverUrl = new URL(SERVER_TEST);
 					HttpURLConnection connection = (HttpURLConnection) serverUrl.openConnection();
 		            connection.setRequestMethod("GET");
 		            connection.setDoInput(true);
@@ -124,10 +102,7 @@ public class SearchActivity extends Activity {
 		            String line = "";
 		            while((line = in.readLine()) != null){
 		            	resultList += line;
-		            	Log.d("RESPONSE LINE", line);
 		            }
-		            
-		            Log.d("RESPONSE", resultList);
 		            
 		            text.setText(resultList);
 		            in.close();
@@ -160,6 +135,62 @@ public class SearchActivity extends Activity {
 		intent.putExtra(EXTRA_RESULTLIST, jsonResponse);
 		startActivity(intent);
 		
+	}
+	
+	public void showAllButtonClicked(View view){
+Intent intent = new Intent(this, ResultActivity.class);
+		
+		// Send information to Django server, which will return JSON object(s)
+		Thread t = new Thread(new Runnable(){
+			@Override
+			public void run(){
+				try{
+					String resultList = "";
+					
+					URL serverUrl = new URL(SERVER_ADDRESS + SERVER_SUFFIX);
+					HttpURLConnection connection = (HttpURLConnection) serverUrl.openConnection();
+		            connection.setRequestMethod("GET");
+		            connection.setDoInput(true);
+		            connection.connect();
+					
+		            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+		            TextView text = (TextView) findViewById(R.id.textView_jsonResponseHidden);
+		            
+		            String line = "";
+		            while((line = in.readLine()) != null){
+		            	resultList += line;
+		            }
+		            
+		            text.setText(resultList);
+		            in.close();
+		            connection.disconnect();
+		            
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		});
+		
+		t.start();
+		try {
+			t.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		Spinner spinner = (Spinner) findViewById(R.id.spinner_searchType);
+		EditText editText = (EditText) findViewById(R.id.editText_inputValue);
+		TextView jsonResponseTextView = (TextView) findViewById(R.id.textView_jsonResponseHidden);
+
+		String searchType = getSearchableParameter(spinner.getSelectedItem().toString());
+		String inputValue = editText.getText().toString();
+		String jsonResponse = (String) jsonResponseTextView.getText();
+		
+		// Start ResultActivity
+		intent.putExtra(EXTRA_SEARCHTYPE, searchType);
+		intent.putExtra(EXTRA_INPUTVALUE, inputValue);
+		intent.putExtra(EXTRA_RESULTLIST, jsonResponse);
+		startActivity(intent);
 	}
 	
 	public String getSearchableParameter(String s){

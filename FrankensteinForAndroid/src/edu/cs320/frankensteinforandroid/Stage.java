@@ -6,44 +6,33 @@ import android.util.Log;
 
 public class Stage {
 
-	long stageId;
-	String location;
-	String info;
+	String stage_location;
+	String stage_description;
 	
-	public Stage(long stageId, String location, String info){
-		this.stageId = stageId;
-		this.location = location;
-		this.info = info;
-	}
-
-	public long getStageId() {
-		return stageId;
-	}
-
-	public void setStageId(long stageId) {
-		this.stageId = stageId;
+	public Stage(String location, String info){
+		this.stage_location = location;
+		this.stage_description = info;
 	}
 
 	public String getLocation() {
-		return location;
+		return stage_location;
 	}
 
 	public void setLocation(String location) {
-		this.location = location;
+		this.stage_location = location;
 	}
 
 	public String getInfo() {
-		return info;
+		return stage_description;
 	}
 
 	public void setInfo(String info) {
-		this.info = info;
+		this.stage_description = info;
 	}
 	
 	public String getFullInfo(){
-		return ("Stage ID: " + stageId + "\n" +
-				"Location: " + location + "\n" +
-				"Info: " + info);
+		return ("Location: " + stage_location + "\n" +
+				"Description: " + stage_description);
 	}
 	
 }

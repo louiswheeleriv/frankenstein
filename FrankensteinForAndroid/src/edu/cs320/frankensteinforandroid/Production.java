@@ -6,44 +6,33 @@ import android.util.Log;
 
 public class Production {
 
-	long productionId;
-	String name;
-	String info;
+	String production_name;
+	String production_info;
 	
-	public Production(long productionId, String name, String info){
-		this.productionId = productionId;
-		this.name = name;
-		this.info = info;
-	}
-
-	public long getProductionId() {
-		return productionId;
-	}
-
-	public void setProductionId(long productionId) {
-		this.productionId = productionId;
+	public Production(String name, String info){
+		this.production_name = name;
+		this.production_info = info;
 	}
 
 	public String getName() {
-		return name;
+		return production_name;
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.production_name = name;
 	}
 
 	public String getInfo() {
-		return info;
+		return production_info;
 	}
 
 	public void setInfo(String info) {
-		this.info = info;
+		this.production_info = info;
 	}
 	
 	public String getFullInfo(){
-		return ("Production ID: " + productionId + "\n" +
-				"Name: " + name + "\n" +
-				"Info: " + info);
+		return ("Name: " + production_name + "\n" +
+				"Info: " + production_info);
 	}
 	
 }

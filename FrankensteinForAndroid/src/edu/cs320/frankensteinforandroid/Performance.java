@@ -3,7 +3,9 @@ package edu.cs320.frankensteinforandroid;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -14,105 +16,96 @@ import android.util.Log;
 
 public class Performance implements Parcelable{
 
-	long performanceId;
-	String info;
-	Stage stage;
-	Production production;
-	Date startTime;
+	String performance_info;
+	Stage performance_stage;
+	Production performance_production;
+	Date performance_start_time;
 	
-	List<Actor> actors;
-	List<Crew> crew;
+	List<Actor> performance_actors = new ArrayList<Actor>();
+	List<Crew> performance_crews = new ArrayList<Crew>();
 	
 	public Performance(){
 		
 	}
 	
-	public Performance(long performanceId, String info, Stage stage, Production production, Date startTime, List<Actor> actors, List<Crew> crew){
-		this.performanceId = performanceId;
-		this.info = info;
-		this.stage = stage;
-		this.production = production;
-		this.startTime = startTime;
-		this.actors = actors;
-		this.crew = crew;
-	}
-
-	public long getPerformanceId() {
-		return performanceId;
-	}
-
-	public void setPerformanceId(long performanceId) {
-		this.performanceId = performanceId;
+	public Performance(String info, Stage stage, Production production, Date startTime, List<Actor> actors, List<Crew> crew){
+		this.performance_info = info;
+		this.performance_stage = stage;
+		this.performance_production = production;
+		this.performance_start_time = startTime;
+		this.performance_actors = actors;
+		this.performance_crews = crew;
 	}
 
 	public String getInfo() {
-		return info;
+		return performance_info;
 	}
 
 	public void setInfo(String info) {
-		this.info = info;
+		this.performance_info = info;
 	}
 
 	public Stage getStage() {
-		return stage;
+		return performance_stage;
 	}
 
 	public void setStage(Stage stage) {
-		this.stage = stage;
+		this.performance_stage = stage;
 	}
 
 	public Production getProduction() {
-		return production;
+		return performance_production;
 	}
 
 	public void setProduction(Production production) {
-		this.production = production;
+		this.performance_production = production;
 	}
 
 	public Date getStartTime() {
-		return startTime;
+		return performance_start_time;
 	}
 
 	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
+		this.performance_start_time = startTime;
 	}
 
 	public List<Actor> getActors() {
-		return actors;
+		return performance_actors;
 	}
 
 	public void setActors(List<Actor> actors) {
-		this.actors = actors;
+		this.performance_actors = actors;
 	}
 
 	public List<Crew> getCrew() {
-		return crew;
+		return performance_crews;
 	}
 
 	public void setCrew(List<Crew> crew) {
-		this.crew = crew;
+		this.performance_crews = crew;
 	}
 	
 	public String getFullInfo(){
-		String fullInfo = ("PERFORMANCE INFO\n" + info + "\n\n" +
-				"STAGE\nLocation: " + stage.getLocation() + "\n" +
-				"Info: " + stage.getInfo() + "\n\n" +
-				"TIME\n" + startTime + "\n\n" +
+		String fullInfo = ("PERFORMANCE INFO\n" + performance_info + "\n\n" +
+				"STAGE\nLocation: " + performance_stage.getLocation() + "\n" +
+				"Info: " + performance_stage.getInfo() + "\n\n" +
+				"TIME\n" + performance_start_time + "\n\n" +
 				"ACTORS\n");
 		
-		for(int i = 0; i < actors.size(); i++){
-			Actor a = actors.get(i);
+		for(int i = 0; i < performance_actors.size(); i++){
+			Actor a = performance_actors.get(i);
 			fullInfo += ("Name: " + a.getName() + "\n" +
-						 "Bio: " + a.getBio() + "\n\n");
+						 "Bio: " + a.getBio() + "\n" +
+						 "Role: " + a.getRoles().get(getInfo()) + "\n");
 		}
 		
 		fullInfo += "CREW\n";
 		
-		for(int i = 0; i < crew.size(); i++){
-			Crew c = crew.get(i);
+		for(int i = 0; i < performance_crews.size(); i++){
+			Crew c = performance_crews.get(i);
 			fullInfo += ("Name: " + c.getName() + "\n" +
-						 "Job: " + c.getResponsibilities() + "\n" +
-						 "Bio: " + c.getBio() + "\n\n");
+						 "Bio: " + c.getBio() + "\n" +
+						 "Responsibility: " + c.getResponsibilities().get(getInfo()) + "\n");
 		}
 		
 		return fullInfo;
@@ -120,8 +113,26 @@ public class Performance implements Parcelable{
 	
 	@Override
 	public String toString(){
-		return ("Location: " + stage.getLocation() + "\n" +
-				"Time: " + startTime.toString());
+		return ("Location: " + performance_stage.getLocation() + "\n" +
+				"Time: " + performance_start_time.toString());
+	}
+	
+	public boolean hasActor(String name){
+		for(int i = 0; i < performance_actors.size(); i++){
+			if(performance_actors.get(i).getName().equals(name)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean hasCrew(String name){
+		for(int i = 0; i < performance_crews.size(); i++){
+			if(performance_crews.get(i).getName().equals(name)){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
