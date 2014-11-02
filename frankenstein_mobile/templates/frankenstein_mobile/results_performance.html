@@ -2,16 +2,116 @@
 
 {% extends "frankenstein_mobile/base.html" %}
 {% block content %}
-{% load render_table from django_tables2 %}
 {% load static %}
 
 <div class="container">
-	<h1>Results</h1>
-		<table class="table" style="color:black;">
-			<div>
-				{% render_table table %}
-			</div>
-		</table>
+	<h2 id="pageHeader"> </h2>
+	<div id="theResults">
+		
+	</div> 
 </div>
 
-{% endblock %}
+<script type="text/javascript">
+	// get the data from the json object
+	var data = {{ results|safe }};
+
+	// the name they searched with
+	var search_name = '{{ performance_info }}';
+
+	var pHeader = document.getElementById("pageHeader").innerHTML = "Performances with the description <em>'" + search_name + "'</em>.....";
+
+	// the main panel group div
+	var panelgroup = document.createElement("div");
+	panelgroup.id = "accordion";
+	panelgroup.className = "panel-group";
+
+	// add it to the main results page
+	var res = document.getElementById("theResults");
+	res.appendChild(panelgroup);
+
+	for(var k = 0; k < data.length; k++) {
+
+		console.log(data[k].performance_info);
+
+		var pdefault = document.createElement("div");
+		pdefault.className = "panel panel-default";
+
+		var panelheading = document.createElement("div");
+		panelheading.className = "panel-heading";
+
+		var ptitle = document.createElement("h4");
+		ptitle.className = "panel-title";
+
+		var header = document.createElement("a")
+		header.setAttribute("data-toggle", "collapse");
+		header.setAttribute("data-parent", "#accordion");
+		header.setAttribute("href", "#"+k);
+
+		var headerText = document.createElement("div");		
+		headerText.innerHTML = data[k].performance_info;
+
+		var panelCollapse = document.createElement("div");
+		panelCollapse.id = k;
+		panelCollapse.className = "panel-collapse collapse";
+
+		var panelbody = document.createElement("div");
+		panelbody.className = "panel-body";
+
+		var paneltext = document.createElement("p");
+		paneltext.setAttribute("style", "color:white;");
+
+
+		paneltext.innerHTML = paneltext.innerHTML + 
+		"<br>\
+		<strong>Performance Info: </strong>" + data[k].performance_info + 
+		"<br><strong>Location: </strong>" + data[k].performance_stage.stage_location +
+		"<br><strong>Start Time: </strong>" + data[k].performance_start_time + "<br>"
+		;
+
+		paneltext.innerHTML = paneltext.innerHTML + "<h3>Actors</h3>";
+		if(data[k].performance_actors.length > 0) {
+			for(var i = 0; i < data[k].performance_actors.length; i++) {
+				paneltext.innerHTML = paneltext.innerHTML + 
+				"<br><strong>Actor Name</strong>: " + data[k].performance_actors[i].actor_name + 
+				"<br><strong>Bio</strong>: " + data[k].performance_actors[i].actor_bio +
+				"<br><strong>Role</strong>: " + data[k].performance_actors[i].role + 
+				"<br><strong>Appearnce Time</strong>: " + data[k].performance_actors[i].appearance_time + 
+				"<br>"
+				;
+			}
+		} else {
+			paneltext.innerHTML = paneltext.innerHTML + "<strong>There are currently no actors in this performance</strong><br>"
+		}
+		
+
+		paneltext.innerHTML = paneltext.innerHTML + "<h3>Crew</h3>";
+		if(data[k].performance_crews.length) {
+			for(var i = 0; i < data[k].performance_crews.length; i++) {
+				paneltext.innerHTML = paneltext.innerHTML + 
+				"<br><strong>Crew Name</strong>: " + data[k].performance_crews[i].crew_name + 
+				"<br><strong>Bio</strong>: " + data[k].performance_crews[i].crew_bio +
+				"<br><strong>Responsibilities</strong>: " + data[k].performance_crews[i].responsibilities + 
+				"<br>"
+				;
+			}
+		} else {
+			paneltext.innerHTML = paneltext.innerHTML + "<strong>There are currently no crew members in this performance</strong><br>"
+		}
+		
+
+		panelgroup.appendChild(pdefault);
+		pdefault.appendChild(panelheading);
+		panelheading.appendChild(ptitle);
+		ptitle.appendChild(header);
+		header.appendChild(headerText);
+		panelgroup.appendChild(panelCollapse);
+		panelCollapse.appendChild(panelbody);
+		panelbody.appendChild(paneltext);
+
+	}
+
+
+
+	</script>
+
+	{% endblock %}

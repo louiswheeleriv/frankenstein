@@ -5,13 +5,27 @@ body {
 	padding-top: 150px;
 }
 
-h1 {
+h1,h3,h2{
 	font-family: 'de-walpergens-pica', cursive;
 	color: #22B14C;
 }
 
 .searchHeader {
 	text-align: center;
+}
+
+#theResults table{
+	font-size: small;
+}
+
+/*.borderless {
+    border: 1px solid white;
+    border-top: none !important;
+    border-bottom: none !important;
+}*/
+
+.table th, .table td {
+	border: 1px solid black;
 }
 
 .top-buffer { margin-top:20px; }
@@ -21,6 +35,8 @@ h1 {
 	background-color: #000;
 	border-color: #2A2A2A;
 }
+
+
 .navbar-default .navbar-brand {
 	font-family: 'de-walpergens-pica', cursive;
 	color: #22B14C;
@@ -66,6 +82,10 @@ h1 {
 }
 .navbar-default .navbar-link:hover {
 	color: #cdcdcd;
+}
+
+.list-group-item span {
+ margin-top: -0.5em;
 }
 
 @media (max-width: 767px) {
