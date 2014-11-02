@@ -5,7 +5,7 @@
 {% load static %}
 
 <div class="container">
-	<h1 id="pageHeader"> </h1>
+	<h2 id="pageHeader"> </h2>
 	<div id="theResults">
 		
 	</div> 
@@ -119,12 +119,45 @@
 			var paneltext = document.createElement("p");
 			paneltext.setAttribute("style", "color:white;");
 
+			paneltext.innerHTML = paneltext.innerHTML + "<h3>Actor Information</h3>";
 
-			paneltext.innerHTML = 
-			"<br>\
-			<strong>Name: </strong>" + name_matched_actors[k].name + 
-			"<br><strong>Bio: </strong>" + name_matched_actors[k].bio + "<br>"
-			;
+			var t = document.createElement("table");
+			t.className = "table table-condensed borderless";
+
+			var tbody = document.createElement("tbody");
+			var tr1 = document.createElement("tr");
+
+			var td_A = document.createElement("td");
+			td_A.innerHTML = "<strong>Name:</strong>";
+
+			var td_B = document.createElement("td");
+			td_B.innerHTML = name_matched_actors[k].name;
+
+			var tr2 = document.createElement("tr");
+			var td_C = document.createElement("td");
+			var td_D = document.createElement("td");			
+			
+			td_C.innerHTML = "<strong>Bio:</strong>";
+			td_D.innerHTML = name_matched_actors[k].bio;
+
+			paneltext.appendChild(t);
+			t.appendChild(tbody);
+			tbody.appendChild(tr1);
+			tr1.appendChild(td_A);
+			tr1.appendChild(td_B);
+
+			tbody.appendChild(tr2);
+			tr2.appendChild(td_C);
+			tr2.appendChild(td_D);
+
+
+			// paneltext.innerHTML = paneltext.innerHTML + 
+			// "<br>\
+			// <strong>Name: </strong>" + name_matched_actors[k].name + 
+			// "<br><strong>Bio: </strong>" + name_matched_actors[k].bio + "<br>"
+			// ;
+
+			paneltext.innerHTML = paneltext.innerHTML + "<h3>Performances</h3>";
 
 			for(var i = 0; i < data.length; i++) {
 
@@ -135,14 +168,67 @@
 						var role = name_matched_actors[k].performance[a].role;
 						var ap = name_matched_actors[k].performance[a].appearance_time;
 
-						paneltext.innerHTML = paneltext.innerHTML + 
-						"<br><strong>Performance Info</strong>: " + data[i].performance_info + 
-						"<br><strong>Stage Location</strong>: " + data[i].performance_stage.stage_location +
-						"<br><strong>Start Time</strong>: " + data[i].performance_start_time + 
-						"<br><strong>" + name_matched_actors[k].name + "'s Role</strong>: " + role + 
-						"<br><strong>" + name_matched_actors[k].name + "'s Appearance Time</strong>: " + ap + 
-						"<br>"
-						;
+						var t2 = document.createElement("table");
+						t2.className = "table table-condensed borderless";
+
+						var tbody2 = document.createElement("tbody");
+						var tr3 = document.createElement("tr");
+						var td5 = document.createElement("td");
+						var td6 = document.createElement("td");
+
+						var tr4 = document.createElement("tr");
+						var td7 = document.createElement("td");
+						var td8 = document.createElement("td");
+
+						var tr5 = document.createElement("tr");
+						var td9 = document.createElement("td");
+						var td10 = document.createElement("td");
+
+						var tr6 = document.createElement("tr");
+						var td11 = document.createElement("td");
+						var td12 = document.createElement("td");
+
+						var tr7 = document.createElement("tr");
+						var td13 = document.createElement("td");
+						var td14 = document.createElement("td");
+
+						td5.innerHTML = "<strong>Performance Info:</strong>";
+						td6.innerHTML = data[i].performance_info;
+						td7.innerHTML = "<strong>Stage Location:</strong>";
+						td8.innerHTML = data[i].performance_stage.stage_location;
+						td9.innerHTML = "<strong>Start Time:</strong>";
+						td10.innerHTML = data[i].performance_start_time; 
+						td11.innerHTML = "<strong>" + name_matched_actors[k].name + "'s Role</strong>:";
+						td12.innerHTML = role;
+						td13.innerHTML = "<strong>" + name_matched_actors[k].name + "'s Appearance Time</strong>:";
+						td14.innerHTML = ap; 
+
+						paneltext.appendChild(t2);
+						t2.appendChild(tbody2);
+						tbody2.appendChild(tr3);
+						tr3.appendChild(td5);
+						tr3.appendChild(td6);
+						tbody2.appendChild(tr4);
+						tr4.appendChild(td7);
+						tr4.appendChild(td8);
+						tbody2.appendChild(tr5);
+						tr5.appendChild(td9);
+						tr5.appendChild(td10);
+						tbody2.appendChild(tr6);
+						tr6.appendChild(td11);
+						tr6.appendChild(td12);
+						tbody2.appendChild(tr7);
+						tr7.appendChild(td13);
+						tr7.appendChild(td14);
+
+						// paneltext.innerHTML = paneltext.innerHTML + 
+						// "<br><strong>Performance Info</strong>: " + data[i].performance_info + 
+						// "<br><strong>Stage Location</strong>: " + data[i].performance_stage.stage_location +
+						// "<br><strong>Start Time</strong>: " + data[i].performance_start_time + 
+						// "<br><strong>" + name_matched_actors[k].name + "'s Role</strong>: " + role + 
+						// "<br><strong>" + name_matched_actors[k].name + "'s Appearance Time</strong>: " + ap + 
+						// "<br>"
+						// ;
 					}
 				}
 			}

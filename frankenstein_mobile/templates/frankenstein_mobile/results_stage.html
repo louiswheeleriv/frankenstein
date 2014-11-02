@@ -1,11 +1,11 @@
-<!-- The results page for the stage search. Shows results based on filter from page. Rendered through django-tables2 -->
+<!-- The results page for the stage search. Shows results based on filter from page. -->
 
 {% extends "frankenstein_mobile/base.html" %}
 {% block content %}
 {% load static %}
 
 <div class="container">
-	<h1 id="pageHeader"> </h1>
+	<h2 id="pageHeader"> </h2>
 	<div id="theResults">
 		
 	</div> 
@@ -102,6 +102,8 @@
 			var paneltext = document.createElement("p");
 			paneltext.setAttribute("style", "color:white;");
 
+			paneltext.innerHTML = paneltext.innerHTML + "<h3>Stage Information</h3>";
+
 
 			var t = document.createElement("table");
 			t.className = "table table-condensed borderless";
@@ -132,12 +134,7 @@
 			tr2.appendChild(td_C);
 			tr2.appendChild(td_D);
 
-
-			// paneltext.innerHTML = 
-			// "<br>\
-			// <strong>Location: </strong>" + location_matched_stages[k].location + 
-			// "<br><strong>Description: </strong>" + location_matched_stages[k].description + "<br>"
-			// ;
+			paneltext.innerHTML = paneltext.innerHTML + "<h3>Performances</h3>";
 
 			for(var i = 0; i < data.length; i++) {
 

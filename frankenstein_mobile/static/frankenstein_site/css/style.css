@@ -14,14 +14,19 @@ h1,h3,h2{
 	text-align: center;
 }
 
-.borderless {
-    border: 2px solid white;
-    border-top: none !important;
+#theResults table{
+	font-size: small;
 }
 
-/*.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
-   background-color: #4DB870;
+/*.borderless {
+    border: 1px solid white;
+    border-top: none !important;
+    border-bottom: none !important;
 }*/
+
+.table th, .table td {
+	border: 1px solid black;
+}
 
 .top-buffer { margin-top:20px; }
 
