@@ -1,5 +1,5 @@
 
-from api.models import Performance, Stage, Production, Actor, Crew, PerfActor, PerfCrew
+from api.models import Performance, Stage, Production, Actor, Crew, PerfActor, PerfCrew, SignificantEvent
 from dateutil import parser
 
 ## Populates database with custom CSV
@@ -40,20 +40,25 @@ with open('../makeTables/production.csv') as production_file:
 
 with open('../makeTables/performance.csv') as perf_file:
     for line in perf_file:
-        info, stage, time, production = line.split(',')
-        p = Performance(performance_info = info,performance_start_time = parser.parse(time))
+        # Part 3 of Act 1,Mohican Media Room 2,5/22/2015,19:25,Frankenstein
+        info, stage_name, date, time, production = line.split(',')
+        p = Performance(performance_info = info,performance_start_time = parser.parse(date+' '+time))
         # Select a random Stage
-        p.performance_stage = Stage.objects.order_by('?')[0]
+        stage = Stage.objects.filter(stage_location = stage_name).get()
+        p.performance_stage = stage
         # Select a random Stage
         p.performance_production = Production.objects.order_by('?')[0]
         p.save()
 
 with open('../makeTables/perfactor.csv') as perfactr_file:
     for line in perfactr_file:
+        # Part 4 of Act 1,Ellen Galperin,The Monster,19:45
         perf, actor, role, appearance_time = line.split(',')
+        appearance_time = appearance_time.split(':')[1]
         pa = PerfActor(role = role, appearance_time = appearance_time)
-        pa.performance = Performance.objects.order_by('?')[0]
-        pa.actor = Actor.objects.order_by('?')[0]
+        performance = Performance.objects.filter(performance_info = perf).order_by('?')[0]
+        pa.performance = performance
+        pa.actor = Actor.objects.filter(actor_name=actor).get()
         pa.save()
 
 with open('../makeTables/perfcrew.csv') as perfcrew_file:
@@ -61,9 +66,14 @@ with open('../makeTables/perfcrew.csv') as perfcrew_file:
         perf, crew, responsibility = line.split(',')
         pc = PerfCrew()
         pc.responsibilities = responsibility
-        pc.performance = Performance.objects.order_by('?')[0]
-        pc.crew = Crew.objects.order_by('?')[0]
+        pc.performance = Performance.objects.filter(performance_info = perf).order_by('?')[0]
+        pc.crew = Crew.objects.filter(crew_name=crew).get()
         pc.save()
 
-print Performance.objects.all()
-print Production.objects.all()
+with open('../makeTables/significant_event.csv') as sigevent:
+    for line in sigevent:
+        perf, event = line.split(',')
+        sig_event = SignificantEvent()
+        sig_event.description = event
+        sig_event.performance = Performance.objects.filter(performance_info = perf).order_by('?')[0]
+        sig_event.save()
