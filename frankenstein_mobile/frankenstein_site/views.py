@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, QueryDict, HttpRequest
 from django.template import RequestContext, loader
-
+from datetime import datetime, timedelta
 from api.frankenstein_serialization import PerformanceSerializer
 from api.models import Production, Stage, Actor, Crew, Performance
 from api.views import PerformanceList
@@ -123,18 +123,21 @@ def search_time(request):
     return render(request, 'frankenstein_mobile/search_time.html')
 
 def results_time(request):
-    if request.GET.get('q'):
-        message = request.GET['q']
-    else:
-        message = ''
+    queryset = Performance.objects.all()
+    time_query = request.GET.get('performance_start_time', None)
 
-    # if Performance.objects.filter(performance_start_time=message).exists():
-    #     table = PerformanceTable(Performance.objects.filter(performance_start_time=message))
-    #
-    #     RequestConfig(request).configure(table)
-    #     return render(request, 'frankenstein_mobile/results_time.html', {'table': table})
-    # else:
-    #     return render(request, 'frankenstein_mobile/results_notfound.html')
+    if time_query is not None:
+        date_time = parse(time_query)
+        next_day = date_time + timedelta(days=1)
+        print date_time, next_day, "asfagaga"
+        queryset = queryset.filter(performance_start_time__range=[date_time,next_day])
+
+    results = []
+    for perf in queryset.all():
+        sx = PerformanceSerializer(perf)
+        results.append(sx.data)
+
+    return render(request, 'frankenstein_mobile/results_time.html', {'results': json.dumps(results)})
 
 
 ###########################################################################
@@ -193,9 +196,11 @@ def results(request):
         queryset = queryset.filter(performance_production__production_name__contains=production_name)
     if stage_location is not None:
         queryset = queryset.filter(performance_stage__production_name__contains=production_name)
-    if time_query is not None:
-        date_time = parse(time_query)
-        queryset = queryset.filter(performance_start_time=date_time)
+    # if time_query is not None:
+        # date_time = parse(time_query)
+        # next_day = date_time + datetime.timedelta(days=1)
+        # print date_time, next_day, "asfagaga"
+        # queryset = queryset.filter(performance_start_time__range=[date_time,next_day])
 
     results = []
     for perf in queryset.all():

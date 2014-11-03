@@ -19,8 +19,8 @@
 
 	// the main panel group div
 	var panelgroup = document.createElement("div");
-	panelgroup.id = "accordion";
 	panelgroup.className = "panel-group";
+	panelgroup.id = "accordion";	
 
 	// add it to the main results page
 	var res = document.getElementById("theResults");
@@ -60,52 +60,44 @@
 		paneltext.innerHTML = paneltext.innerHTML + "<h3>Performance Information</h3>";
 
 		var t = document.createElement("table");
-			t.className = "table table-condensed borderless";
+		t.className = "table table-condensed borderless";
 
-			var tbody = document.createElement("tbody");
-			var tr1 = document.createElement("tr");
+		var tbody = document.createElement("tbody");
+		var tr1 = document.createElement("tr");
 
-			var td_A = document.createElement("td");
-			td_A.innerHTML = "<strong>Performance Info:</strong>";
+		var td_A = document.createElement("td");
+		td_A.innerHTML = "<strong>Performance Info:</strong>";
 
-			var td_B = document.createElement("td");
-			td_B.innerHTML = data[k].performance_info;
+		var td_B = document.createElement("td");
+		td_B.innerHTML = data[k].performance_info;
 
-			var tr2 = document.createElement("tr");
-			var td_C = document.createElement("td");
-			var td_D = document.createElement("td");			
-			
-			td_C.innerHTML = "<strong>Location:</strong>";
-			td_D.innerHTML = data[k].performance_stage.stage_location;
+		var tr2 = document.createElement("tr");
+		var td_C = document.createElement("td");
+		var td_D = document.createElement("td");			
 
-			var tr3 = document.createElement("tr");
-			var td_E = document.createElement("td");
-			var td_F = document.createElement("td");			
-			
-			td_E.innerHTML = "<strong>Start Time:</strong>";
-			td_F.innerHTML = data[k].performance_start_time;
+		td_C.innerHTML = "<strong>Location:</strong>";
+		td_D.innerHTML = data[k].performance_stage.stage_location;
 
-			paneltext.appendChild(t);
-			t.appendChild(tbody);
-			tbody.appendChild(tr1);
-			tr1.appendChild(td_A);
-			tr1.appendChild(td_B);
+		var tr3 = document.createElement("tr");
+		var td_E = document.createElement("td");
+		var td_F = document.createElement("td");			
 
-			tbody.appendChild(tr2);
-			tr2.appendChild(td_C);
-			tr2.appendChild(td_D);
+		td_E.innerHTML = "<strong>Start Time:</strong>";
+		td_F.innerHTML = data[k].performance_start_time;
 
-			tbody.appendChild(tr3);
-			tr3.appendChild(td_E);
-			tr3.appendChild(td_F);
+		paneltext.appendChild(t);
+		t.appendChild(tbody);
+		tbody.appendChild(tr1);
+		tr1.appendChild(td_A);
+		tr1.appendChild(td_B);
 
+		tbody.appendChild(tr2);
+		tr2.appendChild(td_C);
+		tr2.appendChild(td_D);
 
-		// paneltext.innerHTML = paneltext.innerHTML + 
-		// "<br>\
-		// <strong>Performance Info: </strong>" + data[k].performance_info + 
-		// "<br><strong>Location: </strong>" + data[k].performance_stage.stage_location +
-		// "<br><strong>Start Time: </strong>" + data[k].performance_start_time + "<br>"
-		// ;
+		tbody.appendChild(tr3);
+		tr3.appendChild(td_E);
+		tr3.appendChild(td_F);
 
 		paneltext.innerHTML = paneltext.innerHTML + "<h3>Actors</h3>";
 		if(data[k].performance_actors.length > 0) {
@@ -155,13 +147,6 @@
 				tr6.appendChild(td11);
 				tr6.appendChild(td12);
 
-				// paneltext.innerHTML = paneltext.innerHTML + 
-				// "<br><strong>Actor Name</strong>: " + data[k].performance_actors[i].actor_name + 
-				// "<br><strong>Bio</strong>: " + data[k].performance_actors[i].actor_bio +
-				// "<br><strong>Role</strong>: " + data[k].performance_actors[i].role + 
-				// "<br><strong>Appearnce Time</strong>: " + data[k].performance_actors[i].appearance_time + 
-				// "<br>"
-				// ;
 			}
 		} else {
 			paneltext.innerHTML = paneltext.innerHTML + "<strong>There are currently no actors in this performance</strong><br>"
@@ -210,31 +195,32 @@
 				tr5.appendChild(td9);
 				tr5.appendChild(td10);
 
-
-				// paneltext.innerHTML = paneltext.innerHTML + 
-				// "<br><strong>Crew Name</strong>: " + data[k].performance_crews[i].crew_name + 
-				// "<br><strong>Bio</strong>: " + data[k].performance_crews[i].crew_bio +
-				// "<br><strong>Responsibilities</strong>: " + data[k].performance_crews[i].responsibilities + 
-				// "<br>"
-				// ;
 			}
 		} else {
 			paneltext.innerHTML = paneltext.innerHTML + "<strong>There are currently no crew members in this performance</strong><br>"
 		}
-		
 
 		panelgroup.appendChild(pdefault);
 		pdefault.appendChild(panelheading);
 		panelheading.appendChild(ptitle);
 		ptitle.appendChild(header);
 		header.appendChild(headerText);
-		panelgroup.appendChild(panelCollapse);
+		pdefault.appendChild(panelCollapse);
 		panelCollapse.appendChild(panelbody);
 		panelbody.appendChild(paneltext);
 
 	}
 
-
+	$(function () {
+		$('#accordion').on('shown.bs.collapse', function (e) {
+			var offset = $('.panel.panel-default > .panel-collapse.in').offset();
+			if(offset) {
+				$('html,body').animate({
+					scrollTop: $('.panel-title a').offset().top -10
+				}, 500); 
+			}
+		}); 
+	});
 
 	</script>
 

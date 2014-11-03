@@ -1,8 +1,7 @@
 body {
-	/*background-color: #2A2A2A;*/
 	background-color: #000;
 	color: white;
-	padding-top: 150px;
+	padding-top: 120px;
 }
 
 h1,h3,h2{
@@ -16,24 +15,23 @@ h1,h3,h2{
 
 #theResults table{
 	font-size: small;
+	background-color: #000;
 }
 
-/*.borderless {
-    border: 1px solid white;
-    border-top: none !important;
-    border-bottom: none !important;
-}*/
+.panel-default>.panel-heading+.panel-collapse>.panel-body {
+	background-color: #000;
+}
 
 .table th, .table td {
 	border: 1px solid black;
 }
 
-.top-buffer { margin-top:20px; }
+.top-buffer { margin-top:10px; }
 
 .navbar-default {
 	font-family: 'de-walpergens-pica', cursive;
-	background-color: #000;
-	border-color: #2A2A2A;
+	background-color: #191919;
+	border-color: #191919;
 }
 
 

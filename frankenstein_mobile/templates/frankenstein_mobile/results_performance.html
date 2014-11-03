@@ -1,4 +1,4 @@
-<!-- The results page for the performance search. Shows results based on filter from page. Rendered through django-tables2 -->
+<!-- The results page for the performance search. Shows results based on filter from page. -->
 
 {% extends "frankenstein_mobile/base.html" %}
 {% block content %}
@@ -18,7 +18,7 @@
 	// the name they searched with
 	var search_name = '{{ performance_info }}';
 
-	var pHeader = document.getElementById("pageHeader").innerHTML = "Performances with the description <em>'" + search_name + "'</em>.....";
+	var pHeader = document.getElementById("pageHeader").innerHTML = "Performances with the description <em>'" + search_name + "'</em>...";
 
 	// the main panel group div
 	var panelgroup = document.createElement("div");
@@ -104,7 +104,7 @@
 		panelheading.appendChild(ptitle);
 		ptitle.appendChild(header);
 		header.appendChild(headerText);
-		panelgroup.appendChild(panelCollapse);
+		pdefault.appendChild(panelCollapse);
 		panelCollapse.appendChild(panelbody);
 		panelbody.appendChild(paneltext);
 

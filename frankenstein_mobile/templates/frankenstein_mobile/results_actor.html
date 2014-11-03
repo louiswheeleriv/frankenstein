@@ -20,7 +20,7 @@
 	// the name they searched with
 	var search_name = '{{ actor_name }}';
 
-	var pHeader = document.getElementById("pageHeader").innerHTML = "Performances with actor's named <em>" + search_name + "</em>.....";
+	var pHeader = document.getElementById("pageHeader").innerHTML = "Performances featuring <em>" + search_name + "</em>...</br>";
 
 	// Grouping by actor
 	var name_matched_actors = [];
@@ -79,47 +79,13 @@
 		}
 
 
-
-		// the main panel group div
-		var panelgroup = document.createElement("div");
-		panelgroup.id = "accordion";
-		panelgroup.className = "panel-group";
-
 		// add it to the main results page
 		var res = document.getElementById("theResults");
-		res.appendChild(panelgroup);
-
+		res.setAttribute("style", "color:white;");
 
 		for(var k = 0; k < name_matched_actors.length; k++) {
 
-			var pdefault = document.createElement("div");
-			pdefault.className = "panel panel-default";
-
-			var panelheading = document.createElement("div");
-			panelheading.className = "panel-heading";
-
-			var ptitle = document.createElement("h4");
-			ptitle.className = "panel-title";
-
-			var header = document.createElement("a")
-			header.setAttribute("data-toggle", "collapse");
-			header.setAttribute("data-parent", "#accordion");
-			header.setAttribute("href", "#"+k);
-
-			var headerText = document.createElement("div");		
-			headerText.innerHTML = name_matched_actors[k].name;
-
-			var panelCollapse = document.createElement("div");
-			panelCollapse.id = k;
-			panelCollapse.className = "panel-collapse collapse";
-
-			var panelbody = document.createElement("div");
-			panelbody.className = "panel-body";
-
-			var paneltext = document.createElement("p");
-			paneltext.setAttribute("style", "color:white;");
-
-			paneltext.innerHTML = paneltext.innerHTML + "<h3>Actor Information</h3>";
+			res.innerHTML = res.innerHTML + "<h3>Actor Information</h3>";
 
 			var t = document.createElement("table");
 			t.className = "table table-condensed borderless";
@@ -140,7 +106,7 @@
 			td_C.innerHTML = "<strong>Bio:</strong>";
 			td_D.innerHTML = name_matched_actors[k].bio;
 
-			paneltext.appendChild(t);
+			res.appendChild(t);
 			t.appendChild(tbody);
 			tbody.appendChild(tr1);
 			tr1.appendChild(td_A);
@@ -150,14 +116,7 @@
 			tr2.appendChild(td_C);
 			tr2.appendChild(td_D);
 
-
-			// paneltext.innerHTML = paneltext.innerHTML + 
-			// "<br>\
-			// <strong>Name: </strong>" + name_matched_actors[k].name + 
-			// "<br><strong>Bio: </strong>" + name_matched_actors[k].bio + "<br>"
-			// ;
-
-			paneltext.innerHTML = paneltext.innerHTML + "<h3>Performances</h3>";
+			res.innerHTML = res.innerHTML + "<h3>Performances</h3>";
 
 			for(var i = 0; i < data.length; i++) {
 
@@ -203,7 +162,7 @@
 						td13.innerHTML = "<strong>" + name_matched_actors[k].name + "'s Appearance Time</strong>:";
 						td14.innerHTML = ap; 
 
-						paneltext.appendChild(t2);
+						res.appendChild(t2);
 						t2.appendChild(tbody2);
 						tbody2.appendChild(tr3);
 						tr3.appendChild(td5);
@@ -221,26 +180,10 @@
 						tr7.appendChild(td13);
 						tr7.appendChild(td14);
 
-						// paneltext.innerHTML = paneltext.innerHTML + 
-						// "<br><strong>Performance Info</strong>: " + data[i].performance_info + 
-						// "<br><strong>Stage Location</strong>: " + data[i].performance_stage.stage_location +
-						// "<br><strong>Start Time</strong>: " + data[i].performance_start_time + 
-						// "<br><strong>" + name_matched_actors[k].name + "'s Role</strong>: " + role + 
-						// "<br><strong>" + name_matched_actors[k].name + "'s Appearance Time</strong>: " + ap + 
-						// "<br>"
-						// ;
 					}
 				}
 			}
 
-			panelgroup.appendChild(pdefault);
-			pdefault.appendChild(panelheading);
-			panelheading.appendChild(ptitle);
-			ptitle.appendChild(header);
-			header.appendChild(headerText);
-			panelgroup.appendChild(panelCollapse);
-			panelCollapse.appendChild(panelbody);
-			panelbody.appendChild(paneltext);
 		}
 	} else {
 		// add it to the main results page

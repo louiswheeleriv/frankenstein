@@ -65,7 +65,7 @@ class PerformanceSerializer(serializers.ModelSerializer):
 
     def transform_performance_start_time(self, object, value):
         if value is not None:
-            return value.strftime('%m/%d/%Y')
+            return value.strftime('%H:%M, %m/%d/%Y')
         else:
             return ''
 
