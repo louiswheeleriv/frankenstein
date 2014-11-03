@@ -1,20 +1,198 @@
-<!-- The results page for the actors search. Shows results based on filter from page. Rendered through django-tables2 -->
+<!-- The results page for the actors search. Shows results based on filter from page. -->
 
 {% extends "frankenstein_mobile/base.html" %}
 {% block content %}
-<!-- {% load render_table from django_tables2 %} -->
 {% load static %}
 
 <div class="container">
-	<h1>Results</h1>
-		<table class="table" style="color:black;">
-			<div>
-				<script type="text/javascript">
-					var data = {{ results|safe }};
-					alert(data.performance_info);
-				</script>
-			</div>
-		</table>
+	<h2 id="pageHeader"> </h2>
+	<div id="theResults">
+		
+	</div> 
+
+
 </div>
 
-{% endblock %}
+<script type="text/javascript">
+	// get the data from the json object
+	var data = {{ results|safe }};
+
+	// the name they searched with
+	var search_name = '{{ actor_name }}';
+
+	var pHeader = document.getElementById("pageHeader").innerHTML = "Performances featuring <em>" + search_name + "</em>...</br>";
+
+	// Grouping by actor
+	var name_matched_actors = [];
+
+	// if performances are available
+	if(data.length >= 1) {
+
+		for (var i = 0; i < data.length; i++) {
+
+			for(var j = 0; j < data[i].performance_actors.length; j++) {
+
+				var perf = {
+					id: data[i].id,
+					role: data[i].performance_actors[j].role,
+					appearance_time: data[i].performance_actors[j].appearance_time
+				};
+
+				var currentActor = {
+					name: data[i].performance_actors[j].actor_name, 
+					bio: data[i].performance_actors[j].actor_bio, 
+					performance: [perf]										
+				};
+
+				// if the current actor has the same name as the search name
+				if(currentActor.name.indexOf(search_name) > -1 ) {
+					// if the list is not empty	
+					if(name_matched_actors.length != 0) {
+
+						for(var k = 0; k < name_matched_actors.length; k++) {
+							// if the name in the table is different, add it in
+							if(currentActor.name != name_matched_actors[k].name) {
+								name_matched_actors.push(currentActor);
+							} else {
+								// the two names are the same
+								for(var n = 0; n < currentActor.performance.length; n++) {
+									//if the performances are different
+									if($.inArray(currentActor.performance[n], name_matched_actors[k].performance) == -1) {
+
+										name_matched_actors[k].performance.push(currentActor.performance[n]);
+									}
+
+								}
+							}
+						}
+
+					} else {
+						name_matched_actors.push(currentActor);
+					}
+				}
+			}
+		}
+
+		for(var z = 0; z < name_matched_actors.length; z++) {
+			console.log("name_matched_actors: ");
+			console.log(name_matched_actors[z]);
+		}
+
+
+		// add it to the main results page
+		var res = document.getElementById("theResults");
+		res.setAttribute("style", "color:white;");
+
+		for(var k = 0; k < name_matched_actors.length; k++) {
+
+			res.innerHTML = res.innerHTML + "<h3>Actor Information</h3>";
+
+			var t = document.createElement("table");
+			t.className = "table table-condensed borderless";
+
+			var tbody = document.createElement("tbody");
+			var tr1 = document.createElement("tr");
+
+			var td_A = document.createElement("td");
+			td_A.innerHTML = "<strong>Name:</strong>";
+
+			var td_B = document.createElement("td");
+			td_B.innerHTML = name_matched_actors[k].name;
+
+			var tr2 = document.createElement("tr");
+			var td_C = document.createElement("td");
+			var td_D = document.createElement("td");			
+			
+			td_C.innerHTML = "<strong>Bio:</strong>";
+			td_D.innerHTML = name_matched_actors[k].bio;
+
+			res.appendChild(t);
+			t.appendChild(tbody);
+			tbody.appendChild(tr1);
+			tr1.appendChild(td_A);
+			tr1.appendChild(td_B);
+
+			tbody.appendChild(tr2);
+			tr2.appendChild(td_C);
+			tr2.appendChild(td_D);
+
+			res.innerHTML = res.innerHTML + "<h3>Performances</h3>";
+
+			for(var i = 0; i < data.length; i++) {
+
+				for(var a = 0; a < name_matched_actors[k].performance.length; a++) {
+					console.log(name_matched_actors[k].performance[a]);
+
+					if(name_matched_actors[k].performance[a].id == data[i].id) {
+						var role = name_matched_actors[k].performance[a].role;
+						var ap = name_matched_actors[k].performance[a].appearance_time;
+
+						var t2 = document.createElement("table");
+						t2.className = "table table-condensed borderless";
+
+						var tbody2 = document.createElement("tbody");
+						var tr3 = document.createElement("tr");
+						var td5 = document.createElement("td");
+						var td6 = document.createElement("td");
+
+						var tr4 = document.createElement("tr");
+						var td7 = document.createElement("td");
+						var td8 = document.createElement("td");
+
+						var tr5 = document.createElement("tr");
+						var td9 = document.createElement("td");
+						var td10 = document.createElement("td");
+
+						var tr6 = document.createElement("tr");
+						var td11 = document.createElement("td");
+						var td12 = document.createElement("td");
+
+						var tr7 = document.createElement("tr");
+						var td13 = document.createElement("td");
+						var td14 = document.createElement("td");
+
+						td5.innerHTML = "<strong>Performance Info:</strong>";
+						td6.innerHTML = data[i].performance_info;
+						td7.innerHTML = "<strong>Stage Location:</strong>";
+						td8.innerHTML = data[i].performance_stage.stage_location;
+						td9.innerHTML = "<strong>Start Time:</strong>";
+						td10.innerHTML = data[i].performance_start_time; 
+						td11.innerHTML = "<strong>" + name_matched_actors[k].name + "'s Role</strong>:";
+						td12.innerHTML = role;
+						td13.innerHTML = "<strong>" + name_matched_actors[k].name + "'s Appearance Time</strong>:";
+						td14.innerHTML = ap; 
+
+						res.appendChild(t2);
+						t2.appendChild(tbody2);
+						tbody2.appendChild(tr3);
+						tr3.appendChild(td5);
+						tr3.appendChild(td6);
+						tbody2.appendChild(tr4);
+						tr4.appendChild(td7);
+						tr4.appendChild(td8);
+						tbody2.appendChild(tr5);
+						tr5.appendChild(td9);
+						tr5.appendChild(td10);
+						tbody2.appendChild(tr6);
+						tr6.appendChild(td11);
+						tr6.appendChild(td12);
+						tbody2.appendChild(tr7);
+						tr7.appendChild(td13);
+						tr7.appendChild(td14);
+
+					}
+				}
+			}
+
+		}
+	} else {
+		// add it to the main results page
+		var res = document.getElementById("theResults");
+		var nope = document.createElement("h3");
+		nope.setAttribute("style", "color:white;");
+		nope.innerHTML = search_name + " is currently not in any performances";
+		res.appendChild(nope);
+	}
+	</script>
+
+	{% endblock %}

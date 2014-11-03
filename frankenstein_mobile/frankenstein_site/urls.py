@@ -28,4 +28,6 @@ urlpatterns = patterns('',
     url(r'^search_performance/$', views.search_performance, name='search_performance'),
     url(r'^search_performance/results_performance/$', views.results_performance, name='results_performance'),
 
+    url(r'^results/$', views.results, name='results'),
+
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

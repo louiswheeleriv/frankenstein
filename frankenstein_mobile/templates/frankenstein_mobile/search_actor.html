@@ -7,14 +7,19 @@
 <div class="container">
 	
 	<h1>Search By <b>Actor Name</b></h1>
-	<form role="form" action="results_actor">
+	<form role="form" action="results_actor/">
 		<div class="form-group">
-			<input type="text" class="form-control" name = "q" id="searchDetail" placeholder="Actor Name">
+			<p class="text-muted">Choose one of the following...</p>
+			<select class="form-control" name="actor_name">
+				{% for actor in actor_list %}
+				<option>{{ actor.actor_name }}</option>
+				{% endfor %}
+				
+			</select>
 		</div>
-		<button type="submit" class="btn btn-default">Search</button>
+		<button type="submit" class="btn btn-default" id="sub">Search</button>
 	</form>
 
 </div>
-
 
 {% endblock %}

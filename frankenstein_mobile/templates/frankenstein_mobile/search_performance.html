@@ -6,9 +6,10 @@
 
 <div class="container">
 	<h1>Search By <b>Performance</b></h1>
-	<form role="form" action="results_performance">
+	<form role="form" action="results_performance/">
 		<div class="form-group">
-			<select multiple class="form-control" name="q">
+			<p class="text-muted">Choose one of the following...</p>
+			<select class="form-control" name="performance_info">
 				{% for performance in performance_list %}
 					<option>{{ performance.performance_info }}</option>
 				{% endfor %}

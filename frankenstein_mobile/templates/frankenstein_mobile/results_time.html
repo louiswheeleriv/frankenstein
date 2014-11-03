@@ -1,17 +1,21 @@
-<!-- The results page for the time search. Shows results based on filter from page. Rendered through django-tables2 -->
+<!-- The results page for the time search. Shows results based on filter from page.-->
 
 {% extends "frankenstein_mobile/base.html" %}
 {% block content %}
-{% load render_table from django_tables2 %}
 {% load static %}
 
 <div class="container">
-	<h1>Results</h1>
-		<table class="table" style="color:black;">
-			<div>
-				{% render_table table %}
-			</div>
-		</table>
+	<h2 id="pageHeader"> </h2>
+	<div id="theResults">
+		
+	</div> 
 </div>
+
+<script type="text/javascript">
+	// get the data from the json object
+	var data = {{ results|safe }};
+
+	
+</script>
 
 {% endblock %}

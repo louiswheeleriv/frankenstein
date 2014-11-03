@@ -2,16 +2,189 @@
 
 {% extends "frankenstein_mobile/base.html" %}
 {% block content %}
-{% load render_table from django_tables2 %}
 {% load static %}
 
 <div class="container">
-	<h1>Results</h1>
-		<table class="table" style="color:black;">
-			<div>
-				{% render_table table %}
-			</div>
-		</table>
+	<h2 id="pageHeader"> </h2>
+	<div id="theResults">
+		
+	</div> 
+
+
 </div>
 
-{% endblock %}
+<script type="text/javascript">
+	// get the data from the json object
+	var data = {{ results|safe }};
+
+	// the name they searched with
+	var search_name = '{{ crew_name }}';
+
+	var pHeader = document.getElementById("pageHeader").innerHTML = "Performances with crew member <em>" + search_name + "</em>...";
+
+	// Grouping by crew
+	var name_matched_crews = [];
+
+	// if performances are available
+	if(data.length >= 1) {
+
+		for (var i = 0; i < data.length; i++) {
+
+			for(var j = 0; j < data[i].performance_crews.length; j++) {
+
+				var perf = {
+					id: data[i].id,
+					responsibilities: data[i].performance_crews[j].responsibilities,
+				};
+
+				var currentCrew = {
+					name: data[i].performance_crews[j].crew_name, 
+					bio: data[i].performance_crews[j].crew_bio, 
+					performance: [perf]										
+				};
+
+				// if the current crew has the same name as the search name
+				if(currentCrew.name.indexOf(search_name) > -1 ) {
+					// if the list is not empty	
+					if(name_matched_crews.length != 0) {
+
+						for(var k = 0; k < name_matched_crews.length; k++) {
+							// if the name in the table is different, add it in
+							if(currentCrew.name != name_matched_crews[k].name) {
+								name_matched_crews.push(currentCrew);
+							} else {
+								// the two names are the same
+								for(var n = 0; n < currentCrew.performance.length; n++) {
+									//if the performances are different
+									if($.inArray(currentCrew.performance[n], name_matched_crews[k].performance) == -1) {
+
+										name_matched_crews[k].performance.push(currentCrew.performance[n]);
+									}
+
+								}
+							}
+						}
+
+					} else {
+						name_matched_crews.push(currentCrew);
+					}
+				}
+			}
+		}
+
+		for(var z = 0; z < name_matched_crews.length; z++) {
+			console.log("name_matched_crews: ");
+			console.log(name_matched_crews[z]);
+		}
+
+
+		// add it to the main results page
+		var res = document.getElementById("theResults");
+		res.setAttribute("style", "color:white;");
+
+
+		for(var k = 0; k < name_matched_crews.length; k++) {
+
+			res.innerHTML = res.innerHTML + "<h3>Crew Member Information</h3>";
+
+			var t = document.createElement("table");
+			t.className = "table table-condensed borderless";
+
+			var tbody = document.createElement("tbody");
+			var tr1 = document.createElement("tr");
+
+			var td_A = document.createElement("td");
+			td_A.innerHTML = "<strong>Name:</strong>";
+
+			var td_B = document.createElement("td");
+			td_B.innerHTML = name_matched_crews[k].name;
+
+			var tr2 = document.createElement("tr");
+			var td_C = document.createElement("td");
+			var td_D = document.createElement("td");			
+			
+			td_C.innerHTML = "<strong>Bio:</strong>";
+			td_D.innerHTML = name_matched_crews[k].bio;
+
+			res.appendChild(t);
+			t.appendChild(tbody);
+			tbody.appendChild(tr1);
+			tr1.appendChild(td_A);
+			tr1.appendChild(td_B);
+
+			tbody.appendChild(tr2);
+			tr2.appendChild(td_C);
+			tr2.appendChild(td_D);
+
+
+			res.innerHTML = res.innerHTML + "<h3>Performances</h3>";
+
+			for(var i = 0; i < data.length; i++) {
+
+				for(var a = 0; a < name_matched_crews[k].performance.length; a++) {
+					console.log(name_matched_crews[k].performance[a]);
+
+					if(name_matched_crews[k].performance[a].id == data[i].id) {
+						var responsibilities = name_matched_crews[k].performance[a].responsibilities;
+
+						var t2 = document.createElement("table");
+						t2.className = "table table-condensed borderless";
+
+						var tbody2 = document.createElement("tbody");
+						var tr3 = document.createElement("tr");
+						var td5 = document.createElement("td");
+						var td6 = document.createElement("td");
+
+						var tr4 = document.createElement("tr");
+						var td7 = document.createElement("td");
+						var td8 = document.createElement("td");
+
+						var tr5 = document.createElement("tr");
+						var td9 = document.createElement("td");
+						var td10 = document.createElement("td");
+
+						var tr6 = document.createElement("tr");
+						var td11 = document.createElement("td");
+						var td12 = document.createElement("td");
+
+						td5.innerHTML = "<strong>Performance Info:</strong>";
+						td6.innerHTML = data[i].performance_info;
+						td7.innerHTML = "<strong>Stage Location:</strong>";
+						td8.innerHTML = data[i].performance_stage.stage_location;
+						td9.innerHTML = "<strong>Start Time:</strong>";
+						td10.innerHTML = data[i].performance_start_time; 
+						td11.innerHTML = "<strong>" + name_matched_crews[k].name + "'s Responsibilities</strong>:";
+						td12.innerHTML = responsibilities;
+
+
+						res.appendChild(t2);
+						t2.appendChild(tbody2);
+						tbody2.appendChild(tr3);
+						tr3.appendChild(td5);
+						tr3.appendChild(td6);
+						tbody2.appendChild(tr4);
+						tr4.appendChild(td7);
+						tr4.appendChild(td8);
+						tbody2.appendChild(tr5);
+						tr5.appendChild(td9);
+						tr5.appendChild(td10);
+						tbody2.appendChild(tr6);
+						tr6.appendChild(td11);
+						tr6.appendChild(td12);
+
+					}
+				}
+			}
+
+		}
+	} else {
+		// add it to the main results page
+		var res = document.getElementById("theResults");
+		var nope = document.createElement("h3");
+		nope.setAttribute("style", "color:white;");
+		nope.innerHTML = search_name + " is currently not in any performances";
+		res.appendChild(nope);
+	}
+	</script>
+
+	{% endblock %}
