@@ -21,6 +21,7 @@ public class Performance implements Parcelable{
 	Production performance_production;
 	Date performance_start_time;
 	
+	List<String> performance_significant_events = new ArrayList<String>();
 	List<Actor> performance_actors = new ArrayList<Actor>();
 	List<Crew> performance_crews = new ArrayList<Crew>();
 	
@@ -83,6 +84,18 @@ public class Performance implements Parcelable{
 
 	public void setCrew(List<Crew> crew) {
 		this.performance_crews = crew;
+	}
+	
+	public List<String> getEvents(){
+		return performance_significant_events;
+	}
+	
+	public void setEvents(List<String> events){
+		this.performance_significant_events = events;
+	}
+	
+	public void addEvent(String event){
+		this.performance_significant_events.add(event);
 	}
 	
 	public String getFullInfo(){

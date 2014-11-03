@@ -10,11 +10,13 @@
     <string name="title_activity_result">Results</string>
     <string name="search_title_1">Lafayette College presents...</string>
     <string name="search_title_2">Frankenstein</string>
+    
+    <string name="search_searchType">Search:</string>
+    <string name="search_inputValue">For:</string>
     <string name="result_searchResults">Search results:</string>
     <string name="result_selectionInfo">Selection info:</string>
 
     <string-array name="search_types">
-        <item>a production</item>
         <item>a stage</item>
         <item>an actor</item>
         <item>a stage crew member</item>
