@@ -9,7 +9,7 @@
 	<form role="form" action="results_performance/">
 		<div class="form-group">
 			<p class="text-muted">Choose one of the following...</p>
-			<select class="form-control" name="description">
+			<select class="form-control" name="sig_event">
 				{% for sig_event in sig_events %}
 					<option>{{ sig_event.description }}</option>
 				{% endfor %}

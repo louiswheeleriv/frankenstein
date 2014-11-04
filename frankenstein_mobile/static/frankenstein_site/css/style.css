@@ -5,7 +5,7 @@ body {
 }
 
 body h1,h3,h2{
-	font-family: 'de-walpergens-pica', sans-serf;
+	font-family: 'de-walpergens-pica', Georgia, serif;
 	color: #22B14C;
 }
 
@@ -29,14 +29,14 @@ body h1,h3,h2{
 .top-buffer { margin-top:10px; }
 
 .navbar-default {
-	font-family: 'de-walpergens-pica', cursive;
+	font-family: 'de-walpergens-pica', Georgia, serif;
 	background-color: #191919;
 	border-color: #191919;
 }
 
 
 .navbar-default .navbar-brand {
-	font-family: 'de-walpergens-pica', cursive;
+	font-family: 'de-walpergens-pica', Georgia, serif;
 	color: #22B14C;
 	font-size: 50px;
 }
@@ -44,11 +44,11 @@ body h1,h3,h2{
 	color: #cdcdcd;
 }
 .navbar-default .navbar-text {
-	font-family: 'de-walpergens-pica', cursive;
+	font-family: 'de-walpergens-pica', Georgia, serif;
 	color: #22B14C;
 }
 .navbar-default .navbar-nav > li > a {
-	font-family: 'de-walpergens-pica', cursive;
+	font-family: 'de-walpergens-pica', Georgia, serif;
 	color: #22B14C;
 }
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {

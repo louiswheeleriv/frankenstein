@@ -46,7 +46,11 @@ class PerformanceList(generics.ListCreateAPIView):
         if time_query is not None:
             date_time = parse(time_query)
             next_day = date_time + timedelta(days=1)
+<<<<<<< HEAD
             queryset = queryset.filter(performance_start_time__gte = date_time, performance_start_time__lt = next_day)
+=======
+            queryset = queryset.filter(performance_start_time__range=[date_time,next_day])
+>>>>>>> d8ed03540141c668f35722c598a51219eb89253d
         if sig_event is not None:
             queryset = queryset.filter(significantevent__description__contains=sig_event)
 
