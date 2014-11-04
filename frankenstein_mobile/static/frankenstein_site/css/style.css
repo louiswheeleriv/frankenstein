@@ -4,8 +4,8 @@ body {
 	padding-top: 120px;
 }
 
-h1,h3,h2{
-	font-family: 'de-walpergens-pica', cursive;
+body h1,h3,h2{
+	font-family: 'de-walpergens-pica', sans-serf;
 	color: #22B14C;
 }
 

@@ -1,3 +1,4 @@
+.
 <!-- The results page for the actors search. Shows results based on filter from page. -->
 
 {% extends "frankenstein_mobile/base.html" %}
@@ -116,7 +117,8 @@
 
 					if(name_matched_actors[k].performance[a].id == data[i].id) {
 						var role = name_matched_actors[k].performance[a].role;
-						var ap = name_matched_actors[k].performance[a].appearance_time;
+
+						var ap = name_matched_actors[k].performance[a].appearance_time;					
 
 						var t2 = document.createElement("table");
 						t2.className = "table table-condensed borderless";
@@ -151,7 +153,12 @@
 						td11.innerHTML = "<strong>" + name_matched_actors[k].name + "'s Role</strong>:";
 						td12.innerHTML = role;
 						td13.innerHTML = "<strong>" + name_matched_actors[k].name + "'s Appearance Time</strong>:";
-						td14.innerHTML = ap; 
+						if(ap == 0) {
+							td14.innerHTML = "At the beginning of the performance"; 
+						} else {
+							td14.innerHTML = ap + " minutes into the performance"; 
+						}
+						
 
 						res.appendChild(t2);
 						t2.appendChild(tbody2);

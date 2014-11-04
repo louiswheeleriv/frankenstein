@@ -139,7 +139,8 @@ def results_time(request):
         sx = PerformanceSerializer(perf)
         results.append(sx.data)
 
-    return render(request, 'frankenstein_mobile/results_time.html', {'results': json.dumps(results)})
+    message = request.GET['performance_start_time']
+    return render(request, 'frankenstein_mobile/results_time.html', {'results': json.dumps(results), 'date': message})
 
 
 ###########################################################################

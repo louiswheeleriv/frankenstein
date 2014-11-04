@@ -33,8 +33,7 @@ class PerfActor(models.Model):
     def __unicode__(self):
         return 'Actor Performance. Name: ' \
                '{0}, Appearance Time: {1}, Role: {2}'\
-            .format(self.actor,
-                    (self.appearance_time.strftime('%H:%M') if self.appearance_time is not None  else ''),self.role)
+            .format(self.actor, self.appearance_time, self.role)
 
 class SignificantEvent(models.Model):
     description = models.CharField(max_length=200)

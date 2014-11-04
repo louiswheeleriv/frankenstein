@@ -15,7 +15,7 @@
 	// get the data from the json object
 	var data = {{ results|safe }};
 
-	var pHeader = document.getElementById("pageHeader").innerHTML = "All Performances.....";
+	var pHeader = document.getElementById("pageHeader").innerHTML = "All Performances...";
 
 	// the main panel group div
 	var panelgroup = document.createElement("div");
@@ -128,7 +128,11 @@
 				td9.innerHTML = "<strong>Role:</strong>";
 				td10.innerHTML = data[k].performance_actors[i].role;
 				td11.innerHTML = "<strong>Appearance Time:</strong>";
-				td12.innerHTML = data[k].performance_actors[i].appearance_time;
+				if(data[k].performance_actors[i].appearance_time == 0) {
+					td12.innerHTML = "At the beginning of the performance"; 
+				} else {
+					td12.innerHTML = data[k].performance_actors[i].appearance_time + " minutes into the performance"; 
+				}
 
 				paneltext.appendChild(t2);
 				t2.appendChild(tbody2);
@@ -209,16 +213,6 @@
 
 	}
 
-	$(function () {
-		$('#accordion').on('shown.bs.collapse', function (e) {
-			var offset = $('.panel.panel-default > .panel-collapse.in').offset();
-			if(offset) {
-				$('html,body').animate({
-					scrollTop: $('.panel-title a').offset().top -10
-				}, 500); 
-			}
-		}); 
-	});
 
 	</script>
 
