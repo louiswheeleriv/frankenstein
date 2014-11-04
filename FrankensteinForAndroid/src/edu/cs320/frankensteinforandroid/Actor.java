@@ -1,6 +1,7 @@
 package edu.cs320.frankensteinforandroid;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,13 +17,13 @@ public class Actor {
 	String actor_name;
 	String actor_bio;
 	Map<String, List<String>> roles;
-	Map<String, List<String>> appearanceTimes;
+	Map<String, List<Integer>> appearanceTimes;
 	
 	public Actor(String name, String bio){
 		this.actor_name = name;
 		this.actor_bio = bio;
 		this.roles = new HashMap<String, List<String>>();
-		this.appearanceTimes = new HashMap<String, List<String>>();
+		this.appearanceTimes = new HashMap<String, List<Integer>>();
 	}
 
 	public Map<String, List<String>> getRoles() {
@@ -33,15 +34,15 @@ public class Actor {
 		this.roles = roles;
 	}
 
-	public Map<String, List<String>> getAppearanceTimes() {
+	public Map<String, List<Integer>> getAppearanceTimes() {
 		return appearanceTimes;
 	}
 
-	public void setAppearanceTimes(Map<String, List<String>> appearanceTimes) {
+	public void setAppearanceTimes(Map<String, List<Integer>> appearanceTimes) {
 		this.appearanceTimes = appearanceTimes;
 	}
 	
-	public void addRoleAndAppearanceTime(String performanceInfo, String role, String appearanceTime){
+	public void addRoleAndAppearanceTime(String performanceInfo, String role, int appearanceTime){
 		List<String> newRoles = new ArrayList<String>();
 		
 		if(roles.get(performanceInfo) != null){
@@ -50,7 +51,7 @@ public class Actor {
 		
 		newRoles.add(role);
 		
-		List<String> newAppearanceTimes = new ArrayList<String>();
+		List<Integer> newAppearanceTimes = new ArrayList<Integer>();
 		
 		if(appearanceTimes.get(performanceInfo) != null){
 			newAppearanceTimes = this.appearanceTimes.get(performanceInfo);
@@ -62,9 +63,9 @@ public class Actor {
 		this.appearanceTimes.put(performanceInfo, newAppearanceTimes);
 	}
 	
-	public void addRoleAndAppearanceTimeBulk(Map<String, List<String>> roles, Map<String, List<String>> appearanceTimes){
+	public void addRoleAndAppearanceTimeBulk(Map<String, List<String>> roles, Map<String, List<Integer>> appearanceTimes){
 		Map<String, List<String>> newRoles = new HashMap<String, List<String>>();
-		Map<String, List<String>> newAppearanceTimes = new HashMap<String, List<String>>();
+		Map<String, List<Integer>> newAppearanceTimes = new HashMap<String, List<Integer>>();
 		
 		if(this.roles != null){
 			newRoles = this.roles;
@@ -89,11 +90,11 @@ public class Actor {
 		if(this.appearanceTimes != null){
 			newAppearanceTimes = this.appearanceTimes;
 			for(String s : appearanceTimes.keySet()){
-				List<String> appearanceTimeList = new ArrayList<String>();
+				List<Integer> appearanceTimeList = new ArrayList<Integer>();
 				if(newAppearanceTimes.get(s) != null){
 					appearanceTimeList = newAppearanceTimes.get(s);
 					appearanceTimeList.addAll(appearanceTimes.get(s));
-					Set<String> appearanceTimeSet = new HashSet<String>();
+					Set<Integer> appearanceTimeSet = new HashSet<Integer>();
 					appearanceTimeSet.addAll(appearanceTimeList);
 					appearanceTimeList.clear();
 					appearanceTimeList.addAll(appearanceTimeSet);

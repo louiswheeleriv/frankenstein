@@ -68,14 +68,27 @@ public class ResultActivity extends Activity {
 			boolean done = false;
 			for(int i = 0; (i < performances.size()) && !done; i++){
 				Performance p = performances.get(i);
-				for(int j = 0; (j < p.getActors().size()) && !done; j++){
-					Actor a = p.getActors().get(j);
-					String matchName = intent.getStringExtra(SearchActivity.EXTRA_INPUTVALUE);
-					if(a.getName().equalsIgnoreCase(matchName)){
-						infoString = a.getBio();
-						done = true;
+				
+				if(searchType.equals("actor_name")){
+					for(int j = 0; (j < p.getActors().size()) && !done; j++){
+						Actor a = p.getActors().get(j);
+						String matchName = intent.getStringExtra(SearchActivity.EXTRA_INPUTVALUE);
+						if(a.getName().equalsIgnoreCase(matchName)){
+							infoString = a.getBio();
+							done = true;
+						}
+					}
+				}else{
+					for(int j = 0; (j < p.getCrew().size()) && !done; j++){
+						Crew c = p.getCrew().get(j);
+						String matchName = intent.getStringExtra(SearchActivity.EXTRA_INPUTVALUE);
+						if(c.getName().equalsIgnoreCase(matchName)){
+							infoString = c.getBio();
+							done = true;
+						}
 					}
 				}
+				
 			}
 
 			if(performances.size() == 0){
@@ -91,20 +104,17 @@ public class ResultActivity extends Activity {
 			info.setText(infoString);
 			info.setVisibility(View.VISIBLE);
 
-			LinearLayout personnelInfo = (LinearLayout) findViewById(R.id.linearLayout_result_personnelInfo);
-			personnelInfo.setVisibility(View.VISIBLE);
-
-		}else{
-			LinearLayout personnelInfo = (LinearLayout) findViewById(R.id.linearLayout_result_personnelInfo);
-			personnelInfo.setVisibility(View.GONE);
 		}
-
-		if(showingAll == "true"){
+		
+		if(showingAll.equals("true")){
 			LinearLayout personnelInfo = (LinearLayout) findViewById(R.id.linearLayout_result_personnelInfo);
 			personnelInfo.setVisibility(View.GONE);
-		}else{
+		}else if(searchType.equals("actor_name") || searchType.equals("crew_name")){
 			LinearLayout personnelInfo = (LinearLayout) findViewById(R.id.linearLayout_result_personnelInfo);
 			personnelInfo.setVisibility(View.VISIBLE);
+		}else{
+			LinearLayout personnelInfo = (LinearLayout) findViewById(R.id.linearLayout_result_personnelInfo);
+			personnelInfo.setVisibility(View.GONE);
 		}
 
 		ArrayAdapter<Performance> adapter = new ArrayAdapter<Performance>(this, android.R.layout.simple_list_item_1, DataUtils.sortPerformanceList(performances));

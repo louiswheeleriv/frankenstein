@@ -68,7 +68,7 @@ public class SearchActivity extends Activity {
 		
 		DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
 		Calendar cal = Calendar.getInstance();
-		datePicker.init(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), new OnDateChangedListener(){
+		datePicker.init(2015, 4, 22, new OnDateChangedListener(){
 
 			// Code for when datepicker value is changed
 			@Override
@@ -82,6 +82,8 @@ public class SearchActivity extends Activity {
 
 	// Turn a list of strings into an adapter for a listview
 	public ArrayAdapter<String> getArrayAdapter(List<String> strings){
+		java.util.Collections.sort(strings);
+		
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, strings);
 		return adapter;
 	}
@@ -208,13 +210,16 @@ public class SearchActivity extends Activity {
 			public void run(){
 				Spinner spinnerSearchType = (Spinner) findViewById(R.id.spinner_searchType);
 				Spinner spinnerInputValue = (Spinner) findViewById(R.id.spinner_inputValue);
-				DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
 
 				String searchType = getSearchableParameter(spinnerSearchType.getSelectedItem().toString());
 				
 				String inputValue = "";
 				if(searchType == "performance_start_time"){
-					// TODO: inputValue = datePicker.??? (date as string to be sent to server)
+					DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
+					String month = Integer.toString(datePicker.getMonth() + 1);
+					String day = Integer.toString(datePicker.getDayOfMonth());
+					String year = Integer.toString(datePicker.getYear());
+					inputValue = month + "-" + day + "-" + year;
 				}else{
 					inputValue = spinnerInputValue.getSelectedItem().toString();
 				}
@@ -241,7 +246,10 @@ public class SearchActivity extends Activity {
 		TextView jsonResponseTextView = (TextView) findViewById(R.id.textView_jsonResponseHidden);
 
 		String searchType = getSearchableParameter(spinnerSearchType.getSelectedItem().toString());
-		String inputValue = spinnerInputValue.getSelectedItem().toString();
+		String inputValue = "";
+		if(searchType != "performance_start_time"){
+			inputValue = spinnerInputValue.getSelectedItem().toString();
+		}
 		String jsonResponse = (String) jsonResponseTextView.getText();
 
 		// Start ResultActivity
@@ -309,7 +317,7 @@ public class SearchActivity extends Activity {
 			searchType = "crew_name";
 			break;
 		case "Plot Events":
-			searchType = "event";
+			searchType = "sig_event";
 			break;
 		case "Time":
 			searchType = "performance_start_time";

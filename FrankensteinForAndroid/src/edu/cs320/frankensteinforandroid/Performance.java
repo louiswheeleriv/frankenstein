@@ -111,10 +111,19 @@ public class Performance implements Parcelable{
 		for(int i = 0; i < performance_actors.size(); i++){
 			Actor a = performance_actors.get(i);
 			List<String> roles = a.getRoles().get(getInfo());
+			List<Integer> appTimes = a.getAppearanceTimes().get(getInfo());
 			
 			fullInfo += "Name: " + a.getName() + "\n";
 			for(int j = 0; j < roles.size(); j++){
 				fullInfo += "Role: " + roles.get(j) + "\n";
+				if(appTimes.get(j) == 0){
+					fullInfo += "Appearance Time: Beginning" + "\n";
+				}else if(appTimes.get(j) == 1){
+					fullInfo += "Appearance Time: 1 minute in" + "\n";
+				}else{
+					fullInfo += "Appearance Time: " + appTimes.get(j) + " minutes in" + "\n";
+				}
+				
 			}
 			fullInfo += "\n";
 		}
@@ -134,7 +143,6 @@ public class Performance implements Parcelable{
 			for(int j = 0; j < jobs.size(); j++){
 				fullInfo += "Job: " + jobs.get(j) + "\n";
 			}
-			fullInfo += "\n";
 		}
 		
 		if(performance_crews.size() == 0){
@@ -146,7 +154,14 @@ public class Performance implements Parcelable{
 	
 	@Override
 	public String toString(){
-		return getInfo();
+		String s = getInfo();
+		s += "\n";
+
+		Format formatter = new SimpleDateFormat("E h:mm a");
+		String dateString = formatter.format(performance_start_time);
+		s += dateString;
+		
+		return s;
 	}
 	
 	public boolean hasActor(String name){

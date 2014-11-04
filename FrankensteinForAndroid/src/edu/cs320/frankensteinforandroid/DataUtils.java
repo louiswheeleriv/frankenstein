@@ -117,6 +117,13 @@ public class DataUtils {
 					jsonCrew.add(parseCrewFromJSON(jsonCrewObject, jsonInfo));
 				}
 			}
+			
+			JSONArray jsonEventArray = jsonObject.getJSONArray("significant_events");
+			List<String> jsonEvents = new ArrayList<String>();
+			for(int i = 0; i < jsonEventArray.length(); i++){
+				JSONObject jsonEvent = jsonEventArray.getJSONObject(i);
+				String jsonEventString = jsonEvent.getString("description");
+			}
 
 			Performance perf = new Performance(jsonInfo, jsonStage, jsonProduction, jsonStartTime, jsonActors, jsonCrew);
 			return perf;
@@ -159,9 +166,10 @@ public class DataUtils {
 			String jsonBio = jsonObject.getString("actor_bio");
 			String jsonRole = jsonObject.getString("role");
 			String jsonAppearanceTime = jsonObject.getString("appearance_time");
+			int appearanceTimeInt = Integer.parseInt(jsonAppearanceTime);
 
 			Actor actor = new Actor(jsonName, jsonBio);
-			actor.addRoleAndAppearanceTime(performanceInfo, jsonRole, jsonAppearanceTime);
+			actor.addRoleAndAppearanceTime(performanceInfo, jsonRole, appearanceTimeInt);
 
 			return actor;
 		}catch(Exception e){
