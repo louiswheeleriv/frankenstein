@@ -68,7 +68,7 @@ public class SearchActivity extends Activity {
 		
 		DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
 		Calendar cal = Calendar.getInstance();
-		datePicker.init(2015, 4, 22, new OnDateChangedListener(){
+		datePicker.init(2015, 3, 22, new OnDateChangedListener(){
 
 			// Code for when datepicker value is changed
 			@Override
@@ -315,7 +315,7 @@ public class SearchActivity extends Activity {
 		
 		switch(s){
 		case "Stages":
-			searchType = "stage";
+			searchType = "stage_location";
 			break;
 		case "Actors":
 			searchType = "actor_name";
