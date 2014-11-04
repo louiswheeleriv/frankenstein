@@ -4,3 +4,4 @@ bin/**
 *.pyc
 *.project
 FrankensteinForAndroid/bin/
+frankenstein_mobile/db.sqlite3
