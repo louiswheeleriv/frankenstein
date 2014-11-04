@@ -21,7 +21,7 @@ import android.widget.TextView;
 
 public class DataUtils {
 
-	public final static String SERVER_ADDRESS = "http://192.168.1.138:8000/api/";
+	public final static String SERVER_ADDRESS = "http://139.147.28.183:8000/api/";
 	public final static String SERVER_PREFIX = "performances/?";
 	public final static String SERVER_SUFFIX = "format=json";
 
@@ -155,8 +155,8 @@ public class DataUtils {
 
 	public static Actor parseActorFromJSON(JSONObject jsonObject, String performanceInfo){
 		try{
-			String jsonName = jsonObject.getString("name");
-			String jsonBio = jsonObject.getString("bio");
+			String jsonName = jsonObject.getString("actor_name");
+			String jsonBio = jsonObject.getString("actor_bio");
 			String jsonRole = jsonObject.getString("role");
 			String jsonAppearanceTime = jsonObject.getString("appearance_time");
 
@@ -230,8 +230,7 @@ public class DataUtils {
 
 	public static Date parseDate(String input) throws java.text.ParseException{
 		//SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
-		//SimpleDateFormat df = new SimpleDateFormat("HH:mm, MM/dd/yyyy");
-		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		SimpleDateFormat df = new SimpleDateFormat("HH:mm, MM/dd/yyyy");
 
 		return df.parse(input);
 	}

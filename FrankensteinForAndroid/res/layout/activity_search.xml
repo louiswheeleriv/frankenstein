@@ -20,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_weight="0"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal" >
 
         <TextView
@@ -40,6 +41,7 @@
     </LinearLayout>
     
     <LinearLayout
+        android:id="@+id/linearLayout_search_inputValue"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_weight="0"
@@ -60,39 +62,22 @@
 	        android:layout_height="match_parent"
 	        android:layout_weight="1" />
         
-    </LinearLayout>
-    
-    
-    
-    <LinearLayout
-        android:id="@+id/linearLayout_timeSelection"
-        android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:layout_weight="0"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TimePicker
-            android:id="@+id/timePicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center" />
-
-	    <DatePicker
+        <DatePicker
 	        android:id="@+id/datePicker"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
 	        android:layout_weight="1"
             android:layout_gravity="center"
-            android:calendarViewShown="false" />
-	    
-	</LinearLayout>
+            android:calendarViewShown="false"
+            android:visibility="gone" />
+        
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_weight="0"
+        android:layout_marginTop="15dp"
         android:orientation="horizontal" >
 
         <Button
@@ -102,7 +87,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="15dp"
-            android:layout_weight="1"
+            android:layout_weight="4"
             android:onClick="searchButtonClicked"
             android:text="@string/title_button_search" />
 
@@ -113,7 +98,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="30dp"
-            android:layout_weight="1"
+            android:layout_weight="3"
             android:onClick="showAllButtonClicked"
             android:text="@string/title_button_show_all" />
     </LinearLayout>

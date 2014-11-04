@@ -1,5 +1,7 @@
 package edu.cs320.frankensteinforandroid;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,6 +14,7 @@ import org.json.JSONArray;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 public class Performance implements Parcelable{
@@ -25,9 +28,7 @@ public class Performance implements Parcelable{
 	List<Actor> performance_actors = new ArrayList<Actor>();
 	List<Crew> performance_crews = new ArrayList<Crew>();
 	
-	public Performance(){
-		
-	}
+	public Performance(){}
 	
 	public Performance(String info, Stage stage, Production production, Date startTime, List<Actor> actors, List<Crew> crew){
 		this.performance_info = info;
@@ -99,26 +100,45 @@ public class Performance implements Parcelable{
 	}
 	
 	public String getFullInfo(){
-		String fullInfo = ("PERFORMANCE INFO\n" + performance_info + "\n\n" +
+		Format formatter = new SimpleDateFormat("h:mm a, MM/dd/yyyy");
+		String dateString = formatter.format(performance_start_time);
+		String fullInfo = (performance_info + "\n\n" +
 				"STAGE\nLocation: " + performance_stage.getLocation() + "\n" +
-				"Info: " + performance_stage.getInfo() + "\n\n" +
-				"TIME\n" + performance_start_time + "\n\n" +
+				"Info: " + performance_stage.getInfo() + "\n" +
+				"TIME\n" + dateString + "\n\n" +
 				"ACTORS\n");
 		
 		for(int i = 0; i < performance_actors.size(); i++){
 			Actor a = performance_actors.get(i);
-			fullInfo += ("Name: " + a.getName() + "\n" +
-						 "Bio: " + a.getBio() + "\n" +
-						 "Role: " + a.getRoles().get(getInfo()) + "\n");
+			List<String> roles = a.getRoles().get(getInfo());
+			
+			fullInfo += "Name: " + a.getName() + "\n";
+			for(int j = 0; j < roles.size(); j++){
+				fullInfo += "Role: " + roles.get(j) + "\n";
+			}
+			fullInfo += "\n";
+		}
+		
+		if(performance_actors.size() == 0){
+			fullInfo += "No actors listed for this performance\n\n";
 		}
 		
 		fullInfo += "CREW\n";
 		
 		for(int i = 0; i < performance_crews.size(); i++){
 			Crew c = performance_crews.get(i);
-			fullInfo += ("Name: " + c.getName() + "\n" +
-						 "Bio: " + c.getBio() + "\n" +
-						 "Responsibility: " + c.getResponsibilities().get(getInfo()) + "\n");
+			
+			List<String> jobs = c.getResponsibilities().get(getInfo());
+			
+			fullInfo += "Name: " + c.getName() + "\n";
+			for(int j = 0; j < jobs.size(); j++){
+				fullInfo += "Job: " + jobs.get(j) + "\n";
+			}
+			fullInfo += "\n";
+		}
+		
+		if(performance_crews.size() == 0){
+			fullInfo += "No crew listed for this performance";
 		}
 		
 		return fullInfo;
@@ -126,8 +146,7 @@ public class Performance implements Parcelable{
 	
 	@Override
 	public String toString(){
-		return ("Location: " + performance_stage.getLocation() + "\n" +
-				"Time: " + performance_start_time.toString());
+		return getInfo();
 	}
 	
 	public boolean hasActor(String name){

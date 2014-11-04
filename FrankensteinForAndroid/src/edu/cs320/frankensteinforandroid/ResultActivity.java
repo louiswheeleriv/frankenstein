@@ -1,45 +1,46 @@
 package edu.cs320.frankensteinforandroid;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class ResultActivity extends Activity {
 
+	// List of performances returned by the server
 	List<Performance> performances;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_result);
+		
+		// Make selection info pane scrollable
 		TextView selectionInfo = (TextView) findViewById(R.id.textView_result_selectionInfo);
 		selectionInfo.setMovementMethod(new ScrollingMovementMethod());
 
-		// Determine what type of search the user did, display data appropriately
-
+		// Parse the JSON response into a list of performances
 		Intent intent = getIntent();
 		performances = DataUtils.parseJSONIntoPerformances(intent.getStringExtra(SearchActivity.EXTRA_RESULTLIST));
-		//List<Performance> performances = DataUtils.parseJSONIntoPerformances(getString(R.string.example_json_results));
-
 		ArrayAdapter adapter = getAdapterForList(performances);
 
+		// Display the performances in the results pane
 		final ListView listView = (ListView) findViewById(R.id.listView_result_searchResults);
 		listView.setAdapter(adapter);
 		listView.setClickable(true);
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
+			// Code for when a list item is clicked
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
 				Object o = listView.getItemAtPosition(position);
@@ -49,76 +50,65 @@ public class ResultActivity extends Activity {
 		});
 	}
 
+	// Determine whether or not to show personnel info at the top,
+	// and return an adapter for the list of performances
 	public ArrayAdapter getAdapterForList(List<Performance> performances){
+
 		Intent intent = getIntent();
 		String searchType = intent.getStringExtra(SearchActivity.EXTRA_SEARCHTYPE);
-		String inputValue = intent.getStringExtra(SearchActivity.EXTRA_INPUTVALUE);
+		String showingAll = intent.getStringExtra(SearchActivity.EXTRA_SHOWINGALL);
 
-		if(searchType.equals("actor_name")){
-			List<Actor> actorsToDisplay = new ArrayList<Actor>();
+		if(searchType.equals("actor_name") || searchType.equals("crew_name")){
+			TextView name = (TextView) findViewById(R.id.textView_result_personnelName);
+			name.setText(intent.getStringExtra(SearchActivity.EXTRA_INPUTVALUE));
+			name.setVisibility(View.VISIBLE);
 
-			for(int i = 0; i < performances.size(); i++){
-				
-				List<Actor> actorsInThisPerformance = performances.get(i).getActors();
-
-				for(int j = 0; j < actorsInThisPerformance.size(); j++){
-
-					if(actorsInThisPerformance.get(j).getName().toLowerCase().contains(inputValue.toLowerCase())){
-						boolean alreadyInList = false;
-
-						for(int k = 0; k < actorsToDisplay.size(); k++){
-							if(actorsToDisplay.get(k).getName().equalsIgnoreCase(actorsInThisPerformance.get(j).getName())){
-								alreadyInList = true;
-
-								actorsToDisplay.get(k).addRoleAndAppearanceTimeBulk(actorsInThisPerformance.get(j).getRoles(), actorsInThisPerformance.get(j).getAppearanceTimes());
-								break;
-							}
-						}
-
-						if(!alreadyInList){
-							actorsToDisplay.add(actorsInThisPerformance.get(j));
-						}
-
+			// Get info about actor
+			String infoString = "";
+			boolean done = false;
+			for(int i = 0; (i < performances.size()) && !done; i++){
+				Performance p = performances.get(i);
+				for(int j = 0; (j < p.getActors().size()) && !done; j++){
+					Actor a = p.getActors().get(j);
+					String matchName = intent.getStringExtra(SearchActivity.EXTRA_INPUTVALUE);
+					if(a.getName().equalsIgnoreCase(matchName)){
+						infoString = a.getBio();
+						done = true;
 					}
 				}
 			}
 
-			ArrayAdapter<Actor> adapter = new ArrayAdapter<Actor>(this, android.R.layout.simple_list_item_1, DataUtils.sortActorList(actorsToDisplay));
-			return adapter;
-		}else if(searchType.equals("crew_name")){
-			
-			List<Crew> crewToDisplay = new ArrayList<Crew>();
-
-			for(int i = 0; i < performances.size(); i++){
-				List<Crew> crewInThisPerformance = performances.get(i).getCrew();
-
-				for(int j = 0; j < crewInThisPerformance.size(); j++){
-
-					if(crewInThisPerformance.get(j).getName().toLowerCase().contains(inputValue.toLowerCase())){
-						boolean alreadyInList = false;
-
-						for(int k = 0; k < crewToDisplay.size(); k++){
-							if(crewToDisplay.get(k).getName().equalsIgnoreCase(crewInThisPerformance.get(j).getName())){
-								alreadyInList = true;
-
-								crewToDisplay.get(k).addResponsibilityBulk(crewInThisPerformance.get(j).getResponsibilities());
-								break;
-							}
-						}
-
-						if(!alreadyInList){
-							crewToDisplay.add(crewInThisPerformance.get(j));
-						}
-					}
+			if(performances.size() == 0){
+				infoString = "No performances listed for this ";
+				if(searchType.equals("actor_name")){
+					infoString += "actor";
+				}else{
+					infoString += "crew member";
 				}
 			}
 
-			ArrayAdapter<Crew> adapter = new ArrayAdapter<Crew>(this, android.R.layout.simple_list_item_1, DataUtils.sortCrewList(crewToDisplay));
-			return adapter;
+			TextView info = (TextView) findViewById(R.id.textView_result_personnelInfo);
+			info.setText(infoString);
+			info.setVisibility(View.VISIBLE);
+
+			LinearLayout personnelInfo = (LinearLayout) findViewById(R.id.linearLayout_result_personnelInfo);
+			personnelInfo.setVisibility(View.VISIBLE);
+
 		}else{
-			ArrayAdapter<Performance> adapter = new ArrayAdapter<Performance>(this, android.R.layout.simple_list_item_1, DataUtils.sortPerformanceList(performances));
-			return adapter;
+			LinearLayout personnelInfo = (LinearLayout) findViewById(R.id.linearLayout_result_personnelInfo);
+			personnelInfo.setVisibility(View.GONE);
 		}
+
+		if(showingAll == "true"){
+			LinearLayout personnelInfo = (LinearLayout) findViewById(R.id.linearLayout_result_personnelInfo);
+			personnelInfo.setVisibility(View.GONE);
+		}else{
+			LinearLayout personnelInfo = (LinearLayout) findViewById(R.id.linearLayout_result_personnelInfo);
+			personnelInfo.setVisibility(View.VISIBLE);
+		}
+
+		ArrayAdapter<Performance> adapter = new ArrayAdapter<Performance>(this, android.R.layout.simple_list_item_1, DataUtils.sortPerformanceList(performances));
+		return adapter;
 	}
 
 	@Override
@@ -140,9 +130,7 @@ public class ResultActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	/**
-	 * This function determines the type of listItem and returns its information
-	 */
+	// Determine the type of the list item and return its information
 	public String getFullInfoAboutObject(Object listItem){
 		String listItemInfo = "";
 
