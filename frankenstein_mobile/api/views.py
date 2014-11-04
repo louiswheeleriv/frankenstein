@@ -42,13 +42,12 @@ class PerformanceList(generics.ListCreateAPIView):
         if production_name is not None:
             queryset = queryset.filter(performance_production__production_name__contains=production_name)
         if stage_location is not None:
-            queryset = queryset.filter(performance_stage__production_name__contains=production_name)
+            queryset = queryset.filter(performance_stage__stage_location__contains=stage_location)
         if time_query is not None:
             date_time = parse(time_query)
             next_day = date_time + timedelta(days=1)
-            print date_time, next_day, "asfagaga"
             queryset = queryset.filter(performance_start_time__range=[date_time,next_day])
-		if sig_event is not None:
+        if sig_event is not None:
             queryset = queryset.filter(significantevent__description__contains=sig_event)
 
         return queryset

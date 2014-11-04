@@ -53,33 +53,38 @@ def parse_perfactor():
         for line in perfactr_file:
             # Part 4 of Act 1,Ellen Galperin,The Monster,19:45
             perf, actor, role, appearance_time = line.split(',')
-            appearance_time = appearance_time.split(':')[1]
-            pa = PerfActor()
-            pa.role = role
-            pa.appearance_time = appearance_time
-            performance = Performance.objects.filter(performance_info = perf).order_by('?')[0]
-            pa.performance = performance
-            pa.actor = Actor.objects.filter(actor_name=actor).get()
-            pa.save()
+            # appearance_time = appearance_time.split(':')[1]
+            performance = Performance.objects.filter(performance_info = perf).all()
+            for p in performance:
+                pa = PerfActor()
+                pa.role = role
+                pa.appearance_time = appearance_time
+                pa.performance = p
+                pa.actor = Actor.objects.filter(actor_name=actor).get()
+                pa.save()
 
 def parse_perfcrew():
     with open('../makeTables/perfcrew.csv') as perfcrew_file:
         for line in perfcrew_file:
             perf, crew, responsibility = line.split(',')
-            pc = PerfCrew()
-            pc.responsibilities = responsibility
-            pc.performance = Performance.objects.filter(performance_info = perf).order_by('?')[0]
-            pc.crew = Crew.objects.filter(crew_name=crew).get()
-            pc.save()
+            performance = Performance.objects.filter(performance_info = perf).all()
+            for p in performance:
+                pc = PerfCrew()
+                pc.responsibilities = responsibility
+                pc.performance = p
+                pc.crew = Crew.objects.filter(crew_name=crew).get()
+                pc.save()
 
 def parse_significantevents():
     with open('../makeTables/significant_event.csv') as sigevent_file:
         for line in sigevent_file:
             perf, event = line.split(',')
-            sig_event = SignificantEvent()
-            sig_event.description = event
-            sig_event.performance = Performance.objects.filter(performance_info = perf).order_by('?')[0]
-            sig_event.save()
+            performance = Performance.objects.filter(performance_info = perf).all()
+            for p in performance:
+                sig_event = SignificantEvent()
+                sig_event.description = event
+                sig_event.performance = p
+                sig_event.save()
 
 def load():
     Performance.objects.all().delete()
