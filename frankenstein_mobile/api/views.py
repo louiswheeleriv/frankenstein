@@ -33,6 +33,7 @@ class PerformanceList(generics.ListCreateAPIView):
         production_name = self.request.QUERY_PARAMS.get('production_name', None)
         stage_location = self.request.QUERY_PARAMS.get('stage_location', None)
         time_query = self.request.QUERY_PARAMS.get('performance_start_time', None)
+        sig_event = self.request.QUERY_PARAMS.get('sig_event', None)
 
         if actor_name is not None:
             queryset = queryset.filter(perfactor__actor__actor_name__contains=actor_name)
@@ -47,6 +48,8 @@ class PerformanceList(generics.ListCreateAPIView):
             next_day = date_time + timedelta(days=1)
             print date_time, next_day, "asfagaga"
             queryset = queryset.filter(performance_start_time__range=[date_time,next_day])
+		if sig_event is not None:
+            queryset = queryset.filter(significantevent__description__contains=sig_event)
 
         return queryset
 

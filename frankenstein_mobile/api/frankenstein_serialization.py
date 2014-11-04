@@ -64,8 +64,7 @@ class PerformanceSerializer(serializers.ModelSerializer):
     significant_events = SignificantEventSerializer(source='significantevent_set', many=True)
 
     def transform_performance_start_time(self, object, value):
-        return value.strftime('%H:%M, %m/%d/%Y') if not None else ''
-
+        return value.strftime('%H:%M, %m/%d/%Y') if value is not None else ''
 
     class Meta:
         model = Performance
