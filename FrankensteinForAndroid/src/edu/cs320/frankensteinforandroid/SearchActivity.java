@@ -226,6 +226,7 @@ public class SearchActivity extends Activity {
 				
 				// Remove spaces and replace with %20
 				inputValue = inputValue.replace(" ", "%20");
+				inputValue = inputValue.replace("\n", "");
 
 				TextView text = (TextView) findViewById(R.id.textView_jsonResponseHidden);
 
@@ -249,6 +250,12 @@ public class SearchActivity extends Activity {
 		String inputValue = "";
 		if(searchType != "performance_start_time"){
 			inputValue = spinnerInputValue.getSelectedItem().toString();
+		}else{
+			DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
+			String month = Integer.toString(datePicker.getMonth() + 1);
+			String day = Integer.toString(datePicker.getDayOfMonth());
+			String year = Integer.toString(datePicker.getYear());
+			inputValue = month + "-" + day + "-" + year;
 		}
 		String jsonResponse = (String) jsonResponseTextView.getText();
 

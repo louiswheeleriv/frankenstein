@@ -24,19 +24,20 @@ public class Performance implements Parcelable{
 	Production performance_production;
 	Date performance_start_time;
 	
-	List<String> performance_significant_events = new ArrayList<String>();
 	List<Actor> performance_actors = new ArrayList<Actor>();
 	List<Crew> performance_crews = new ArrayList<Crew>();
+	List<String> performance_significant_events = new ArrayList<String>();
 	
 	public Performance(){}
 	
-	public Performance(String info, Stage stage, Production production, Date startTime, List<Actor> actors, List<Crew> crew){
+	public Performance(String info, Stage stage, Production production, Date startTime, List<Actor> actors, List<Crew> crew, List<String> events){
 		this.performance_info = info;
 		this.performance_stage = stage;
 		this.performance_production = production;
 		this.performance_start_time = startTime;
 		this.performance_actors = actors;
 		this.performance_crews = crew;
+		this.performance_significant_events = events;
 	}
 
 	public String getInfo() {
@@ -146,7 +147,17 @@ public class Performance implements Parcelable{
 		}
 		
 		if(performance_crews.size() == 0){
-			fullInfo += "No crew listed for this performance";
+			fullInfo += "No crew listed for this performance\n\n";
+		}
+		
+		fullInfo += "EVENTS\n";
+		
+		for(int i = 0; i < performance_significant_events.size(); i++){
+			fullInfo += performance_significant_events.get(i) + "\n";
+		}
+		
+		if(performance_significant_events.size() == 0){
+			fullInfo += "No events listed for this performance\n\n";
 		}
 		
 		return fullInfo;

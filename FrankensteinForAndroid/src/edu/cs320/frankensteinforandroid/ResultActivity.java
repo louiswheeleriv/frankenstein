@@ -1,6 +1,9 @@
 package edu.cs320.frankensteinforandroid;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -32,6 +35,9 @@ public class ResultActivity extends Activity {
 		// Parse the JSON response into a list of performances
 		Intent intent = getIntent();
 		performances = DataUtils.parseJSONIntoPerformances(intent.getStringExtra(SearchActivity.EXTRA_RESULTLIST));
+		
+		performances = removeIncorrectDatedPerformances(performances);
+		
 		ArrayAdapter adapter = getAdapterForList(performances);
 
 		// Display the performances in the results pane
@@ -48,6 +54,33 @@ public class ResultActivity extends Activity {
 				selectionInfo.setText(getFullInfoAboutObject(o));
 			}
 		});
+	}
+	
+	public List<Performance> removeIncorrectDatedPerformances(List<Performance> performances){
+		Intent intent = getIntent();
+		String searchType = intent.getStringExtra(SearchActivity.EXTRA_SEARCHTYPE);
+		if(searchType.equals("performance_start_time")){
+			Set<Integer> daysSeenSet = new HashSet<Integer>();
+			
+			for(int i = 0; i < performances.size(); i++){
+				Integer perfDay = performances.get(i).getStartTime().getDate();
+				daysSeenSet.add(perfDay);
+			}
+			
+			List<Integer> daysSeen = new ArrayList<Integer>();
+			daysSeen.addAll(daysSeenSet);
+			
+			if(daysSeen.size() > 1){
+				java.util.Collections.sort(daysSeen);
+				for(int i = 0; i < performances.size(); i++){
+					if(performances.get(i).getStartTime().getDate() != daysSeen.get(0)){
+						performances.remove(i);
+						i--;
+					}
+				}
+			}
+		}
+		return performances;
 	}
 
 	// Determine whether or not to show personnel info at the top,

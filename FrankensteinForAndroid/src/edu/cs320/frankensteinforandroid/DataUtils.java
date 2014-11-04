@@ -21,7 +21,7 @@ import android.widget.TextView;
 
 public class DataUtils {
 
-	public final static String SERVER_ADDRESS = "http://139.147.28.183:8000/api/";
+	public final static String SERVER_ADDRESS = "http://139.147.29.7:8000/api/";
 	public final static String SERVER_PREFIX = "performances/?";
 	public final static String SERVER_SUFFIX = "format=json";
 
@@ -123,9 +123,10 @@ public class DataUtils {
 			for(int i = 0; i < jsonEventArray.length(); i++){
 				JSONObject jsonEvent = jsonEventArray.getJSONObject(i);
 				String jsonEventString = jsonEvent.getString("description");
+				jsonEvents.add(jsonEventString);
 			}
 
-			Performance perf = new Performance(jsonInfo, jsonStage, jsonProduction, jsonStartTime, jsonActors, jsonCrew);
+			Performance perf = new Performance(jsonInfo, jsonStage, jsonProduction, jsonStartTime, jsonActors, jsonCrew, jsonEvents);
 			return perf;
 
 		}catch(Exception e){
