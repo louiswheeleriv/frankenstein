@@ -2,6 +2,7 @@ from api.models import Actor, Performance, Stage, Crew, PerfActor
 from api.frankenstein_serialization import ActorSerializer, PerformanceSerializer, StageSerializer, CrewSerializer, PerfActorSerializer
 from rest_framework import generics
 from dateutil.parser import parse
+from datetime import timedelta
 
 
 class ActorList(generics.ListCreateAPIView):
@@ -36,14 +37,16 @@ class PerformanceList(generics.ListCreateAPIView):
         if actor_name is not None:
             queryset = queryset.filter(perfactor__actor__actor_name__contains=actor_name)
         if crew_name is not None:
-            queryset = queryset.filter(perfcrew___crew__crew_name__contains=crew_name)
+            queryset = queryset.filter(perfcrew__crew__crew_name__contains=crew_name)
         if production_name is not None:
             queryset = queryset.filter(performance_production__production_name__contains=production_name)
         if stage_location is not None:
             queryset = queryset.filter(performance_stage__production_name__contains=production_name)
         if time_query is not None:
             date_time = parse(time_query)
-            queryset = queryset.filter(performance_start_time=date_time)
+            next_day = date_time + timedelta(days=1)
+            print date_time, next_day, "asfagaga"
+            queryset = queryset.filter(performance_start_time__range=[date_time,next_day])
 
         return queryset
 

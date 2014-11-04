@@ -16,7 +16,7 @@
 	var data = {{ results|safe }};
 
 	// the name they searched with
-	var search_name = '{{ performance_info }}';
+	var search_name = '{{ sig_event }}';
 
 	var pHeader = document.getElementById("pageHeader").innerHTML = "Performances with the description <em>'" + search_name + "'</em>...";
 
@@ -30,8 +30,6 @@
 	res.appendChild(panelgroup);
 
 	for(var k = 0; k < data.length; k++) {
-
-		console.log(data[k].performance_info);
 
 		var pdefault = document.createElement("div");
 		pdefault.className = "panel panel-default";

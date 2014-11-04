@@ -9,8 +9,6 @@
 	<div id="theResults">
 		
 	</div> 
-
-
 </div>
 
 <script type="text/javascript">
@@ -73,12 +71,6 @@
 			}
 		}
 
-		for(var z = 0; z < name_matched_actors.length; z++) {
-			console.log("name_matched_actors: ");
-			console.log(name_matched_actors[z]);
-		}
-
-
 		// add it to the main results page
 		var res = document.getElementById("theResults");
 		res.setAttribute("style", "color:white;");
@@ -121,7 +113,6 @@
 			for(var i = 0; i < data.length; i++) {
 
 				for(var a = 0; a < name_matched_actors[k].performance.length; a++) {
-					console.log(name_matched_actors[k].performance[a]);
 
 					if(name_matched_actors[k].performance[a].id == data[i].id) {
 						var role = name_matched_actors[k].performance[a].role;

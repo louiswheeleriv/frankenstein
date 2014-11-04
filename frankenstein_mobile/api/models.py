@@ -33,8 +33,9 @@ class PerfActor(models.Model):
     def __unicode__(self):
         return 'Actor Performance. Name: ' \
                '{0}, Appearance Time: {1}, Role: {2}'\
-            .format(self.actor,(self.appearance_time.strftime('%H:%M') if self.appearance_time is not None  else ''),
-                                                                                      self.role)
+            .format(self.actor,
+                    (self.appearance_time.strftime('%H:%M') if self.appearance_time is not None  else ''),self.role)
+
 class SignificantEvent(models.Model):
     description = models.CharField(max_length=200)
     performance = models.ForeignKey('Performance')
@@ -68,5 +69,5 @@ class Performance(models.Model):
     def __unicode__(self):
             return 'Production: {0}, Stage: {1}, Start Time: {2}, Info: {3}'.format(
                 self.performance_production, self.performance_stage,
-                (self.performance_start_time.strftime('%H:%M, %m/%d/%Y') if self.performance_start_time is not None  else ''),
+                (self.performance_start_time.strftime('%H:%M, %m/%d/%Y') if self.performance_start_time is not None else ''),
                 self.performance_info)

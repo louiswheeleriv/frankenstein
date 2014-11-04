@@ -1,12 +1,14 @@
-from django.shortcuts import render
-from django.http import HttpResponse, QueryDict, HttpRequest
-from django.template import RequestContext, loader
-from datetime import datetime, timedelta
-from api.frankenstein_serialization import PerformanceSerializer
-from api.models import Production, Stage, Actor, Crew, Performance
-from api.views import PerformanceList
-from dateutil.parser import  parse
+from datetime import timedelta
 import json
+
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.template import RequestContext, loader
+from dateutil.parser import  parse
+
+from api.frankenstein_serialization import PerformanceSerializer
+from api.models import Stage, Actor, Crew, Performance, SignificantEvent
+
 
 def index(request):
     return render(request, 'frankenstein_mobile/index.html')
@@ -60,19 +62,19 @@ def search_crew(request):
 def results_crew(request):
     queryset = Performance.objects.all()
     crew_name = request.GET.get('crew_name', None)
-    production_name = request.GET.get('production_name', None)
-    stage_location = request.GET.get('stage_location', None)
-    time_query = request.GET.get('performance_start_time', None)
+    # production_name = request.GET.get('production_name', None)
+    # stage_location = request.GET.get('stage_location', None)
+    # time_query = request.GET.get('performance_start_time', None)
 
     if crew_name is not None:
         queryset = queryset.filter(perfcrew__crew__crew_name__contains=crew_name)
-    if production_name is not None:
-        queryset = queryset.filter(performance_production__production_name__contains=production_name)
-    if stage_location is not None:
-        queryset = queryset.filter(performance_stage__production_name__contains=production_name)
-    if time_query is not None:
-        date_time = parse(time_query)
-        queryset = queryset.filter(performance_start_time=date_time)
+    # if production_name is not None:
+    #     queryset = queryset.filter(performance_production__production_name__contains=production_name)
+    # if stage_location is not None:
+    #     queryset = queryset.filter(performance_stage__production_name__contains=production_name)
+    # if time_query is not None:
+    #     date_time = parse(time_query)
+    #     queryset = queryset.filter(performance_start_time=date_time)
 
     results = []
     for perf in queryset.all():
@@ -144,10 +146,10 @@ def results_time(request):
 
 
 def search_performance(request):
-    performance_list = Performance.objects.values('performance_info')
+    sig_events = SignificantEvent.objects.values('description')
     template = loader.get_template('frankenstein_mobile/search_performance.html')
     context = RequestContext(request, {
-        'performance_list': performance_list,
+        'sig_events': sig_events,
     })
     return HttpResponse(template.render(context))
 
@@ -176,8 +178,8 @@ def results_performance(request):
         sx = PerformanceSerializer(perf)
         results.append(sx.data)
 
-    message = request.GET['performance_info']
-    return render(request, 'frankenstein_mobile/results_performance.html', {'results': json.dumps(results), 'performance_info': message});
+    message = request.GET['description']
+    return render(request, 'frankenstein_mobile/results_performance.html', {'results': json.dumps(results), 'sig_event': message});
 
 ###########################################################################
 def results(request):
