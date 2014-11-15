@@ -16,5 +16,9 @@
     "mongodb": "*",
     "monk": "*",
     "stylus": "*"
-  }
+  },
+  "main": "app.js",
+  "devDependencies": {},
+  "author": "",
+  "license": "ISC"
 }
