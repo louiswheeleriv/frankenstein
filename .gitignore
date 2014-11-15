@@ -1,7 +1,7 @@
 gen/
-bin/
 *.idea
 *.pyc
 *.project
 FrankensteinForAndroid/bin/
+FrankensteinForAndroid/gen/
 frankenstein_mobile/db.sqlite3
