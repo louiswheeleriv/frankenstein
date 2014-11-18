@@ -1,0 +1,18 @@
+extends layout
+
+block content
+	h1.
+		Actor List
+	ul
+		each actor, i in actorlist
+			li
+				a(href="mailto:#{actor.bio}")= actor.name
+				br
+
+	h2 Add Actor
+	form#formAddActor(name="addactor", method="post", action="/addactor")
+			input#inputActorName(type='text', placeholder='Full Name', name='name')
+			br
+			input#inputActorBio(type='text', placeholder='Bio', name='bio')
+			br
+			button#btnSubmit Submit

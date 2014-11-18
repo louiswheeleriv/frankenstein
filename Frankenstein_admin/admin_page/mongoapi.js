@@ -4,8 +4,6 @@
     Functions for interfacing with the mongo database.
 */
 
-// Database functions
-
 function createCollections(req, res){
     var db = req.db;
     db.createCollection("performances");
@@ -27,10 +25,14 @@ function emptyDatabase(req, res){
     crewCollection.drop();
 }
 
-// Performance functions
-
-function getItems(req, res) {
-
+function getActors(req, res){
+    var db = req.db;
+    var actorCollection = db.get('actors');
+    actorCollection.find({}, {}, function(e, docs){
+        res.render('actorlist', {
+            "actorlist":docs
+        });
+    });
 }
 
 function insertItem(req, res, json, collection){
@@ -39,15 +41,28 @@ function insertItem(req, res, json, collection){
     collection.insert(json);
 }
 
-function updateItem(req, res){
+function insertActor(req, res, name, bio){
+    var db = req.db;
+    var actorCollection = db.get('actors');
+    actorCollection.insert({
+        "name":name,
+        "bio":bio
+    }, function(err, doc){
+        if(err){
+            res.send("There was a problem adding the item to the database.");
+        }else{
 
+        }
+    });
 }
 
-function deleteItem(req, res){
-
+function deleteItem(req, res, key){
+    var db = req.db;
+    db.remove(key);
 }
 
-exports.getItems = getItems;
-exports.insertItem = insertItem;
-exports.updateItem = updateItem;
+exports.createCollections = createCollections;
+exports.emptyDatabase = emptyDatabase;
+exports.getActors = getActors;
+exports.insertActor = insertActor;
 exports.deleteItem = deleteItem;
