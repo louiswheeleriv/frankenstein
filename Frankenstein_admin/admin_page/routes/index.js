@@ -14,14 +14,13 @@ router.get('/helloworld', function(req, res) {
 	res.render('helloworld', {title: 'Hello, World!', name:'Frankenstein' })
 });
 
-/* GET actor list page */
-router.get('/actorlist', function(req, res){
-	mongoapi.getActors(req, res);
-});
 
-/* POST add actor */
-router.post('/addactor', function(req, res){
-	mongoapi.insertActor(req, res, req.body.name, req.body.bio);
-});
+// HERE LOUIS IS WHERE THE POST INFORMATION GOES
+router.post('/add_actor', function(req, res) {
+	console.log(req.body);
+	console.log(req.body.actor_name);
+	console.log(req.body.actor_bio);
+	res.redirect('/');
+})
 
 module.exports = router;
