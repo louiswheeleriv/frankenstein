@@ -6,9 +6,15 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var http = require('http');
 
+// Database stuff
 var mongo = require('mongodb');
 var monk = require('monk');
 var db = monk('localhost:27017/admindb');
+
+// Authentication stuff
+var dbConfig = require('db');
+var mongoose = require('mongoose');
+mongoose.connect(dbConfig.url);
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -32,6 +38,13 @@ app.use(function(req, res, next){
     req.db = db;
     next();
 });
+
+// Configuring Passport
+var passport = require('passport');
+var expressSession = require('express-session');
+app.use(expressSession({secret: 'mySecretKey'}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', routes);
 app.use('/users', users);

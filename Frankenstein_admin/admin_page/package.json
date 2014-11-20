@@ -15,7 +15,11 @@
     "jade": "~1.6.0",
     "mongodb": "*",
     "monk": "*",
-    "stylus": "*"
+    "mongoose": "~3.8.19",
+    "stylus": "*",
+    "passport": "~0.2.0",
+    "passport-local": "~1.0.0",
+    "express-session": "~1.9.1"
   },
   "main": "app.js",
   "devDependencies": {},
