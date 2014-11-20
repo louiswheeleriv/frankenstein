@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 // Access the functions in mongoapi.js
-var mongoapi = require('../mongoapi');
+var actors = require('../mongoapi/actors');
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -17,9 +17,16 @@ router.get('/helloworld', function(req, res) {
 
 // HERE LOUIS IS WHERE THE POST INFORMATION GOES
 router.post('/add_actor', function(req, res) {
-	console.log(req.body);
-	console.log(req.body.actor_name);
-	console.log(req.body.actor_bio);
+	var actor = 
+	{
+		"name":req.body.actor_name,
+		"bio":req.body.actor_bio,
+		"dirty":false,
+		"deleted":false
+	}
+
+	actors.save(req, actor);
+
 	res.redirect('/');
 })
 

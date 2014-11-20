@@ -8,7 +8,7 @@ var http = require('http');
 
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('localhost:27017/adminDB');
+var db = monk('localhost:27017/admindb');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
