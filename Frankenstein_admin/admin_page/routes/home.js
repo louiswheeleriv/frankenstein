@@ -6,14 +6,8 @@ var actors = require('../mongoapi/actors');
 
 /* GET home page. */
 router.get('/', function(req, res) {
-  res.render('index', { title: 'Frankenstein' });
+  res.render('home', { title: 'Frankenstein' });
 });
-
-/* GET Hello World Page */
-router.get('/helloworld', function(req, res) {
-	res.render('helloworld', {title: 'Hello, World!', name:'Frankenstein' })
-});
-
 
 // HERE LOUIS IS WHERE THE POST INFORMATION GOES
 router.post('/add_actor', function(req, res) {
