@@ -45,9 +45,13 @@ app.use(function(req, res, next){
 mongoose.connect(configDB.url);
 require('./config/passport')(passport);
 app.use(morgan('dev'));
-app.use(bodyParser());
+// app.use(bodyParser());
 app.set('view engine', 'ejs');
-app.use(session({secret: 'mySecretKey'}));
+app.use(session({
+    secret: 'mySecretKey',
+    resave: true,
+    saveUninitialized: true
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());

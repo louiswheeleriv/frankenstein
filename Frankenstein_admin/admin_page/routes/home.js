@@ -5,7 +5,7 @@ var router = express.Router();
 var actors = require('../mongoapi/actors');
 
 /* GET home page. */
-router.get('/', function(req, res) {
+router.get('/home', function(req, res) {
   res.render('home', { title: 'Frankenstein' });
 });
 

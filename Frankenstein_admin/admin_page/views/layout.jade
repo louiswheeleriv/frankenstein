@@ -7,11 +7,26 @@ html
 		link(rel='stylesheet', href='/stylesheets/style.css')
 		script(src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
 		script(src='/bootstrap/js/bootstrap.min.js')
+		script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js')
+		script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular-resource.min.js')
+		link(href='http://fonts.googleapis.com/css?family=IM+Fell+DW+Pica' rel='stylesheet' type='text/css')
 
 	body
-		nav.navbar.navbar-default.navbar-fixed-top(role='navigation')
-			.container
-				h4.navbar-text(style='color: white;') Lafayette College Presents...
-				a.navbar-brand(href='/') Frankenstein
-
+		#wrapper
+			#sidebar-wrapper
+				ul.sidebar-nav
+					li.sidebar-brand Insert/Update...
+					li
+						a(href='#' action='/doThis') Actor
+					li
+						a(href='#') Crew
+					li
+						a(href='#') Stage
+					li
+						a(href='#') Significant Plot Events
+					li
+						a(href='#') Performances
+					li 
+						button.btn-danger(type='button') Finish
+		
 		block content
