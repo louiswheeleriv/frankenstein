@@ -1,27 +1,31 @@
 extends layout
 
 block content
-	script(type='text/javascript' src="/javascripts/mainScript.js")
-	#page-content-wrapper
-		.container-fluid.search-panel(ng-app)
-			.row
-				.col-lg-12
-					h1 Frankenstein
-					hr
-					p
-						| Choose what to update on through the sidebar
-		.container-fluid.result-panel
-			.row
-				.col-lg-12
-					h2 Let's Do This!
-
-
-//- 		.container.result-panel
-//- 			form.form#post-form(role='form', action='/add_actor', method='POST')
-//- 				.form-control
-//- 					label(for="name") Actor's Name
-//- 					input(type="text" placeholder="Name" id="name" name="actor_name")
-//- 				.form-control
-//- 					label(for="bio") Actor's Bio
-//- 					textarea(row="4" id="bio" placeholder="Bio" name="actor_bio")
-//- 				button(type="submit").btn.btn-primary Submit
+	.container
+		//- h1= title
+		h1 Insert/Update...
+		p Welcome, admin, to #{title}
+		.container.search-container
+			form.form#post-form(role='form', action='', method='POST')
+				.row
+					.span6
+						a.btn.btn-default(href='/', role='button') Actor
+					.span6
+						a.btn.btn-default(href='/', role='button') Crew
+				.row.top-buffer
+					.span6
+						a.btn.btn-default(href='/', role='button') Stage
+					.span6
+						a.btn.btn-default(href='/', role='button') Significant Plot Events
+				.row.top-buffer
+					.span6
+						a.btn.btn-default(href='/', role='button') Performances
+		.container.result-container
+			form.form#post-form(role='form', action='/add_actor', method='POST')
+				.form-control
+					label(for="name") Actor's Name
+					input(type="text" placeholder="Name" id="name" name="actor_name")
+				.form-control
+					label(for="bio") Actor's Bio
+					textarea(row="4" id="bio" placeholder="Bio" name="actor_bio")
+				button(type="submit").btn.btn-primary Submit
