@@ -1,27 +1,50 @@
 extends layout
 
 block content
-	//- script(type='text/javascript' src="/javascripts/mainScript.js")
+	script(type='text/javascript' src="/js/updateActorScript.js")
 	#page-content-wrapper
 		.container-fluid.search-panel
 			.row
 				.col-lg-12
 					h1 Frankenstein
 					hr
+					h3 Pick an Actor
 					form.form(role='form')
 						select.form-control
 							option hello
 							option good bye
 						br
-						button(type="submit").btn.btn-primary Submit
+						br
+						.btn-group(role='group')
+							button(type="submit").btn.btn-primary.btn-lg Update
+							button.btn.btn-danger(type='button')
+								span.glyphicon.glyphicon-remove(aria-hidden='true')
+								|   Remove
+						br
+						br
+						button(type="button" onclick="doThis();").btn.btn-success
+							span.glyphicon.glyphicon-plus(aria-hidden='true')
+							|   New Actor
+						br
+						br
+						
+
 		.container-fluid.result-panel
 			.row
-				.col-lg-12
-					form.form#post-form(role='form', action='/add_actor', method='POST')
-						.form-control
-							label(for="name") Actor's Name
-							input(type="text" placeholder="Name" id="name" name="actor_name")
-						.form-control
-							label(for="bio") Actor's Bio
-							textarea(row="4" id="bio" placeholder="Bio" name="actor_bio")
-						button(type="submit").btn.btn-primary Submit
+				.col-lg-12#thisOne
+					//- form.form#post-form(role='form', action='/add_actor', method='POST')
+					//- 	.form-control
+					//- 		label(for="name") Actor's Name
+					//- 		input(type="text" placeholder="Name" id="name" name="actor_name")
+					//- 	.form-control
+					//- 		label(for="bio") Actor's Bio
+					//- 		textarea(row="4" id="bio" placeholder="Bio" name="actor_bio")
+					//- 	.form-control
+					//- 		label Performances, Roles, and Appearance Times
+					//- 		select
+					//- 			option performance1
+					//- 			option performance2
+					//- 		input(type="text" placeholder="Role" name="actor_role")
+					//- 		input(type="time" value="19:00" name="actor_appTime")
+					//- 	br
+					//- 	button(type="submit").btn.btn-primary Submit

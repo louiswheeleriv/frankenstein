@@ -42,7 +42,7 @@ app.use(function(req, res, next){
 });
 
 // Configuring authentication
-mongoose.connect(configDB.url);
+// mongoose.connect(configDB.url);
 require('./config/passport')(passport);
 app.use(morgan('dev'));
 // app.use(bodyParser());

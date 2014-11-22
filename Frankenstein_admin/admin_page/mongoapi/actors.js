@@ -9,6 +9,7 @@ function save(req, actor){
 
 function getActors(req){
 	var actors = req.db.get('actors');
+	// console.log(actors);
 	return actors.find({deleted:false});
 }
 

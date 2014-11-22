@@ -25,6 +25,18 @@ router.post('/add_actor', function(req, res) {
 })
 
 router.get('/updateActor', function(req, res) {
+	var actor = 
+	{
+		"name":"Joe Shmoe",
+		"bio":"blah blah blah blah blah",
+		"dirty":false,
+		"deleted":false
+	}
+
+	actors.save(req, actor);
+	var c = actors.getActors(req);
+	console.log(c);
+	// res.send(actors.getActors(req));
 	res.render('updateActor.jade', { title: 'Frankenstein' });
 })
 
