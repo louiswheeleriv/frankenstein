@@ -7,17 +7,16 @@ html
 		link(rel='stylesheet', href='/stylesheets/style.css')
 		script(src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
 		script(src='/bootstrap/js/bootstrap.min.js')
-		script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js')
-		script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular-resource.min.js')
 		link(href='http://fonts.googleapis.com/css?family=IM+Fell+DW+Pica' rel='stylesheet' type='text/css')
 
 	body
 		#wrapper
 			#sidebar-wrapper
 				ul.sidebar-nav
-					li.sidebar-brand Insert/Update...
+					li.sidebar-brand 
+						a(href='/home') Insert/Update...
 					li
-						a(href='#' action='/doThis') Actor
+						a(href='/updateActor/') Actor
 					li
 						a(href='#') Crew
 					li
@@ -29,4 +28,4 @@ html
 					li 
 						button.btn-danger(type='button') Finish
 		
-		block content
+			block content
