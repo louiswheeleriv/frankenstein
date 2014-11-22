@@ -6,7 +6,13 @@ var actors = require('../mongoapi/actors');
 
 /* GET home page. */
 router.get('/home', function(req, res) {
-  res.render('home.jade', { title: 'Frankenstein' });
+	var actorCollection = req.db.get('actors');
+	actorCollection.find({name:"Save Actor"}, {}, function(data){
+		console.log('data...');
+		console.log(data);
+	});
+
+	res.render('home', { title: 'Frankenstein' });
 });
 
 // HERE LOUIS IS WHERE THE POST INFORMATION GOES

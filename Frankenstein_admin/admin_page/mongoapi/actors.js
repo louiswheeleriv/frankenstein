@@ -4,18 +4,29 @@
 
 function save(req, actor){
 	var actors = req.db.get('actors');
-	actors.update({"name":actor.name}, actor, {upsert:true});
+	actor.dirty = true;
+	actors.update({"_id":actor._id}, actor, {upsert:true});
 }
 
-function getActors(req){
+function getActors(req, callback){
 	var actors = req.db.get('actors');
-	// console.log(actors);
-	return actors.find({deleted:false});
+	actors.find({deleted:false}, {}, function(err, docs){
+		callback(docs);
+	});
 }
 
-function getDeletedActors(req){
+function getDirtyActors(req, callback){
 	var actors = req.db.get('actors');
-	return actors.find({deleted:true});
+	actors.find({dirty:true}, {}, function(err, docs){
+		callback(docs);
+	});
+}
+
+function getDeletedActors(req, callback){
+	var actors = req.db.get('actors');
+	actors.find({deleted:true}, {}, function(err, docs){
+		callback(docs);
+	});
 }
 
 function markDirty(req, actor){
@@ -32,6 +43,7 @@ function markDeleted(req, actor){
 
 exports.save = save;
 exports.getActors = getActors;
+exports.getDirtyActors = getDirtyActors;
 exports.getDeletedActors = getDeletedActors;
 exports.markDirty = markDirty;
 exports.markDeleted = markDeleted;
