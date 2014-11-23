@@ -19,12 +19,16 @@ function updateTheActor(){
 }
 
 function updateActor(currentActor) {
+
 	var mainDiv = document.getElementById("thisOne");
+	mainDiv.innerHTML = "";
+
+
 	var form = document.createElement("form");
 	form.className = "form";
 	form.id = "post-form";
 	form.setAttribute("role", "form");
-	form.setAttribute("action", "/add_actor");
+	form.setAttribute("action", "/update_actor");
 	form.setAttribute("method", "POST");
 
 	var formControl1 = document.createElement("div");
@@ -83,12 +87,20 @@ function updateActor(currentActor) {
 	formControl3.appendChild(actorAppTime);
 	form.appendChild(formControl3);
 
+	var submit = document.createElement("button");
+	submit.className = "btn btn-primary";
+	submit.setAttribute("type", "submit");
+	submit.innerHTML = "Submit"
+	form.appendChild(submit);
+
 
 	mainDiv.appendChild(form);
 }
 
 function newActor() {
 	var mainDiv = document.getElementById("thisOne");
+	mainDiv.innerHTML = "";
+
 	var form = document.createElement("form");
 	form.className = "form";
 	form.id = "post-form";
@@ -97,7 +109,7 @@ function newActor() {
 	form.setAttribute("method", "POST");
 
 	var formControl1 = document.createElement("div");
-	formControl1.className = "form-control";
+	formControl1.className = "form-group";
 	var actorName = document.createElement("label");
 	actorName.innerHTML = "Actor's Name";
 	var actorNameText = document.createElement("input");
@@ -112,7 +124,7 @@ function newActor() {
 
 
 	var formControl2 = document.createElement("div");
-	formControl2.className = "form-control";
+	formControl2.className = "form-group";
 	var actorBio = document.createElement("label");
 	actorBio.innerHTML = "Actor's Bio";
 
@@ -127,7 +139,7 @@ function newActor() {
 	form.appendChild(formControl2);
 
 	var formControl3 = document.createElement("div");
-	formControl3.className = "form-control";
+	formControl3.className = "form-group";
 	var actorPerf = document.createElement("label");
 	actorPerf.innerHTML = "Performances, Roles, and Appearance Times";
 
@@ -149,6 +161,13 @@ function newActor() {
 	formControl3.appendChild(actorRole);
 	formControl3.appendChild(actorAppTime);
 	form.appendChild(formControl3);
+
+	var submit = document.createElement("button");
+	submit.className = "btn btn-primary";
+	submit.setAttribute("type", "submit");
+	submit.innerHTML = "Submit";
+	form.appendChild(submit);
+	
 
 
 	mainDiv.appendChild(form);
