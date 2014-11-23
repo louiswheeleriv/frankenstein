@@ -1,8 +1,8 @@
 var mongoose = require('mongoose');
 
 var actorSchema = mongoose.Schema({
-	name : String,
-	bio : String,
+	actor_name : String,
+	actor_bio : String,
 	dirty : boolean,
 	deleted : boolean
 });

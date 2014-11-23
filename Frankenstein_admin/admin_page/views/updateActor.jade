@@ -6,23 +6,24 @@ block content
 		.container-fluid.search-panel
 			.row
 				.col-lg-12
+					script.
+						var allActors = !{allActors};
+
 					h1 Frankenstein
 					hr
 					h3 Pick an Actor
 					form.form(role='form')
-						select.form-control
-							option hello
-							option good bye
+						select.form-control#theActors
 						br
 						br
 						.btn-group(role='group')
-							button(type="submit").btn.btn-primary.btn-lg Update
-							button.btn.btn-danger(type='button')
+							button(type="button" onclick='updateTheActor();').btn.btn-primary.btn-lg Update
+							button.btn.btn-danger(type='button' onclick="removeActor();")
 								span.glyphicon.glyphicon-remove(aria-hidden='true')
 								|   Remove
 						br
 						br
-						button(type="button" onclick="doThis();").btn.btn-success
+						button(type="button" onclick="newActor();").btn.btn-success
 							span.glyphicon.glyphicon-plus(aria-hidden='true')
 							|   New Actor
 						br
