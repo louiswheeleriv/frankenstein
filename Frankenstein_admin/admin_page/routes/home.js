@@ -12,7 +12,7 @@ router.get('/home', function(req, res) {
 		console.log(data);
 	});
 
-	res.render('home', { title: 'Frankenstein' });
+	res.render('home.jade', { title: 'Frankenstein' });
 });
 
 // HERE LOUIS IS WHERE THE POST INFORMATION GOES
@@ -29,5 +29,27 @@ router.post('/add_actor', function(req, res) {
 
 	res.redirect('/');
 })
+
+router.get('/updateActor', function(req, res) {
+	var actor = 
+	{
+		"name":"Allen Shmoe",
+		"bio":"blah blah blah blah blah",
+		"dirty":false,
+		"deleted":false
+	}
+
+	actors.save(req, actor);
+
+	actors.getActors(req, function(response) {
+		console.log(response);
+		res.render('updateActor.jade', 
+			{
+				title: 'Frankenstein',
+				allActors:JSON.stringify(response)
+			}
+		);
+	})
+});
 
 module.exports = router;
