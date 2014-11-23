@@ -87,6 +87,14 @@ function updateActor(currentActor) {
 	formControl3.appendChild(actorAppTime);
 	form.appendChild(formControl3);
 
+	// <input type="hidden" name="Language" value="English">
+	// console.log(allActors[currentActor]._id);
+	var theID = document.createElement("input");
+	theID.setAttribute("type", "hidden");
+	theID.setAttribute("name", "_id");
+	theID.setAttribute("value", allActors[currentActor]._id);
+	form.appendChild(theID);
+
 	var submit = document.createElement("button");
 	submit.className = "btn btn-primary";
 	submit.setAttribute("type", "submit");

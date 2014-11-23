@@ -34,18 +34,20 @@ router.get('/updateActor', function(req, res) {
 
 /* POST for updating an already exisiting actor */
 router.post('/update_actor', function(req, res) {
+	console.log(req.body);
 	var actor = 
 	{
 		"name":req.body.actor_name,
 		"bio":req.body.actor_bio,
+		"_id":req.body._id
 		// "dirty":false,
 		// "deleted":false
 	}
 
 	actors.save(req, actor);
 
-	console.log("New actors: ");
 	actors.getActors(req, function(response) {
+		console.log("New actors: ");
 		console.log("***************************************************");
 		console.log(response);
 	})
