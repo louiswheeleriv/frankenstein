@@ -5,6 +5,7 @@
 function save(req, actor){
 	var actors = req.db.get('actors');
 	actor.dirty = true;
+	console.log(JSON.stringify(actor));
 	actors.update({"_id":actor._id}, actor, {upsert:true});
 }
 

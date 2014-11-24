@@ -13,9 +13,10 @@ block content
 					hr
 					h2 Pick an Actor
 					form.form(role='form' action="/remove_actor" method="POST")
-						select.form-control#theActors(name="actor_name")
+						select.form-control#theActors(name="actor_name" onchange="addID()")
 						br
 						br
+						input#hidden(type="hidden" name="_id" value="0")
 						button(type="button" onclick='updateTheActor();').btn.btn-primary.btn-lg Update
 						input.btn.btn-danger(type='submit' onclick="removeActor();" value="Remove")
 						br

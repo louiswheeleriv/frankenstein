@@ -17,6 +17,8 @@ router.get('/home', function(req, res) {
 router.get('/updateActor', function(req, res) {
 	
 	actors.getActors(req, function(response) {
+		console.log("response: ");
+		console.log(response);
 		res.render('updateActor.jade', 
 			{
 				title: 'Frankenstein',
@@ -53,8 +55,7 @@ router.post('/remove_actor', function(req, res) {
 	var actor = 
 	{
 		"_id":req.body._id,
-		"name":req.body.actor_name,
-		"bio":req.body.actor_bio
+		"name":req.body.actor_name
 	}
 
 	actors.markDeleted(req, actor);
@@ -79,7 +80,7 @@ router.post('/add_actor', function(req, res) {
 
 	actors.save(req, actor);
 
-	res.redirect('/');
+	res.redirect('/home');
 })
 
 // **********************************************************************

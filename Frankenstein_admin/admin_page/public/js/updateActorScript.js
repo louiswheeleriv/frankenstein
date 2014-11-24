@@ -2,7 +2,9 @@ var currActor = -1;
 
 $(document).ready(function() {
 
-	document.getElementById("theActors");
+	console.log(allActors);
+
+	var theActors = document.getElementById("theActors");
 
 	for (var i = 0; i < allActors.length; i++) {
 		var option = document.createElement("option");
@@ -11,6 +13,14 @@ $(document).ready(function() {
 	}
 
 });
+
+function addID() {
+	var hidden = getElementById	("hidden");
+	var yourSelect = document.getElementById( "theActors" );
+	var currentActor = yourSelect.selectedIndex;
+	console.log(allActors[currentActor]._id);
+	hidden.value = allActors[currentActor]._id;
+}
 
 function updateTheActor(){
 	var yourSelect = document.getElementById( "theActors" );
