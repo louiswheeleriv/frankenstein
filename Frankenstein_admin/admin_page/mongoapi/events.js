@@ -2,35 +2,48 @@
 // Plot Event API
 //
 
-function save(req, plotEvent){
-	var plotEvents = req.db.get('plotEvents');
-	plotEvents.update({"name":plotEvent.name}, plotEvent, {upsert:true});
+function save(req, event){
+	var events = req.db.get('events');
+	event.dirty = true;
+	events.update({"_id":event._id}, event, {upsert:true});
 }
 
-function getPlotEvents(req){
-	var plotEvents = req.db.get('plotEvents');
-	return plotEvents.find({deleted:false});
+function getEvents(req, callback){
+	var events = req.db.get('events');
+	events.find({deleted:false}, {}, function(err, docs){
+		callback(docs);
+	});
 }
 
-function getDeletedPlotEvents(req){
-	var plotEvents = req.db.get('plotEvents');
-	return plotEvents.find({deleted:true});
+function getDirtyEvents(req, callback){
+	var events = req.db.get('events');
+	events.find({dirty:true}, {}, function(err, docs){
+		callback(docs);
+	});
 }
 
-function markDirty(req, plotEvent){
-	var plotEvents = req.db.get('plotEvents');
-	plotEvent.dirty = true;
-	plotEvents.update({"name":plotEvent.name}, plotEvent);
+function getDeletedEvents(req, callback){
+	var events = req.db.get('events');
+	events.find({deleted:true}, {}, function(err, docs){
+		callback(docs);
+	});
 }
 
-function markDeleted(req, plotEvent){
-	var plotEvents = req.db.get('plotEvents');
-	plotEvent.deleted = true;
-	plotEvents.update({"name":plotEvent.name}, plotEvent);
+function markDirty(req, event){
+	var events = req.db.get('events');
+	event.dirty = true;
+	events.update({"_id":event._id}, event);
+}
+
+function markDeleted(req, event){
+	var events = req.db.get('events');
+	event.deleted = true;
+	events.update({"_id":event._id}, event);
 }
 
 exports.save = save;
-exports.getPlotEvents = getPlotEvents;
-exports.getDeletedPlotEvents = getDeletedPlotEvents;
+exports.getEvents = getEvents;
+exports.getDirtyEvents = getDirtyEvents;
+exports.getDeletedEvents = getDeletedEvents;
 exports.markDirty = markDirty;
 exports.markDeleted = markDeleted;

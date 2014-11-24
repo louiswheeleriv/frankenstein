@@ -32,13 +32,13 @@ function getDeletedActors(req, callback){
 function markDirty(req, actor){
 	var actors = req.db.get('actors');
 	actor.dirty = true;
-	actors.update({"name":actor.name}, actor);
+	actors.update({"_id":actor._id}, actor);
 }
 
 function markDeleted(req, actor){
 	var actors = req.db.get('actors');
 	actor.deleted = true;
-	actors.update({"name":actor.name}, actor);
+	actors.update({"_id":actor._id}, actor);
 }
 
 exports.save = save;

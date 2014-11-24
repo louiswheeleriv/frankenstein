@@ -3,34 +3,47 @@
 //
 
 function save(req, crew){
-	var crewCollection = req.db.get('crew');
-	crewCollection.update({"name":crew.name}, crew, {upsert:true});
+	var crews = req.db.get('crew');
+	crew.dirty = true;
+	crews.update({"_id":crew._id}, crew, {upsert:true});
 }
 
-function getCrew(req){
-	var crewCollection = req.db.get('crew');
-	return crewCollection.find({deleted:false});
+function getCrew(req, callback){
+	var crews = req.db.get('crew');
+	crews.find({deleted:false}, {}, function(err, docs){
+		callback(docs);
+	});
 }
 
-function getDeletedCrew(req){
-	var crewCollection = req.db.get('crew');
-	return crewCollection.find({deleted:true});
+function getDirtyCrew(req, callback){
+	var crews = req.db.get('crew');
+	crews.find({dirty:true}, {}, function(err, docs){
+		callback(docs);
+	});
+}
+
+function getDeletedCrew(req, callback){
+	var crews = req.db.get('crew');
+	crews.find({deleted:true}, {}, function(err, docs){
+		callback(docs);
+	});
 }
 
 function markDirty(req, crew){
-	var crewCollection = req.db.get('crew');
+	var crews = req.db.get('crew');
 	crew.dirty = true;
-	crewCollection.update({"name":crew.name}, crew);
+	crews.update({"_id":crew._id}, crew);
 }
 
 function markDeleted(req, crew){
-	var crewCollection = req.db.get('crew');
+	var crews = req.db.get('crew');
 	crew.deleted = true;
-	crewCollection.update({"name":crew.name}, crew);
+	crews.update({"_id":crew._id}, crew);
 }
 
 exports.save = save;
 exports.getCrew = getCrew;
+exports.getDirtyCrew = getDirtyCrew;
 exports.getDeletedCrew = getDeletedCrew;
 exports.markDirty = markDirty;
 exports.markDeleted = markDeleted;

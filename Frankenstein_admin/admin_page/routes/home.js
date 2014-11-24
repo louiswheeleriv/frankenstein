@@ -7,11 +7,6 @@ var actors = require('../mongoapi/actors');
 /* GET home page. */
 router.get('/home', function(req, res) {
 	var actorCollection = req.db.get('actors');
-	actorCollection.find({name:"Save Actor"}, {}, function(data){
-		console.log('data...');
-		console.log(data);
-	});
-
 	res.render('home.jade', { title: 'Frankenstein' });
 });
 
@@ -22,7 +17,6 @@ router.get('/home', function(req, res) {
 router.get('/updateActor', function(req, res) {
 	
 	actors.getActors(req, function(response) {
-		console.log(response);
 		res.render('updateActor.jade', 
 			{
 				title: 'Frankenstein',
@@ -34,14 +28,13 @@ router.get('/updateActor', function(req, res) {
 
 /* POST for updating an already exisiting actor */
 router.post('/update_actor', function(req, res) {
-	console.log(req.body);
 	var actor = 
 	{
 		"name":req.body.actor_name,
 		"bio":req.body.actor_bio,
-		"_id":req.body._id
-		// "dirty":false,
-		// "deleted":false
+		"_id":req.body._id,
+		"dirty":false,
+		"deleted":false
 	}
 
 	actors.save(req, actor);
@@ -59,14 +52,16 @@ router.post('/update_actor', function(req, res) {
 router.post('/remove_actor', function(req, res) {
 	var actor = 
 	{
+		"_id":req.body._id,
 		"name":req.body.actor_name,
-		"bio":req.body.actor_bio,
-		// "dirty":false,
-		// "deleted":false
+		"bio":req.body.actor_bio
 	}
+
+	actors.markDeleted(req, actor);
 
 	// remove the actor, what should be given to be deleted????
 	console.log("removed " + actor.name);
+	console.log("id: " + actor._id);
 
 	res.redirect('/updateActor');
 
