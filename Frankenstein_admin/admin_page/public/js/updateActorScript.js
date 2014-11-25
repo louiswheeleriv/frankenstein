@@ -1,19 +1,19 @@
-var currActor = -1;
-
 $(document).ready(function() {
 
 	console.log(allActors);
 
 	var theActors = document.getElementById("theActors");
-	var hidden = document.getElementById("idHere");
+	var hidden = document.getElementById("hidden");
 
 	for (var i = allActors.length-1; i >= 0; i--) {
 		var option = document.createElement("option");
-		option.innerHTML = allActors[i].name;
+		option.innerHTML = allActors[i].actor_name;
 		theActors.appendChild(option);
 	}
 
-	hidden.value = allActors[0]._id;
+	if(allActors.length > 0) {
+		hidden.value = allActors[0]._id;
+	}
 
 });
 
@@ -54,7 +54,7 @@ function updateActor(currentActor) {
 	actorNameText.setAttribute("placeholder", "Name");
 	actorNameText.setAttribute("id", "name");
 	actorNameText.setAttribute("name", "actor_name");
-	actorNameText.setAttribute("value", allActors[currentActor].name);
+	actorNameText.setAttribute("value", allActors[currentActor].actor_name);
 
 	formControl1.appendChild(actorName);
 	formControl1.appendChild(actorNameText);
@@ -71,7 +71,7 @@ function updateActor(currentActor) {
 	actorBioText.setAttribute("placeholder", "Bio");
 	actorBioText.setAttribute("id", "bio");
 	actorBioText.setAttribute("name", "actor_bio");
-	actorBioText.innerHTML = allActors[currentActor].bio;
+	actorBioText.innerHTML = allActors[currentActor].actor_bio;
 
 	formControl2.appendChild(actorBio);
 	formControl2.appendChild(actorBioText);

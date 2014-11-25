@@ -27,7 +27,7 @@ router.get('/home', function(req, res) {
 // **********************************************************************
 
 
-/* GET for the update actor page*/
+/* GET for the update actor page */
 router.get('/updateActor', function(req, res) {
 	
 	Actor.getActors(function(response) {
@@ -57,6 +57,8 @@ router.post('/update_actor', function(req, res) {
 			"actor_deleted" : false
 		}
 	);
+	console.log("new actor: ");
+	console.log(a);
 
 	a.saveActor();
 
@@ -67,17 +69,18 @@ router.post('/update_actor', function(req, res) {
 router.post('/remove_actor', function(req, res) {
 	var id = req.body._id;
 	var name = req.body.actor_name;
-	var bio = req.body.actor_bio;
 
 	var a = new Actor( 
 		{
 			"_id" : id,
 			"actor_name" : name,
-			"actor_bio" : bio,
 			"actor_dirty" : false,
 			"actor_deleted" : false
 		}
 	);
+
+	console.log("actor to delete: ");
+	console.log(a);
 
 	a.markDeleted();
 
@@ -110,18 +113,82 @@ router.post('/add_actor', function(req, res) {
 /* GET for the update actor page*/
 router.get('/updateCrew', function(req, res) {
 
-	// actors.getActors(req, function(response) {
-	// 	console.log(response);
-	// 	res.render('updateActor.jade', 
-	// 		{
-	// 			title: 'Frankenstein',
-	// 			allActors:JSON.stringify(response)
-	// 		}
-	// 	);
-	// })
+	Crew.getCrew(function(response) {
+		console.log("response: ");
+		console.log(response);
+		res.render('updateCrew.jade', 
+			{
+				title: 'Frankenstein',
+				allCrew:JSON.stringify(response)
+			}
+		);
+	})
 
-	res.render('updateCrew.jade', {title: 'Frankenstein'});
 });
+
+/* POST for updating an already exisiting actor */
+router.post('/update_crew', function(req, res) {
+	var id = req.body._id;
+	var name = req.body.crew_name;
+	var bio = req.body.crew_bio;
+
+	var a = new Crew(
+		{
+			"_id" : id,
+			"crew_name" : name,
+			"crew_bio" : bio,
+			"crew_dirty" : false,
+			"crew_deleted" : false
+		}
+	);
+
+	a.saveCrew();
+
+	res.redirect('/home');
+})
+
+/* POST for removing an already exisiting actor */
+router.post('/remove_crew', function(req, res) {
+	var id = req.body._id;
+	var name = req.body.actor_name;
+
+	var a = new Crew( 
+		{
+			"_id" : id,
+			"crew_name" : name,
+			"crew_dirty" : false,
+			"crew_deleted" : false
+		}
+	);
+
+	a.markDeleted();
+
+	res.redirect('/home');
+
+});
+
+// Post for adding a new actor
+router.post('/add_crew', function(req, res) {
+	var name = req.body.crew_name;
+	var bio = req.body.crew_bio;
+
+	var a = new Crew(
+		{
+			"_id" : -1,
+			"crew_name" : name,
+			"crew_bio" : bio,
+			"crew_dirty" : false,
+			"crew_deleted" : false
+		}
+	);
+
+	a.saveCrew();
+
+	res.redirect('/home');
+});
+
+// **********************************************************************
+
 
 
 

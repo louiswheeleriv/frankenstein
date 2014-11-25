@@ -20,6 +20,7 @@ actorSchema.methods.saveActor = function(){
 			actor.save();
 		});
 	}else{
+		console.log("please go here");
 		this.save();
 	}
 }
