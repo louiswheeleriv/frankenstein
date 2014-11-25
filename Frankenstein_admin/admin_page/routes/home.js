@@ -25,7 +25,7 @@ router.get('/home', function(req, res) {
 /* GET for the update actor page*/
 router.get('/updateActor', function(req, res) {
 	
-	actors.getActors(req, function(response) {
+	Actor.getActors(function(response) {
 		console.log("response: ");
 		console.log(response);
 		res.render('updateActor.jade', 

@@ -5,16 +5,14 @@ $(document).ready(function() {
 	console.log(allActors);
 
 	var theActors = document.getElementById("theActors");
-	var hidden = document.getElementById("idHere");
-	for (var i = allActors.length-1; i > 0; i--) {
+	var hidden = document.getElementById("hidden");
+	for (var i = allActors.length-1; i >= 0; i--) {
 		var option = document.createElement("option");
-		option.innerHTML = allActors[i].name;
-		hidden.setAttribute("value", allActors[currentActor]._id);
+		option.innerHTML = allActors[i].actor_name;
 		// hidden.value = allActors[currentActor]._id;
 		theActors.appendChild(option);
-		hidden.value = allActors[0]._id;
 	}
-
+	hidden.value = allActors[0]._id;
 });
 
 function addID() {

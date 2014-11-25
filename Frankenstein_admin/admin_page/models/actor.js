@@ -10,14 +10,22 @@ var actorSchema = mongoose.Schema({
 
 // Instance functions
 
-var Actor = mongoose.model('Actor', actorSchema);
-
 actorSchema.methods.saveActor = function(){
+	var actor = this;
+
 	if(this._id == -1){
-		var numActors = Actor.find({}).size();
-		this._id = numActors;
+		var numActors;
+
+		this.model('Actor').count({}, function(err, count){
+			numActors = count;
+			console.log('numActors = ' + numActors);
+			actor._id = numActors;
+			actor.save();
+		});
+
+	}else{
+		this.save();
 	}
-	this.save();
 }
 
 actorSchema.methods.markDirty = function(){
@@ -33,7 +41,9 @@ actorSchema.methods.markDeleted = function(){
 // Static functions
 
 actorSchema.statics.getActors = function(callback){
-	return this.find({"actor_deleted" : false}, callback);
+	this.find({"actor_deleted" : false}, function(err, actors){
+		callback(actors);
+	});
 }
 
 actorSchema.statics.getDirtyActors = function(callback){
