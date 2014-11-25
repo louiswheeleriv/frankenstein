@@ -5,11 +5,12 @@ $(document).ready(function() {
 	console.log(allActors);
 
 	var theActors = document.getElementById("theActors");
-	var hidden = document.getElementById("hidden");
-
-	for (var i = 0; i < allActors.length; i++) {
+	var hidden = document.getElementById("idHere");
+	for (var i = allActors.length-1; i > 0; i--) {
 		var option = document.createElement("option");
 		option.innerHTML = allActors[i].name;
+		hidden.setAttribute("value", allActors[currentActor]._id);
+		// hidden.value = allActors[currentActor]._id;
 		theActors.appendChild(option);
 		hidden.value = allActors[0]._id;
 	}
@@ -21,7 +22,8 @@ function addID() {
 	var yourSelect = document.getElementById( "theActors" );
 	var currentActor = yourSelect.selectedIndex;
 	console.log(allActors[currentActor]._id);
-	hidden.value = allActors[currentActor]._id;
+	hidden.setAttribute("value", allActors[currentActor]._id);
+	// hidden.value = allActors[currentActor]._id;
 }
 
 function updateTheActor(){
