@@ -6,9 +6,14 @@ body, html {
 }
 
 h1,h2,h3,h4 {
-    font-family: "IM Fell DW Pica", serif;
+    font-family: 'IM Fell DW Pica', serif;
     color: green;
 }
+h1 { font-size: 3em !important; }
+h2 { font-size: 1.5em; }
+h3 { font-size: 1.17em; }
+h5 { font-size: .83em; }
+h6 { font-size: .75em; }
 
 
 #wrapper {
@@ -47,7 +52,8 @@ h1,h2,h3,h4 {
     height: 50%;
     width: 100%;
     margin: 0;
-    padding-left: 30px;
+    padding-left: 50px;
+    /*padding: 50px;*/
     white-space: normal;
 }
 
@@ -56,9 +62,9 @@ h1,h2,h3,h4 {
     height: 50%;
     width: 100%;
     margin: auto;
-    padding-left: 30px;
-    padding-top: 5px;
-    border-top: solid black;
+    padding-left: 50px;
+    padding-top: 10px;
+    border-top: 1px solid gray;
 }
 
 
@@ -72,7 +78,7 @@ h1,h2,h3,h4 {
     margin: 0;
     padding: 0;
     list-style: none;
-    font-family: "IM Fell DW Pica", serif;
+    font-family: 'IM Fell DW Pica', serif;
 }
 
 .sidebar-nav li {
@@ -119,24 +125,13 @@ h1,h2,h3,h4 {
         padding-left: 250px;
     }
 
-    #wrapper.toggled {
-        padding-left: 0;
-    }
-
     #sidebar-wrapper {
         width: 250px;
     }
 
-    #wrapper.toggled #sidebar-wrapper {
-        width: 0;
-    }
 
-    #page-content-wrapper {
+    /*#page-content-wrapper {
         padding: 20px;
-    }
+    }*/
 
-    #wrapper.toggled #page-content-wrapper {
-        position: relative;
-        margin-right: 0;
-    }
 }
