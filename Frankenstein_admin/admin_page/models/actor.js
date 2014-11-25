@@ -12,17 +12,13 @@ var actorSchema = mongoose.Schema({
 
 actorSchema.methods.saveActor = function(){
 	var actor = this;
-
 	if(this._id == -1){
 		var numActors;
-
 		this.model('Actor').count({}, function(err, count){
 			numActors = count;
-			console.log('numActors = ' + numActors);
 			actor._id = numActors;
 			actor.save();
 		});
-
 	}else{
 		this.save();
 	}
@@ -47,11 +43,15 @@ actorSchema.statics.getActors = function(callback){
 }
 
 actorSchema.statics.getDirtyActors = function(callback){
-	return this.find({"actor_dirty" : true}, callback);
+	this.find({"actor_dirty" : true}, function(err, actors){
+		callback(actors);
+	});
 }
 
 actorSchema.statics.getDeletedActors = function(callback){
-	return this.find({"actor_deleted" : true}, callback);
+	this.find({"actor_deleted" : true}, function(err, actors){
+		callback(actors);
+	});
 }
 
 module.exports = mongoose.model('Actor', actorSchema);

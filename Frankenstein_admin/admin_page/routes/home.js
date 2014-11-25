@@ -1,10 +1,15 @@
 var express = require('express');
 var router = express.Router();
 
-// Access the functions in mongoapi.js
-var actors = require('../mongoapi/actors');
+// Access the mongoose models for our objects
 var Actor = require('../models/actor');
+var Crew = require('../models/crew');
+var Stage = require('../models/stage');
+var Production = require('../models/production');
+var Event = require('../models/event');
+var Performance = require('../models/event');
 
+// Connect mongoose to the database
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/admindb', function(err){
 	if(err)
@@ -48,46 +53,33 @@ router.post('/update_actor', function(req, res) {
 			"_id" : id,
 			"actor_name" : name,
 			"actor_bio" : bio,
-			"dirty" : false,
-			"deleted" : false
+			"actor_dirty" : false,
+			"actor_deleted" : false
 		}
 	);
 
-	a.save(function(err){
-		if(err)
-			console.log(err);
-	});
-
-	/*
-	actors.save(req, a);
-
-	actors.getActors(req, function(response) {
-		console.log("New actors: ");
-		console.log("***************************************************");
-		console.log(response);
-	})
-	*/
-
+	a.saveActor();
 
 	res.redirect('/home');
 })
 
 /* POST for removing an already exisiting actor */
 router.post('/remove_actor', function(req, res) {
+	var id = req.body._id;
+	var name = req.body.actor_name;
+	var bio = req.body.actor_bio;
 
-	var actor = 
-	{
-		"_id":req.body._id,
-		"name":req.body.actor_name
-	}
+	var a = new Actor( 
+		{
+			"_id" : id,
+			"actor_name" : name,
+			"actor_bio" : bio,
+			"actor_dirty" : false,
+			"actor_deleted" : false
+		}
+	);
 
-	console.log(actor);
-
-	actors.markDeleted(req, actor);
-
-	// remove the actor, what should be given to be deleted????
-	console.log("removed " + actor.name);
-	console.log("id: " + actor._id);
+	a.markDeleted();
 
 	res.redirect('/home');
 
@@ -109,8 +101,6 @@ router.post('/add_actor', function(req, res) {
 	);
 
 	a.saveActor();
-
-	//actors.save(req, actor);
 
 	res.redirect('/home');
 });
