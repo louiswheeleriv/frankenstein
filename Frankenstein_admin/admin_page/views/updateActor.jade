@@ -11,13 +11,13 @@ block content
 					h1 Frankenstein
 					hr
 					h2 Pick an Actor
-					form.form(role='form' action="/remove_actor" method="POST")
+					form.form(role='form' action="/remove_actor" method="POST" onsubmit="return confirm('Do you really want to delete this actor?');")
 						select.form-control#theActors(name="actor_name" onchange="addID()")
 						br
 						br
 						input#hidden(type="hidden" name="_id" value="aValue")
 						button(type="button" onclick='updateTheActor();').btn.btn-primary.btn-lg Update
-						input.btn.btn-danger(type='submit' onclick="removeActor();" value="Remove")
+						input.btn.btn-danger(type='submit' value="Remove")
 						br
 						br
 						button(type="button" onclick="newActor();").btn.btn-success

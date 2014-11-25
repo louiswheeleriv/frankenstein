@@ -5,14 +5,16 @@ $(document).ready(function() {
 	console.log(allActors);
 
 	var theActors = document.getElementById("theActors");
-	var hidden = document.getElementById("hidden");
+	var hidden = document.getElementById("idHere");
+
 	for (var i = allActors.length-1; i >= 0; i--) {
 		var option = document.createElement("option");
-		option.innerHTML = allActors[i].actor_name;
-		// hidden.value = allActors[currentActor]._id;
+		option.innerHTML = allActors[i].name;
 		theActors.appendChild(option);
 	}
+
 	hidden.value = allActors[0]._id;
+
 });
 
 function addID() {
@@ -191,14 +193,4 @@ function newActor() {
 
 
 	mainDiv.appendChild(form);
-}
-
-
-function removeActor() {
-	var yourSelect = document.getElementById( "theActors" );
-	var currentActor = yourSelect.selectedIndex;
-
-	alert("Are you sure you want to permantly remove " + allActors[currentActor].name + "?")
-
-	
 }
