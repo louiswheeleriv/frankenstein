@@ -20,6 +20,7 @@ actorSchema.methods.saveActor = function(){
 			actor.save();
 		});
 	}else{
+		console.log(actor);
 		this.model('Actor').findByIdAndUpdate(this._id, {
 			"actor_name" : this.actor_name,
 			"actor_bio" : this.actor_bio,

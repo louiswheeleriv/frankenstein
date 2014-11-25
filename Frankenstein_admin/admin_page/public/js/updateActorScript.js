@@ -5,14 +5,14 @@ $(document).ready(function() {
 	var theActors = document.getElementById("theActors");
 	var hidden = document.getElementById("hidden");
 
-	for (var i = allActors.length-1; i >= 0; i--) {
+	for (var i = 0; i < allActors.length; i++) {
 		var option = document.createElement("option");
 		option.innerHTML = allActors[i].actor_name;
 		theActors.appendChild(option);
 	}
 
 	if(allActors.length > 0) {
-		hidden.value = allActors[0]._id;
+		hidden.value = allActors[allActors.length-1]._id;
 	}
 
 });
@@ -29,6 +29,7 @@ function addID() {
 function updateTheActor(){
 	var yourSelect = document.getElementById( "theActors" );
 	currentActor = yourSelect.selectedIndex;
+	console.log(currentActor);
 	updateActor(currentActor);
 }
 

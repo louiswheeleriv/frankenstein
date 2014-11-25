@@ -5,14 +5,14 @@ $(document).ready(function() {
 	var theEvent = document.getElementById("theEvent");
 	var hidden = document.getElementById("hidden");
 
-	for (var i = allEvents.length-1; i >= 0; i--) {
+	for (var i = 0; i < allEvents.length; i++) {
 		var option = document.createElement("option");
 		option.innerHTML = allEvents[i].event_name;
 		theEvent.appendChild(option);
 	}
 
 	if(allEvents.length > 0) {
-		hidden.value = allEvents[0]._id;
+		hidden.value = allEvents[allEvents.length-1]._id;
 	}
 
 });
