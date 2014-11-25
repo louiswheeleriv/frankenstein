@@ -5,8 +5,37 @@
 function save(req, actor){
 	var actors = req.db.get('actors');
 	actor.dirty = true;
-	console.log(JSON.stringify(actor));
+
+	
+
+	var present = actors.find({"_id" : actor._id}).limit(1).size();
+
+	if(present == 0){
+		console.log('NOT FOUND IN DB, INSERT');
+	}else if(present == 1){
+		console.log('MATCH FOUND IN DB, UPDATE');
+	}
+	
 	actors.update({"_id":actor._id}, actor, {upsert:true});
+}
+
+function insert(actors, actor){
+	while(1){
+		var cursor = actors.find({}, {_id: 1}).sort(_id).limit(1);
+		var seq = cursor.hasNext() ? cursor.next()._id + 1 : 1;
+		actor._id = seq;
+
+		var results = actors.insert(actor);
+
+		if(results.hasWriteError()){
+			if(results.writeError.code == 11000 /* dup key */ )
+				continue;
+			else
+				console.log('*** Unexpected error inserting data: ' + tojson(results));
+		}
+
+		break;
+	}
 }
 
 function getActors(req, callback){

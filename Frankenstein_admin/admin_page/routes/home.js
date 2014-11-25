@@ -3,6 +3,15 @@ var router = express.Router();
 
 // Access the functions in mongoapi.js
 var actors = require('../mongoapi/actors');
+var Actor = require('../models/actor');
+
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/admindb', function(err){
+	if(err)
+		console.log('*** Connection error: ' + err);
+	else
+		console.log('*** Mongoose connected successfully');
+});
 
 /* GET home page. */
 router.get('/home', function(req, res) {
@@ -30,22 +39,35 @@ router.get('/updateActor', function(req, res) {
 
 /* POST for updating an already exisiting actor */
 router.post('/update_actor', function(req, res) {
-	var actor = 
-	{
-		"name":req.body.actor_name,
-		"bio":req.body.actor_bio,
-		"_id":req.body._id,
-		"dirty":false,
-		"deleted":false
-	}
+	var id = req.body._id;
+	var name = req.body.actor_name;
+	var bio = req.body.actor_bio;
 
-	actors.save(req, actor);
+	var a = new Actor(
+		{
+			"_id" : id,
+			"actor_name" : name,
+			"actor_bio" : bio,
+			"dirty" : false,
+			"deleted" : false
+		}
+	);
+
+	a.save(function(err){
+		if(err)
+			console.log(err);
+	});
+
+	/*
+	actors.save(req, a);
 
 	actors.getActors(req, function(response) {
 		console.log("New actors: ");
 		console.log("***************************************************");
 		console.log(response);
 	})
+	*/
+
 
 	res.redirect('/home');
 })
@@ -69,22 +91,29 @@ router.post('/remove_actor', function(req, res) {
 
 	res.redirect('/home');
 
-})
+});
 
 // Post for adding a new actor
 router.post('/add_actor', function(req, res) {
-	var actor = 
-	{
-		"name":req.body.actor_name,
-		"bio":req.body.actor_bio,
-		"dirty":false,
-		"deleted":false
-	}
+	var name = req.body.actor_name;
+	var bio = req.body.actor_bio;
 
-	actors.save(req, actor);
+	var a = new Actor(
+		{
+			"_id" : -1,
+			"actor_name" : name,
+			"actor_bio" : bio,
+			"actor_dirty" : false,
+			"actor_deleted" : false
+		}
+	);
+
+	a.saveActor();
+
+	//actors.save(req, actor);
 
 	res.redirect('/home');
-})
+});
 
 // **********************************************************************
 
