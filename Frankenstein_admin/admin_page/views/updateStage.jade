@@ -1,0 +1,34 @@
+extends layout
+
+block content
+	#page-content-wrapper
+		.container-fluid.search-panel
+			.row
+				.col-lg-12
+					script.
+						var allStages = !{allStages};
+
+					h1 Frankenstein
+					hr
+					h2 Pick a Stage Location
+					form.form(role='form' action="/remove_stage" method="POST" onsubmit="return confirm('Do you really want to delete this stage location?');")
+						select.form-control#theStage(name="stage_name" onchange="addID()")
+						br
+						br
+						input#hidden(type="hidden" name="_id" value="aValue")
+						button(type="button" onclick='updateTheStage();').btn.btn-primary.btn-lg Update
+						input.btn.btn-danger(type='submit' value="Remove")
+						br
+						br
+						button(type="button" onclick="newStage();").btn.btn-success
+							span.glyphicon.glyphicon-plus(aria-hidden='true')
+							|   New Stage Location
+						br
+						br
+						
+
+		.container-fluid.result-panel
+			.row
+				.col-lg-12#thisOne
+
+	script(type='text/javascript' src="/js/updateStageScript.js")

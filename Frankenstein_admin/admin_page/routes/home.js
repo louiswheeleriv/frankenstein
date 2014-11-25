@@ -189,6 +189,173 @@ router.post('/add_crew', function(req, res) {
 
 // **********************************************************************
 
+/* GET for the update stage page */
+router.get('/updateStage', function(req, res) {
+	
+	Stage.getStages(function(response) {
+		console.log("response: ");
+		console.log(response);
+		res.render('updateStage.jade', 
+			{
+				title: 'Frankenstein',
+				allStages:JSON.stringify(response)
+			}
+		);
+	})
+});
+
+
+/* POST for updating an already exisiting actor */
+router.post('/update_stage', function(req, res) {
+	var id = req.body._id;
+	var location = req.body.stage_location;
+	var description = req.body.stage_description;
+
+	var a = new Stage(
+		{
+			"_id" : id,
+			"stage_location" : location,
+			"stage_description" : description,
+			"stage_dirty" : false,
+			"stage_deleted" : false
+		}
+	);
+	console.log("new stage: ");
+	console.log(a);
+
+	a.saveStage();
+
+	res.redirect('/home');
+})
+
+/* POST for removing an already exisiting actor */
+router.post('/remove_stage', function(req, res) {
+	var id = req.body._id;
+	var location = req.body.actor_name;
+
+	var a = new Stage( 
+		{
+			"_id" : id,
+			"stage_location" : location,
+			"stage_dirty" : false,
+			"stage_deleted" : false
+		}
+	);
+
+	console.log("stage to delete: ");
+	console.log(a);
+
+	a.markDeleted();
+
+	res.redirect('/home');
+
+});
+
+// Post for adding a new actor
+router.post('/add_stage', function(req, res) {
+	var location = req.body.stage_location;
+	var description = req.body.stage_description;
+
+	var a = new Stage(
+		{
+			"_id" : -1,
+			"stage_location" : location,
+			"stage_description" : description,
+			"stage_dirty" : false,
+			"stage_deleted" : false
+		}
+	);
+
+	a.saveStage();
+
+	res.redirect('/home');
+});
+
+// **********************************************************************
+
+/* GET for the update stage page */
+router.get('/updateEvent', function(req, res) {
+	
+	Event.getEvents(function(response) {
+		console.log("response: ");
+		console.log(response);
+		res.render('updateSigEvent.jade', 
+			{
+				title: 'Frankenstein',
+				allEvents:JSON.stringify(response)
+			}
+		);
+	})
+});
+
+/* POST for updating an already exisiting actor */
+router.post('/update_event', function(req, res) {
+	var id = req.body._id;
+	var name = req.body.event_name;
+
+	var a = new Event(
+		{
+			"_id" : id,
+			"event_name" : name,
+			"event_dirty" : false,
+			"event_deleted" : false
+		}
+	);
+	console.log("new event: ");
+	console.log(a);
+
+	a.saveEvent();
+
+	res.redirect('/home');
+})
+
+/* POST for removing an already exisiting actor */
+router.post('/remove_event', function(req, res) {
+	var id = req.body._id;
+	var name = req.body.event_name;
+
+	var a = new Event(
+		{
+			"_id" : id,
+			"event_name" : name,
+			"event_dirty" : false,
+			"event_deleted" : false
+		}
+	);
+
+	console.log("event to delete: ");
+	console.log(a);
+
+	a.markDeleted();
+
+	res.redirect('/home');
+
+});
+
+// Post for adding a new actor
+router.post('/add_event', function(req, res) {
+	var name = req.body.event_name;
+
+	console.log(name);
+
+	var a = new Event(
+		{
+			"_id" : -1,
+			"event_name" : name,
+			"event_dirty" : false,
+			"event_deleted" : false
+		}
+	);
+
+	console.log(a);
+
+	a.saveEvent();
+
+	res.redirect('/home');
+});
+
+// **********************************************************************
+
 
 
 
