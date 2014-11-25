@@ -20,19 +20,30 @@ actorSchema.methods.saveActor = function(){
 			actor.save();
 		});
 	}else{
-		console.log("please go here");
-		this.save();
+		this.model('Actor').findByIdAndUpdate(this._id, {
+			"actor_name" : this.actor_name,
+			"actor_bio" : this.actor_bio,
+			"actor_dirty" : this.actor_dirty,
+			"actor_deleted" : this.actor_deleted
+		}, function(err){
+			if(err)
+				console.log(err);
+		});
 	}
 }
 
 actorSchema.methods.markDirty = function(){
-	this.actor_dirty = true;
-	this.save();
+	this.model('Actor').findByIdAndUpdate(this._id, {"actor_dirty" : true}, function(err){
+		if(err)
+			console.log(err);
+	});
 }
 
 actorSchema.methods.markDeleted = function(){
-	this.actor_deleted = true;
-	this.save();
+	this.model('Actor').findByIdAndUpdate(this._id, {"actor_deleted" : true}, function(err){
+		if(err)
+			console.log(err);
+	});
 }
 
 // Static functions

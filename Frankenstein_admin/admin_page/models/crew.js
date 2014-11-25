@@ -20,18 +20,30 @@ crewSchema.methods.saveCrew = function(){
 			crew.save();
 		});
 	}else{
-		this.save();
+		this.model('Crew').findByIdAndUpdate(this._id, {
+			"crew_name" : this.crew_name,
+			"crew_bio" : this.crew_bio,
+			"crew_dirty" : this.crew_dirty,
+			"crew_deleted" : this.crew_deleted
+		}, function(err){
+			if(err)
+				console.log(err);
+		});
 	}
 }
 
 crewSchema.methods.markDirty = function(){
-	this.crew_dirty = true;
-	this.save();
+	this.model('Crew').findByIdAndUpdate(this._id, {"crew_dirty" : true}, function(err){
+		if(err)
+			console.log(err);
+	});
 }
 
 crewSchema.methods.markDeleted = function(){
-	this.crew_deleted = true;
-	this.save();
+	this.model('Crew').findByIdAndUpdate(this._id, {"crew_deleted" : true}, function(err){
+		if(err)
+			console.log(err);
+	});
 }
 
 // Static functions

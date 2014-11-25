@@ -19,18 +19,29 @@ eventSchema.methods.saveEvent = function(){
 			event.save();
 		});
 	}else{
-		this.save();
+		this.model('Event').findByIdAndUpdate(this._id, {
+			"event_name" : this.event_name,
+			"event_dirty" : this.event_dirty,
+			"event_deleted" : this.event_deleted
+		}, function(err){
+			if(err)
+				console.log(err);
+		});
 	}
 }
 
 eventSchema.methods.markDirty = function(){
-	this.event_dirty = true;
-	this.save();
+	this.model('Event').findByIdAndUpdate(this._id, {"event_dirty" : true}, function(err){
+		if(err)
+			console.log(err);
+	});
 }
 
 eventSchema.methods.markDeleted = function(){
-	this.event_deleted = true;
-	this.save();
+	this.model('Event').findByIdAndUpdate(this._id, {"event_deleted" : true}, function(err){
+		if(err)
+			console.log(err);
+	});
 }
 
 // Static functions

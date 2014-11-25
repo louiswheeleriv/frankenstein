@@ -19,18 +19,29 @@ productionSchema.methods.saveProduction = function(){
 			production.save();
 		});
 	}else{
-		this.save();
+		this.model('Production').findByIdAndUpdate(this._id, {
+			"production_name" : this.production_name,
+			"production_dirty" : this.production_dirty,
+			"production_deleted" : this.production_deleted
+		}, function(err){
+			if(err)
+				console.log(err);
+		});
 	}
 }
 
 productionSchema.methods.markDirty = function(){
-	this.production_dirty = true;
-	this.save();
+	this.model('Production').findByIdAndUpdate(this._id, {"production_dirty" : true}, function(err){
+		if(err)
+			console.log(err);
+	});
 }
 
 productionSchema.methods.markDeleted = function(){
-	this.production_deleted = true;
-	this.save();
+	this.model('Production').findByIdAndUpdate(this._id, {"production_dirty" : true}, function(err){
+		if(err)
+			console.log(err);
+	});
 }
 
 // Static functions

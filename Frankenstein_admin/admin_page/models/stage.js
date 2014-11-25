@@ -20,18 +20,30 @@ stageSchema.methods.saveStage = function(){
 			stage.save();
 		});
 	}else{
-		this.save();
+		this.model('Stage').findByIdAndUpdate(this._id, {
+			"stage_location" : this.stage_location,
+			"stage_description" : this.stage_description,
+			"stage_dirty" : this.stage_dirty,
+			"stage_deleted" : this.stage_deleted
+		}, function(err){
+			if(err)
+				console.log(err);
+		});
 	}
 }
 
 stageSchema.methods.markDirty = function(){
-	this.stage_dirty = true;
-	this.save();
+	this.model('Stage').findByIdAndUpdate(this._id, {"stage_dirty" : true}, function(err){
+		if(err)
+			console.log(err);
+	});
 }
 
 stageSchema.methods.markDeleted = function(){
-	this.stage_deleted = true;
-	this.save();
+	this.model('Stage').findByIdAndUpdate(this._id, {"stage_deleted" : true}, function(err){
+		if(err)
+			console.log(err);
+	});
 }
 
 // Static functions

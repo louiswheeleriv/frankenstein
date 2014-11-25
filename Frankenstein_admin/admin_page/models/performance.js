@@ -22,18 +22,32 @@ performanceSchema.methods.savePerformance = function(){
 			performance.save();
 		});
 	}else{
-		this.save();
+		this.model('Performance').findByIdAndUpdate(this._id, {
+			"performance_info" : this.performance_info,
+			"performance_stage_id" : this.performance_stage_id,
+			"performance_start_time" : this.performance_start_time,
+			"performance_production_id" : this.performance_production_id,
+			"performance_dirty" : this.performance_dirty,
+			"performance_deleted" : this.performance_deleted
+		}, function(err){
+			if(err)
+				console.log(err);
+		});
 	}
 }
 
 performanceSchema.methods.markDirty = function(){
-	this.performance_dirty = true;
-	this.save();
+	this.model('Performance').findByIdAndUpdate(this._id, {"performance_dirty" : true}, function(err){
+		if(err)
+			console.log(err);
+	});
 }
 
 performanceSchema.methods.markDeleted = function(){
-	this.performance_deleted = true;
-	this.save();
+	this.model('Performance').findByIdAndUpdate(this._id, {"performance_deleted" : true}, function(err){
+		if(err)
+			console.log(err);
+	});
 }
 
 // Static functions
