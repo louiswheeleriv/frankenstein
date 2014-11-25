@@ -47,16 +47,19 @@ router.post('/update_actor', function(req, res) {
 		console.log(response);
 	})
 
-	res.redirect('/updateActor');
+	res.redirect('/home');
 })
 
 /* POST for removing an already exisiting actor */
 router.post('/remove_actor', function(req, res) {
+
 	var actor = 
 	{
 		"_id":req.body._id,
 		"name":req.body.actor_name
 	}
+
+	console.log(actor);
 
 	actors.markDeleted(req, actor);
 
@@ -64,7 +67,7 @@ router.post('/remove_actor', function(req, res) {
 	console.log("removed " + actor.name);
 	console.log("id: " + actor._id);
 
-	res.redirect('/updateActor');
+	res.redirect('/home');
 
 })
 
