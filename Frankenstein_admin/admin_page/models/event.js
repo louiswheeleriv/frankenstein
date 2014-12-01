@@ -14,7 +14,7 @@ eventSchema.methods.saveEvent = function(){
 	if(this._id == -1){
 		var numEvents;
 		this.model('Event').count({}, function(err, count){
-			numEvents = count;
+			numEvents = count+1;
 			event._id = numEvents;
 			event.save();
 		});

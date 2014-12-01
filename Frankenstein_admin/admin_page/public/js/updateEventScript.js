@@ -21,7 +21,6 @@ function addID() {
 	var hidden = document.getElementById("hidden");
 	var yourSelect = document.getElementById( "theEvent" );
 	var currentEvent = yourSelect.selectedIndex;
-	console.log(allEvents[currentEvent]._id);
 	hidden.setAttribute("value", allEvents[currentEvent]._id);
 }
 
@@ -82,7 +81,6 @@ function updateEvent(currentEvent) {
 	submit.setAttribute("type", "submit");
 	submit.innerHTML = "Submit"
 	form.appendChild(submit);
-
 
 	mainDiv.appendChild(form);
 }

@@ -8,10 +8,11 @@ block content
 					script.
 						var allEvents = !{allEvents};
 
-					h1 Frankenstein
+					h1
+						a(href='/home') Frankenstein
 					hr
 					h2 Pick a Significant Event
-					form.form(role='form' action="/remove_Event" method="POST" onsubmit="return confirm('Do you really want to delete this crew?');")
+					form.form(role='form' action="/remove_Event" method="POST" onsubmit="return confirm('Do you really want to delete this event?');")
 						select.form-control#theEvent(name="event_name" onchange="addID()")
 						br
 						br

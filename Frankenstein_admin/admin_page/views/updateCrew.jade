@@ -8,7 +8,8 @@ block content
 					script.
 						var allCrew = !{allCrew};
 
-					h1 Frankenstein
+					h1
+						a(href='/home') Frankenstein
 					hr
 					h2 Pick a Crew Member
 					form.form(role='form' action="/remove_crew" method="POST" onsubmit="return confirm('Do you really want to delete this crew?');")

@@ -21,14 +21,12 @@ function addID() {
 	var hidden = document.getElementById("hidden");
 	var yourSelect = document.getElementById( "theActors" );
 	var currentActor = yourSelect.selectedIndex;
-	console.log(allActors[currentActor]._id);
 	hidden.setAttribute("value", allActors[currentActor]._id);
 }
 
 function updateTheActor(){
 	var yourSelect = document.getElementById( "theActors" );
 	currentActor = yourSelect.selectedIndex;
-	console.log(currentActor);
 	updateActor(currentActor);
 }
 
