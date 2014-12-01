@@ -1,30 +1,49 @@
-var currActor = -1;
-
 $(document).ready(function() {
 
-	document.getElementById("theActors");
+	console.log(allActors);
+
+	var theActors = document.getElementById("theActors");
+	var hidden = document.getElementById("hidden");
 
 	for (var i = 0; i < allActors.length; i++) {
 		var option = document.createElement("option");
-		option.innerHTML = allActors[i].name;
+		option.innerHTML = allActors[i].actor_name;
 		theActors.appendChild(option);
+	}
+
+	if(allActors.length > 0) {
+		hidden.value = allActors[allActors.length-1]._id;
 	}
 
 });
 
+function addID() {
+	var hidden = document.getElementById("hidden");
+	var yourSelect = document.getElementById( "theActors" );
+	var currentActor = yourSelect.selectedIndex;
+	console.log(allActors[currentActor]._id);
+	hidden.setAttribute("value", allActors[currentActor]._id);
+	// hidden.value = allActors[currentActor]._id;
+}
+
 function updateTheActor(){
 	var yourSelect = document.getElementById( "theActors" );
 	currentActor = yourSelect.selectedIndex;
+	console.log(currentActor);
 	updateActor(currentActor);
 }
 
 function updateActor(currentActor) {
+
 	var mainDiv = document.getElementById("thisOne");
+	mainDiv.innerHTML = "";
+
+
 	var form = document.createElement("form");
 	form.className = "form";
 	form.id = "post-form";
 	form.setAttribute("role", "form");
-	form.setAttribute("action", "/add_actor");
+	form.setAttribute("action", "/update_actor");
 	form.setAttribute("method", "POST");
 
 	var formControl1 = document.createElement("div");
@@ -36,7 +55,7 @@ function updateActor(currentActor) {
 	actorNameText.setAttribute("placeholder", "Name");
 	actorNameText.setAttribute("id", "name");
 	actorNameText.setAttribute("name", "actor_name");
-	actorNameText.setAttribute("value", allActors[currentActor].name);
+	actorNameText.setAttribute("value", allActors[currentActor].actor_name);
 
 	formControl1.appendChild(actorName);
 	formControl1.appendChild(actorNameText);
@@ -53,7 +72,7 @@ function updateActor(currentActor) {
 	actorBioText.setAttribute("placeholder", "Bio");
 	actorBioText.setAttribute("id", "bio");
 	actorBioText.setAttribute("name", "actor_bio");
-	actorBioText.innerHTML = allActors[currentActor].bio;
+	actorBioText.innerHTML = allActors[currentActor].actor_bio;
 
 	formControl2.appendChild(actorBio);
 	formControl2.appendChild(actorBioText);
@@ -82,6 +101,20 @@ function updateActor(currentActor) {
 	formControl3.appendChild(actorRole);
 	formControl3.appendChild(actorAppTime);
 	form.appendChild(formControl3);
+
+	// <input type="hidden" name="Language" value="English">
+	// console.log(allActors[currentActor]._id);
+	var theID = document.createElement("input");
+	theID.setAttribute("type", "hidden");
+	theID.setAttribute("name", "_id");
+	theID.setAttribute("value", allActors[currentActor]._id);
+	form.appendChild(theID);
+
+	var submit = document.createElement("button");
+	submit.className = "btn btn-primary";
+	submit.setAttribute("type", "submit");
+	submit.innerHTML = "Submit"
+	form.appendChild(submit);
 
 
 	mainDiv.appendChild(form);
@@ -89,6 +122,8 @@ function updateActor(currentActor) {
 
 function newActor() {
 	var mainDiv = document.getElementById("thisOne");
+	mainDiv.innerHTML = "";
+
 	var form = document.createElement("form");
 	form.className = "form";
 	form.id = "post-form";
@@ -97,7 +132,7 @@ function newActor() {
 	form.setAttribute("method", "POST");
 
 	var formControl1 = document.createElement("div");
-	formControl1.className = "form-control";
+	formControl1.className = "form-group";
 	var actorName = document.createElement("label");
 	actorName.innerHTML = "Actor's Name";
 	var actorNameText = document.createElement("input");
@@ -112,7 +147,7 @@ function newActor() {
 
 
 	var formControl2 = document.createElement("div");
-	formControl2.className = "form-control";
+	formControl2.className = "form-group";
 	var actorBio = document.createElement("label");
 	actorBio.innerHTML = "Actor's Bio";
 
@@ -127,7 +162,7 @@ function newActor() {
 	form.appendChild(formControl2);
 
 	var formControl3 = document.createElement("div");
-	formControl3.className = "form-control";
+	formControl3.className = "form-group";
 	var actorPerf = document.createElement("label");
 	actorPerf.innerHTML = "Performances, Roles, and Appearance Times";
 
@@ -150,16 +185,13 @@ function newActor() {
 	formControl3.appendChild(actorAppTime);
 	form.appendChild(formControl3);
 
+	var submit = document.createElement("button");
+	submit.className = "btn btn-primary";
+	submit.setAttribute("type", "submit");
+	submit.innerHTML = "Submit";
+	form.appendChild(submit);
+	
+
 
 	mainDiv.appendChild(form);
-}
-
-
-function removeActor() {
-	var yourSelect = document.getElementById( "theActors" );
-	var currentActor = yourSelect.selectedIndex;
-
-	alert("Are you sure you want to permantly remove " + allActors[currentActor].name + "?")
-
-	
 }
