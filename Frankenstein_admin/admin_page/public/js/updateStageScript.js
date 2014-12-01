@@ -76,17 +76,17 @@ function updateStage(currentStage) {
 	formControl2.appendChild(stageDescriptionText);
 	form.appendChild(formControl2);
 
-	var formControl3 = document.createElement("div");
-	formControl3.className = "form-control";
-	var stagePerf = document.createElement("label");
-	stagePerf.innerHTML = "Performances, Roles, and Appearance Times";
+	// var formControl3 = document.createElement("div");
+	// formControl3.className = "form-control";
+	// var stagePerf = document.createElement("label");
+	// stagePerf.innerHTML = "Performances, Roles, and Appearance Times";
 
-	var stagePerfOptions = document.createElement("select");
-	// ADD OPTIONS HERE
+	// var stagePerfOptions = document.createElement("select");
+	// // ADD OPTIONS HERE
 	
-	formControl3.appendChild(stagePerf);
-	formControl3.appendChild(stagePerfOptions);
-	form.appendChild(formControl3);
+	// formControl3.appendChild(stagePerf);
+	// formControl3.appendChild(stagePerfOptions);
+	// form.appendChild(formControl3);
 
 	var theID = document.createElement("input");
 	theID.setAttribute("type", "hidden");
@@ -145,17 +145,17 @@ function newStage() {
 	formControl2.appendChild(stageDescriptionText);
 	form.appendChild(formControl2);
 
-	var formControl3 = document.createElement("div");
-	formControl3.className = "form-group";
-	var stagePerf = document.createElement("label");
-	stagePerf.innerHTML = "Performances";
+	// var formControl3 = document.createElement("div");
+	// formControl3.className = "form-group";
+	// var stagePerf = document.createElement("label");
+	// stagePerf.innerHTML = "Performances";
 
-	var stagePerfOptions = document.createElement("select");
-	// ADD OPTIONS HERE
+	// var stagePerfOptions = document.createElement("select");
+	// // ADD OPTIONS HERE
 	
-	formControl3.appendChild(stagePerf);
-	formControl3.appendChild(stagePerfOptions);
-	form.appendChild(formControl3);
+	// formControl3.appendChild(stagePerf);
+	// formControl3.appendChild(stagePerfOptions);
+	// form.appendChild(formControl3);
 
 	var submit = document.createElement("button");
 	submit.className = "btn btn-primary";

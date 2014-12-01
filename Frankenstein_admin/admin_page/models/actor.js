@@ -15,7 +15,7 @@ actorSchema.methods.saveActor = function(){
 	if(this._id == -1){
 		var numActors;
 		this.model('Actor').count({}, function(err, count){
-			numActors = count;
+			numActors = count+1;
 			actor._id = numActors;
 			actor.save();
 		});

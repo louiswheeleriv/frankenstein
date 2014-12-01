@@ -23,7 +23,6 @@ function addID() {
 	var currentActor = yourSelect.selectedIndex;
 	console.log(allActors[currentActor]._id);
 	hidden.setAttribute("value", allActors[currentActor]._id);
-	// hidden.value = allActors[currentActor]._id;
 }
 
 function updateTheActor(){
@@ -78,32 +77,30 @@ function updateActor(currentActor) {
 	formControl2.appendChild(actorBioText);
 	form.appendChild(formControl2);
 
-	var formControl3 = document.createElement("div");
-	formControl3.className = "form-control";
-	var actorPerf = document.createElement("label");
-	actorPerf.innerHTML = "Performances, Roles, and Appearance Times";
+	// var formControl3 = document.createElement("div");
+	// formControl3.className = "form-control";
+	// var actorPerf = document.createElement("label");
+	// actorPerf.innerHTML = "Performances, Roles, and Appearance Times";
 
-	var actorPerfOptions = document.createElement("select");
-	// ADD OPTIONS HERE
+	// var actorPerfOptions = document.createElement("select");
+	// // ADD OPTIONS HERE
 
-	var actorRole = document.createElement("input");
-	actorRole.setAttribute("type", "text");
-	actorRole.setAttribute("placeholder", "Role");
-	actorRole.setAttribute("name", "actor_role");
+	// var actorRole = document.createElement("input");
+	// actorRole.setAttribute("type", "text");
+	// actorRole.setAttribute("placeholder", "Role");
+	// actorRole.setAttribute("name", "actor_role");
 
-	var actorAppTime = document.createElement("input");
-	actorAppTime.setAttribute("type", "time");
-	actorAppTime.setAttribute("value", "19:00");
-	actorAppTime.setAttribute("name", "actor_appTime");
+	// var actorAppTime = document.createElement("input");
+	// actorAppTime.setAttribute("type", "time");
+	// actorAppTime.setAttribute("value", "19:00");
+	// actorAppTime.setAttribute("name", "actor_appTime");
 	
-	formControl3.appendChild(actorPerf);
-	formControl3.appendChild(actorPerfOptions);
-	formControl3.appendChild(actorRole);
-	formControl3.appendChild(actorAppTime);
-	form.appendChild(formControl3);
+	// formControl3.appendChild(actorPerf);
+	// formControl3.appendChild(actorPerfOptions);
+	// formControl3.appendChild(actorRole);
+	// formControl3.appendChild(actorAppTime);
+	// form.appendChild(formControl3);
 
-	// <input type="hidden" name="Language" value="English">
-	// console.log(allActors[currentActor]._id);
 	var theID = document.createElement("input");
 	theID.setAttribute("type", "hidden");
 	theID.setAttribute("name", "_id");
@@ -115,7 +112,6 @@ function updateActor(currentActor) {
 	submit.setAttribute("type", "submit");
 	submit.innerHTML = "Submit"
 	form.appendChild(submit);
-
 
 	mainDiv.appendChild(form);
 }
@@ -161,29 +157,29 @@ function newActor() {
 	formControl2.appendChild(actorBioText);
 	form.appendChild(formControl2);
 
-	var formControl3 = document.createElement("div");
-	formControl3.className = "form-group";
-	var actorPerf = document.createElement("label");
-	actorPerf.innerHTML = "Performances, Roles, and Appearance Times";
+	// var formControl3 = document.createElement("div");
+	// formControl3.className = "form-group";
+	// var actorPerf = document.createElement("label");
+	// actorPerf.innerHTML = "Performances, Roles, and Appearance Times";
 
-	var actorPerfOptions = document.createElement("select");
-	// ADD OPTIONS HERE
+	// var actorPerfOptions = document.createElement("select");
+	// // ADD OPTIONS HERE
 
-	var actorRole = document.createElement("input");
-	actorRole.setAttribute("type", "text");
-	actorRole.setAttribute("placeholder", "Role");
-	actorRole.setAttribute("name", "actor_role");
+	// var actorRole = document.createElement("input");
+	// actorRole.setAttribute("type", "text");
+	// actorRole.setAttribute("placeholder", "Role");
+	// actorRole.setAttribute("name", "actor_role");
 
-	var actorAppTime = document.createElement("input");
-	actorAppTime.setAttribute("type", "time");
-	actorAppTime.setAttribute("value", "19:00");
-	actorAppTime.setAttribute("name", "actor_appTime");
+	// var actorAppTime = document.createElement("input");
+	// actorAppTime.setAttribute("type", "time");
+	// actorAppTime.setAttribute("value", "19:00");
+	// actorAppTime.setAttribute("name", "actor_appTime");
 	
-	formControl3.appendChild(actorPerf);
-	formControl3.appendChild(actorPerfOptions);
-	formControl3.appendChild(actorRole);
-	formControl3.appendChild(actorAppTime);
-	form.appendChild(formControl3);
+	// formControl3.appendChild(actorPerf);
+	// formControl3.appendChild(actorPerfOptions);
+	// formControl3.appendChild(actorRole);
+	// formControl3.appendChild(actorAppTime);
+	// form.appendChild(formControl3);
 
 	var submit = document.createElement("button");
 	submit.className = "btn btn-primary";

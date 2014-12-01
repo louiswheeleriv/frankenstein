@@ -15,7 +15,12 @@ $(document).ready(function() {
 		hidden.value = allCrew[allCrew.length-1]._id;
 	}
 
+	console.log(hidden.value);
+
 });
+
+
+
 
 function addID() {
 	var hidden = document.getElementById("hidden");
@@ -24,6 +29,8 @@ function addID() {
 	console.log(allCrew[currentCrew]._id);
 	hidden.setAttribute("value", allCrew[currentCrew]._id);
 }
+
+
 
 
 function updateTheCrew(){
@@ -76,24 +83,24 @@ function updateCrew(currentCrew) {
 	formControl2.appendChild(crewBioText);
 	form.appendChild(formControl2);
 
-	var formControl3 = document.createElement("div");
-	formControl3.className = "form-control";
-	var crewPerf = document.createElement("label");
-	crewPerf.innerHTML = "Performances, Roles, and Appearance Times";
+	// var formControl3 = document.createElement("div");
+	// formControl3.className = "form-control";
+	// var crewPerf = document.createElement("label");
+	// crewPerf.innerHTML = "Performances, Roles, and Appearance Times";
 
-	var crewPerfOptions = document.createElement("select");
-	// ADD OPTIONS HERE
+	// var crewPerfOptions = document.createElement("select");
+	// // ADD OPTIONS HERE
 
-	var crewResponsibility = document.createElement("input");
-	crewResponsibility.setAttribute("type", "text");
-	crewResponsibility.setAttribute("placeholder", "Role");
-	crewResponsibility.setAttribute("name", "crew_responsibility");
+	// var crewResponsibility = document.createElement("input");
+	// crewResponsibility.setAttribute("type", "text");
+	// crewResponsibility.setAttribute("placeholder", "Role");
+	// crewResponsibility.setAttribute("name", "crew_responsibility");
 
 	
-	formControl3.appendChild(crewPerf);
-	formControl3.appendChild(crewPerfOptions);
-	formControl3.appendChild(crewResponsibility);
-	form.appendChild(formControl3);
+	// formControl3.appendChild(crewPerf);
+	// formControl3.appendChild(crewPerfOptions);
+	// formControl3.appendChild(crewResponsibility);
+	// form.appendChild(formControl3);
 
 	var theID = document.createElement("input");
 	theID.setAttribute("type", "hidden");
@@ -110,6 +117,10 @@ function updateCrew(currentCrew) {
 
 	mainDiv.appendChild(form);
 }
+
+
+
+
 
 function newCrew() {
 	var mainDiv = document.getElementById("thisOne");
@@ -152,24 +163,23 @@ function newCrew() {
 	formControl2.appendChild(crewBioText);
 	form.appendChild(formControl2);
 
-	var formControl3 = document.createElement("div");
-	formControl3.className = "form-group";
-	var crewPerf = document.createElement("label");
-	crewPerf.innerHTML = "Performances and Responsibility";
+	// var formControl3 = document.createElement("div");
+	// formControl3.className = "form-group";
+	// var crewPerf = document.createElement("label");
+	// crewPerf.innerHTML = "Performances and Responsibility";
 
-	var crewPerfOptions = document.createElement("select");
-	// ADD OPTIONS HERE
+	// var crewPerfOptions = document.createElement("select");
+	// // ADD OPTIONS HERE
 
-	var crewResponsibility = document.createElement("input");
-	crewResponsibility.setAttribute("type", "text");
-	crewResponsibility.setAttribute("placeholder", "Role");
-	crewResponsibility.setAttribute("name", "crew_responsibility");
+	// var crewResponsibility = document.createElement("input");
+	// crewResponsibility.setAttribute("type", "text");
+	// crewResponsibility.setAttribute("placeholder", "Role");
+	// crewResponsibility.setAttribute("name", "crew_responsibility");
 
-
-	formControl3.appendChild(crewPerf);
-	formControl3.appendChild(crewPerfOptions);
-	formControl3.appendChild(crewResponsibility);
-	form.appendChild(formControl3);
+	// formControl3.appendChild(crewPerf);
+	// formControl3.appendChild(crewPerfOptions);
+	// formControl3.appendChild(crewResponsibility);
+	// form.appendChild(formControl3);
 
 	var submit = document.createElement("button");
 	submit.className = "btn btn-primary";
@@ -177,7 +187,5 @@ function newCrew() {
 	submit.innerHTML = "Submit";
 	form.appendChild(submit);
 	
-
-
 	mainDiv.appendChild(form);
 }

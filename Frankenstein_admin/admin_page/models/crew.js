@@ -15,7 +15,7 @@ crewSchema.methods.saveCrew = function(){
 	if(this._id == -1){
 		var numCrew;
 		this.model('Crew').count({}, function(err, count){
-			numCrew = count;
+			numCrew = count+1;
 			crew._id = numCrew;
 			crew.save();
 		});

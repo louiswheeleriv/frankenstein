@@ -15,7 +15,7 @@ stageSchema.methods.saveStage = function(){
 	if(this._id == -1){
 		var numStages;
 		this.model('Stage').count({}, function(err, count){
-			numStages = count;
+			numStages = count+1;
 			stage._id = numStages;
 			stage.save();
 		});

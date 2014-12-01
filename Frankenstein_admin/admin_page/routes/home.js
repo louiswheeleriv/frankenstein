@@ -7,7 +7,7 @@ var Crew = require('../models/crew');
 var Stage = require('../models/stage');
 var Production = require('../models/production');
 var Event = require('../models/event');
-var Performance = require('../models/event');
+var Performance = require('../models/performance');
 
 // Connect mongoose to the database
 var mongoose = require('mongoose');
@@ -356,6 +356,89 @@ router.post('/add_event', function(req, res) {
 
 // **********************************************************************
 
+
+/* GET for the update stage page */
+router.get('/updatePerf', function(req, res) {
+	
+	Performance.getPerformances(function(response) {
+		console.log("response: ");
+		console.log(response);
+		res.render('updatePerf.jade', 
+			{
+				title: 'Frankenstein',
+				allPerfs:JSON.stringify(response)
+			}
+		);
+	})
+});
+
+/* POST for updating an already exisiting actor */
+router.post('/update_perf', function(req, res) {
+	var id = req.body._id;
+	var info = req.body.performance_info;
+
+	var a = new Performance(
+		{
+			"_id" : id,
+			"performance_info" : info,
+			"performance_dirty" : false,
+			"performance_deleted" : false
+		}
+	);
+	console.log("new perf: ");
+	console.log(a);
+
+	a.savePerformance();
+
+	res.redirect('/home');
+})
+
+/* POST for removing an already exisiting actor */
+router.post('/remove_event', function(req, res) {
+	var id = req.body._id;
+	var name = req.body.event_name;
+
+	var a = new Event(
+		{
+			"_id" : id,
+			"event_name" : name,
+			"event_dirty" : false,
+			"event_deleted" : false
+		}
+	);
+
+	console.log("event to delete: ");
+	console.log(a);
+
+	a.markDeleted();
+
+	res.redirect('/home');
+
+});
+
+// Post for adding a new actor
+router.post('/add_event', function(req, res) {
+	var name = req.body.event_name;
+
+	console.log(name);
+
+	var a = new Event(
+		{
+			"_id" : -1,
+			"event_name" : name,
+			"event_dirty" : false,
+			"event_deleted" : false
+		}
+	);
+
+	console.log(a);
+
+	a.saveEvent();
+
+	res.redirect('/home');
+});
+
+// **********************************************************************
 
 
 
