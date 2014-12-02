@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var actorSchema = mongoose.Schema({
-	_id : Number,
+	postgres_id : Number,
 	actor_name : String,
 	actor_bio : String,
 	actor_dirty : Boolean,
@@ -12,16 +12,23 @@ var actorSchema = mongoose.Schema({
 
 actorSchema.methods.saveActor = function(){
 	var actor = this;
-	if(this._id == -1){
+
+	if(this.postgres_id == -1){
+		actor.actor_dirty = true;
+		actor.save();
+
+		/*		
 		var numActors;
 		this.model('Actor').count({}, function(err, count){
 			numActors = count+1;
 			actor._id = numActors;
 			actor.save();
 		});
+		*/
+
 	}else{
-		console.log(actor);
 		this.model('Actor').findByIdAndUpdate(this._id, {
+			"postgres_id" : this.postgres_id,
 			"actor_name" : this.actor_name,
 			"actor_bio" : this.actor_bio,
 			"actor_dirty" : this.actor_dirty,
@@ -48,6 +55,12 @@ actorSchema.methods.markDeleted = function(){
 }
 
 // Static functions
+
+actorSchema.statics.findActorById = function(id, callback){
+	this.model('Actor').findById(id, function(actorSelected){
+		callback(actorSelected);
+	});
+}
 
 actorSchema.statics.getActors = function(callback){
 	this.find({"actor_deleted" : false}, function(err, actors){

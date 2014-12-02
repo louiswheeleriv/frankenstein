@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var crewSchema = mongoose.Schema({
-	_id : Number,
+	postgres_id : Number,
 	crew_name : String,
 	crew_bio : String,
 	crew_dirty : Boolean,
@@ -12,15 +12,23 @@ var crewSchema = mongoose.Schema({
 
 crewSchema.methods.saveCrew = function(){
 	var crew = this;
-	if(this._id == -1){
+
+	if(this.postgres_id == -1){
+		crew.crew_dirty = true;
+		crew.save();
+
+		/*
 		var numCrew;
 		this.model('Crew').count({}, function(err, count){
 			numCrew = count+1;
 			crew._id = numCrew;
 			crew.save();
 		});
+		*/
+
 	}else{
 		this.model('Crew').findByIdAndUpdate(this._id, {
+			"postgres_id" : this.postgres_id,
 			"crew_name" : this.crew_name,
 			"crew_bio" : this.crew_bio,
 			"crew_dirty" : this.crew_dirty,
@@ -47,6 +55,12 @@ crewSchema.methods.markDeleted = function(){
 }
 
 // Static functions
+
+crewSchema.statics.findCrewById = function(id, callback){
+	this.model('Crew').findById(id, function(crewSelected){
+		callback(crewSelected);
+	});
+}
 
 crewSchema.statics.getCrew = function(callback){
 	this.find({"crew_deleted" : false}, function(err, crew){
