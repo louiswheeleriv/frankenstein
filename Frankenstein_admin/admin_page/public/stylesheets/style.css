@@ -20,7 +20,7 @@ h1 a {
     text-decoration:none; 
 }
 h1 a:hover {
-    color: #9AD69D;
+    color: #61BE65;
     text-decoration:none; 
 }
 h1 a:visited {
@@ -121,8 +121,7 @@ h1 a:visited {
     height: 65px;
     font-size: 22px;
     line-height: 60px;
-    color: #fff;
-
+    color: #999999;
 }
 
 .sidebar-nav > .sidebar-brand a {

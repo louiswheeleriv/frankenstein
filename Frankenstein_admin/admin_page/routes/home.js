@@ -356,6 +356,8 @@ router.post('/add_event', function(req, res) {
 	res.redirect('/home');
 });
 
+
+
 // **********************************************************************
 
 
@@ -365,82 +367,101 @@ router.get('/updatePerf', function(req, res) {
 	Performance.getPerformances(function(response) {
 		console.log("response: ");
 		console.log(response);
-		res.render('updatePerf.jade', 
+		
+		Stage.getStages(function(allStages) {
+
+			res.render('updatePerf.jade', 
 			{
 				title: 'Frankenstein',
-				allPerfs:JSON.stringify(response)
+				allPerfs:JSON.stringify(response),
+				allStages:JSON.stringify(allStages)
 			}
-		);
+			);
+		})
+
 	})
+
 });
 
 /* POST for updating an already exisiting actor */
 router.post('/update_perf', function(req, res) {
-	var id = req.body._id;
-	var info = req.body.performance_info;
 
-	var a = new Performance(
-		{
-			"postgres_id" : id,
-			"performance_info" : info,
-			"performance_dirty" : false,
-			"performance_deleted" : false
-		}
-	);
-	console.log("new perf: ");
-	console.log(a);
+	console.log(req.body);
 
-	a.savePerformance();
+	// var id = req.body._id;
+	// var info = req.body.performance_info;
+
+	// var a = new Performance(
+	// 	{
+	// 		"postgres_id" : id,
+	// 		"performance_info" : info,
+	// 		"performance_dirty" : false,
+	// 		"performance_deleted" : false
+	// 	}
+	// );
+	// console.log("new perf: ");
+	// console.log(a);
+
+	// a.savePerformance();
 
 	res.redirect('/home');
 })
 
 /* POST for removing an already exisiting actor */
-router.post('/remove_event', function(req, res) {
-	var id = req.body._id;
-	var name = req.body.event_name;
+router.post('/remove_perf', function(req, res) {
+	// var id = req.body._id;
+	// var name = req.body.event_name;
 
-	var a = new Event(
-		{
-			"postgres_id" : id,
-			"event_name" : name,
-			"event_dirty" : false,
-			"event_deleted" : false
-		}
-	);
+	// var a = new Event(
+	// 	{
+	// 		"postgres_id" : id,
+	// 		"event_name" : name,
+	// 		"event_dirty" : false,
+	// 		"event_deleted" : false
+	// 	}
+	// );
 
-	console.log("event to delete: ");
-	console.log(a);
+	// console.log("event to delete: ");
+	// console.log(a);
 
-	a.markDeleted();
+	// a.markDeleted();
 
 	res.redirect('/home');
 
 });
 
 // Post for adding a new actor
-router.post('/add_event', function(req, res) {
-	var name = req.body.event_name;
+router.post('/add_perf', function(req, res) {
+	console.log("req body: ");
+	console.log(req.body);
+	
+	var info = req.body.performance_info;
+	var stage = req.body.stage_id;
+	var time = req.body.performance_start_time;
+	//get actors
+	//get crew
 
-	console.log(name);
-
-	var a = new Event(
-		{
-			"postgres_id" : -1,
-			"event_name" : name,
-			"event_dirty" : false,
-			"event_deleted" : false
-		}
+	var a = new Performance(
+		"performance_info" : info,
+		"performance_start_time" : time,
+		"performance_stage_id" : stage
 	);
 
-	console.log(a);
+	// var a = new Event(
+	// 	{
+	// 		"postgres_id" : -1,
+	// 		"event_name" : name,
+	// 		"event_dirty" : false,
+	// 		"event_deleted" : false
+	// 	}
+	// );
 
-	a.saveEvent();
+	// console.log(a);
+
+	// a.saveEvent();
 
 	res.redirect('/home');
 });
-
-// **********************************************************************
 
 
 
