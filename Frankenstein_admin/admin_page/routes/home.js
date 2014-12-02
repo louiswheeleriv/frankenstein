@@ -8,6 +8,7 @@ var Stage = require('../models/stage');
 var Production = require('../models/production');
 var Event = require('../models/event');
 var Performance = require('../models/event');
+var import_export = require('../database/import_export')
 
 // Connect mongoose to the database
 var mongoose = require('mongoose');
@@ -21,6 +22,7 @@ mongoose.connect('mongodb://localhost/admindb', function(err){
 /* GET home page. */
 router.get('/home', function(req, res) {
 	var actorCollection = req.db.get('actors');
+	import_export();
 	res.render('home.jade', { title: 'Frankenstein' });
 });
 
