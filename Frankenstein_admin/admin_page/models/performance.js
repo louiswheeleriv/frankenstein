@@ -1,20 +1,22 @@
 var mongoose = require('mongoose');
 
+var ObjectId = Schema.ObjectId;
+
 var performanceSchema = mongoose.Schema({
 	postgres_id : Number,
 	performance_info : String,
-	performance_stage_id : Number,
+	performance_stage_id : ObjectId,
 	performance_start_time : Date,
-	performance_production_id : Number,
+	performance_production_id : ObjectId,
 
 	performance_actors : [{
-		actor_id : Number,
+		actor_id : ObjectId,
 		actor_role : String,
 		actor_appearance_time : Number
 	}],
 
 	performance_crew : [{
-		crew_id : Number,
+		crew_id : ObjectId,
 		crew_responsibility : String
 	}],
 

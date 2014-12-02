@@ -80,4 +80,8 @@ actorSchema.statics.getDeletedActors = function(callback){
 	});
 }
 
+actorSchema.statics.removeAll = function(callback){
+	this.find({}).remove().exec();
+}
+
 module.exports = mongoose.model('Actor', actorSchema);
