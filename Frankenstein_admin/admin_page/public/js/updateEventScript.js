@@ -21,7 +21,6 @@ function addID() {
 	var hidden = document.getElementById("hidden");
 	var yourSelect = document.getElementById( "theEvent" );
 	var currentEvent = yourSelect.selectedIndex;
-	console.log(allEvents[currentEvent]._id);
 	hidden.setAttribute("value", allEvents[currentEvent]._id);
 }
 
@@ -59,17 +58,17 @@ function updateEvent(currentEvent) {
 	form.appendChild(formControl1);
 
 
-	var formControl3 = document.createElement("div");
-	formControl3.className = "form-control";
-	var eventPerf = document.createElement("label");
-	eventPerf.innerHTML = "Performances";
+	// var formControl3 = document.createElement("div");
+	// formControl3.className = "form-control";
+	// var eventPerf = document.createElement("label");
+	// eventPerf.innerHTML = "Performances";
 
-	var eventPerfOptions = document.createElement("select");
-	// ADD OPTIONS HERE
+	// var eventPerfOptions = document.createElement("select");
+	// // ADD OPTIONS HERE
 	
-	formControl3.appendChild(eventPerf);
-	formControl3.appendChild(eventPerfOptions);
-	form.appendChild(formControl3);
+	// formControl3.appendChild(eventPerf);
+	// formControl3.appendChild(eventPerfOptions);
+	// form.appendChild(formControl3);
 
 	var theID = document.createElement("input");
 	theID.setAttribute("type", "hidden");
@@ -82,7 +81,6 @@ function updateEvent(currentEvent) {
 	submit.setAttribute("type", "submit");
 	submit.innerHTML = "Submit"
 	form.appendChild(submit);
-
 
 	mainDiv.appendChild(form);
 }
@@ -112,17 +110,17 @@ function newEvent() {
 	formControl1.appendChild(eventNameText);
 	form.appendChild(formControl1);
 
-	var formControl3 = document.createElement("div");
-	formControl3.className = "form-group";
-	var eventPerf = document.createElement("label");
-	eventPerf.innerHTML = "Performances";
+	// var formControl3 = document.createElement("div");
+	// formControl3.className = "form-group";
+	// var eventPerf = document.createElement("label");
+	// eventPerf.innerHTML = "Performances";
 
-	var eventPerfOptions = document.createElement("select");
-	// ADD OPTIONS HERE
+	// var eventPerfOptions = document.createElement("select");
+	// // ADD OPTIONS HERE
 	
-	formControl3.appendChild(eventPerf);
-	formControl3.appendChild(eventPerfOptions);
-	form.appendChild(formControl3);
+	// formControl3.appendChild(eventPerf);
+	// formControl3.appendChild(eventPerfOptions);
+	// form.appendChild(formControl3);
 
 	var submit = document.createElement("button");
 	submit.className = "btn btn-primary";

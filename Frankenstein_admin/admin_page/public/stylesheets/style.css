@@ -15,6 +15,18 @@ h3 { font-size: 1.17em; }
 h5 { font-size: .83em; }
 h6 { font-size: .75em; }
 
+h1 a {
+    color: green;
+    text-decoration:none; 
+}
+h1 a:hover {
+    color: #9AD69D;
+    text-decoration:none; 
+}
+h1 a:visited {
+    text-decoration:none; 
+}
+
 
 #wrapper {
     padding-left: 250;
@@ -55,6 +67,7 @@ h6 { font-size: .75em; }
     padding-left: 50px;
     /*padding: 50px;*/
     white-space: normal;
+    background: white;
 }
 
 .result-panel {
@@ -65,6 +78,7 @@ h6 { font-size: .75em; }
     padding-left: 50px;
     padding-top: 10px;
     border-top: 1px solid gray;
+    background: white;
 }
 
 

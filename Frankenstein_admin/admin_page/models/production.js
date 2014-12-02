@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var productionSchema = mongoose.Schema({
-	_id : Number,
+	postgres_id : Number,
 	production_name : String,
 	production_dirty : Boolean,
 	production_deleted : Boolean
@@ -11,15 +11,23 @@ var productionSchema = mongoose.Schema({
 
 productionSchema.methods.saveProduction = function(){
 	var production = this;
-	if(this._id == -1){
+
+	if(this.postgres_id == -1){
+		production.production_dirty = true;
+		production.save();
+
+		/*
 		var numProductions;
 		this.model('Production').count({}, function(err, count){
 			numProductions = count;
 			production._id = numProductions;
 			production.save();
 		});
+		*/
+
 	}else{
 		this.model('Production').findByIdAndUpdate(this._id, {
+			"postgres_id" : this.postgres_id,
 			"production_name" : this.production_name,
 			"production_dirty" : this.production_dirty,
 			"production_deleted" : this.production_deleted
@@ -45,6 +53,12 @@ productionSchema.methods.markDeleted = function(){
 }
 
 // Static functions
+
+productionSchema.statics.findProductionById = function(id, callback){
+	this.model('Production').findById(id, function(productionSelected){
+		callback(productionSelected);
+	});
+}
 
 productionSchema.statics.getProductions = function(callback){
 	this.find({"production_deleted" : false}, function(err, productions){

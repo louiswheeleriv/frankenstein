@@ -1,0 +1,35 @@
+extends layout
+
+block content
+	#page-content-wrapper
+		.container-fluid.search-panel
+			.row
+				.col-lg-12
+					script.
+						var allPerfs = !{allPerfs};
+
+					h1 
+						a(href='/home') Frankenstein
+					hr
+					h2 Pick a Performance
+					form.form(role='form' action="/remove_perf" method="POST" onsubmit="return confirm('Do you really want to delete this performance?');")
+						select.form-control#thePerfs(name="performance_info" onchange="addID()")
+						br
+						br
+						input#hidden(type="hidden" name="_id" value="aValue")
+						button(type="button" onclick='updateThePerf();').btn.btn-primary.btn-lg Update
+						input.btn.btn-danger(type='submit' value="Remove")
+						br
+						br
+						button(type="button" onclick="newPerf();").btn.btn-success
+							span.glyphicon.glyphicon-plus(aria-hidden='true')
+							|   New Performance
+						br
+						br
+						
+
+		.container-fluid.result-panel
+			.row
+				.col-lg-12#thisOne
+
+	script(type='text/javascript' src="/js/updatePerfScript.js")

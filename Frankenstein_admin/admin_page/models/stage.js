@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 var stageSchema = mongoose.Schema({
-	_id : Number,
+	postgres_id : Number,
 	stage_location : String,
 	stage_description : String,
 	stage_dirty : Boolean,
@@ -12,15 +12,23 @@ var stageSchema = mongoose.Schema({
 
 stageSchema.methods.saveStage = function(){
 	var stage = this;
-	if(this._id == -1){
+
+	if(this.postgres_id == -1){
+		stage.stage_dirty = true;
+		stage.save();
+
+		/*
 		var numStages;
 		this.model('Stage').count({}, function(err, count){
-			numStages = count;
+			numStages = count+1;
 			stage._id = numStages;
 			stage.save();
 		});
+		*/
+
 	}else{
 		this.model('Stage').findByIdAndUpdate(this._id, {
+			"postgres_id" : this.postgres_id,
 			"stage_location" : this.stage_location,
 			"stage_description" : this.stage_description,
 			"stage_dirty" : this.stage_dirty,
@@ -47,6 +55,12 @@ stageSchema.methods.markDeleted = function(){
 }
 
 // Static functions
+
+stageSchema.statics.findStageById = function(id, callback){
+	this.model('Stage').findById(id, function(stageSelected){
+		callback(stageSelected);
+	});
+}
 
 stageSchema.statics.getStages = function(callback){
 	this.find({"stage_deleted" : false}, function(err, stages){
