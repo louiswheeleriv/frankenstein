@@ -3,18 +3,18 @@ var mongoose = require('mongoose');
 var performanceSchema = mongoose.Schema({
 	postgres_id : Number,
 	performance_info : String,
-	performance_stage_postgres_id : Number,
+	performance_stage_id : Number,
 	performance_start_time : Date,
-	performance_production_postgres_id : Number,
+	performance_production_id : Number,
 
 	performance_actors : [{
-		actor_postgres_id : Number,
+		actor_id : Number,
 		actor_role : String,
 		actor_appearance_time : Number
 	}],
 
 	performance_crew : [{
-		crew_postgres_id : Number,
+		crew_id : Number,
 		crew_responsibility : String
 	}],
 
