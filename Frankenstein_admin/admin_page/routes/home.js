@@ -24,6 +24,12 @@ router.get('/home', function(req, res) {
 	res.render('home.jade', { title: 'Frankenstein' });
 });
 
+router.post('/send_to_postgres', function(req, res) {
+	console.log("done!");
+	res.render('/logout');
+	// res.redirect('/logout');
+});
+
 // **********************************************************************
 
 
@@ -436,27 +442,23 @@ router.post('/add_perf', function(req, res) {
 	var info = req.body.performance_info;
 	var stage = req.body.stage_id;
 	var time = req.body.performance_start_time;
+	// time : { type : Date, default: Date.now }
 	//get actors
 	//get crew
 
 	var a = new Performance(
+	{
+		"postgres_id" : -1,
 		"performance_info" : info,
-		"performance_start_time" : time,
-		"performance_stage_id" : stage
+		"performance_stage_id" : stage,
+		"performance_start_time" : 0,
+		// "performance_production_id" : 1,
+		"performance_actors" : {},
+		"performance_crew" : {}
+	}
 	);
 
-	// var a = new Event(
-	// 	{
-	// 		"postgres_id" : -1,
-	// 		"event_name" : name,
-	// 		"event_dirty" : false,
-	// 		"event_deleted" : false
-	// 	}
-	// );
-
-	// console.log(a);
-
-	// a.saveEvent();
+	a.savePerformance();
 
 	res.redirect('/home');
 });
