@@ -53,10 +53,12 @@ router.post('/update_actor', function(req, res) {
 	var id = req.body._id;
 	var name = req.body.actor_name;
 	var bio = req.body.actor_bio;
+	var postID = req.body.postgres_id;
 
 	var a = new Actor(
 		{
 			// "_id" : id,
+			"postgres_id" : postID,
 			"actor_name" : name,
 			"actor_bio" : bio,
 			"actor_dirty" : false,

@@ -103,8 +103,13 @@ function updateActor(currentActor) {
 	theID.setAttribute("type", "hidden");
 	theID.setAttribute("name", "_id");
 	theID.setAttribute("value", allActors[currentActor]._id);
-	console.log(allActors[currentActor]._id);
 	form.appendChild(theID);
+
+	var thePostID = document.createElement("input");
+	thePostID.setAttribute("type", "hidden");
+	thePostID.setAttribute("name", "postgres_id");
+	thePostID.setAttribute("value", allActors[currentActor].postgres_id);
+	form.appendChild(thePostID);
 
 	var submit = document.createElement("button");
 	submit.className = "btn btn-primary";
