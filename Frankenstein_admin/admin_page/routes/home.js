@@ -401,24 +401,79 @@ router.get('/updatePerf', isLoggedIn, function(req, res) {
 
 /* POST for updating an already exisiting actor */
 router.post('/update_perf', isLoggedIn, function(req, res) {
-	
-	var id = req.body._id;
 	var info = req.body.performance_info;
 	var stage = req.body.stage_id;
 	var time = req.body.performance_start_time;
-	//var postID = req.body.postgres_id;
+	var actorcount = req.body.actorcount;
+	var crewcount = req.body.crewcount;
+
+	//get actors
+	var actors = [];
+
+	if(actorcount > 1) {
+		for(var i = 0; i < actorcount; i++) {
+
+			var actor = {
+				actor_id : req.body.actorId[i],
+				actor_role : req.body.actorRole[i],
+				actor_appearance_time : req.body.actorTime[i],
+				actor_name : req.body.actorName[i]
+			};
+
+			actors.push(actor);
+
+		}
+	}		
+	if(actorcount == 1) {
+		var actor = {
+			actor_id : req.body.actorId,
+			actor_role : req.body.actorRole,
+			actor_appearance_time : req.body.actorTime,
+			actor_name : req.body.actorName
+		};
+
+		actors.push(actor);
+	}
+
+	
+
+	//get crew
+	var crews = [];
+
+	if(crewcount > 1) {
+		for(var i = 0; i < crewcount; i++) {
+
+			var crew = {
+				crew_id : req.body.crewId[i],
+				crew_responsibility : req.body.crewResp[i],
+				crew_name : req.body.crewName[i]
+			};
+
+			crews.push(crew);
+		}
+	} 
+	if(crewcount == 1) {
+		var crew = {
+			crew_id : req.body.crewId,
+			crew_responsibility : req.body.crewResp,
+			crew_name : req.body.crewName 
+		};
+
+		crews.push(crew);
+	}
+
+	
 
 	var a = new Performance(
 	{
-		"_id" : id,
-		//"postgres_id" : postID,
 		"performance_info" : info,
 		"performance_stage_id" : stage,
 		"performance_start_time" : time,
-		"performance_deleted" : false
-		// "performance_production_id" : 1
-		// "performance_actors" : [{}],
-		// "performance_crew" : [{}]
+		"performance_deleted" : false,
+		"performance_dirty" : false,
+		"performance_actors" : actors,
+		"performance_crew" : crews
+		// "performance_production_id" : 1,
 	}
 	);
 
@@ -429,22 +484,16 @@ router.post('/update_perf', isLoggedIn, function(req, res) {
 
 /* POST for removing an already exisiting actor */
 router.post('/remove_perf', isLoggedIn, function(req, res) {
-	// var id = req.body._id;
-	// var name = req.body.event_name;
+	var id = req.body._id;
 
-	// var a = new Event(
-	// 	{
-	// 		"postgres_id" : id,
-	// 		"event_name" : name,
-	// 		"event_dirty" : false,
-	// 		"event_deleted" : false
-	// 	}
-	// );
+	console.log(req.body);
 
-	// console.log("event to delete: ");
-	// console.log(a);
+	var a = new Performance(
+	{
+		"_id" : id
+	});
 
-	// a.markDeleted();
+	a.markDeleted();
 
 	res.redirect('/updatePerf');
 
@@ -452,8 +501,8 @@ router.post('/remove_perf', isLoggedIn, function(req, res) {
 
 // Post for adding a new actor
 router.post('/add_perf', isLoggedIn, function(req, res) {
-	// console.log("req body: ");
-	// console.log(req.body);
+	console.log("req body: ");
+	console.log(req.body);
 	
 	var info = req.body.performance_info;
 	var stage = req.body.stage_id;
@@ -470,17 +519,20 @@ router.post('/add_perf', isLoggedIn, function(req, res) {
 			var actor = {
 				actor_id : req.body.actorId[i],
 				actor_role : req.body.actorRole[i],
-				actor_appearance_time : req.body.actorTime[i]
+				actor_appearance_time : req.body.actorTime[i],
+				actor_name : req.body.actorName[i]
 			};
 
 			actors.push(actor);
 
-		}		
-	} else {
+		}
+	}		
+	if(actorcount == 1) {
 		var actor = {
 			actor_id : req.body.actorId,
 			actor_role : req.body.actorRole,
-			actor_appearance_time : req.body.actorTime
+			actor_appearance_time : req.body.actorTime,
+			actor_name : req.body.actorName
 		};
 
 		actors.push(actor);
@@ -496,20 +548,23 @@ router.post('/add_perf', isLoggedIn, function(req, res) {
 
 			var crew = {
 				crew_id : req.body.crewId[i],
-				crew_responsibility : req.body.crewResp[i] 
+				crew_responsibility : req.body.crewResp[i],
+				crew_name : req.body.crewName[i]
 			};
 
 			crews.push(crew);
 		}
-	} else {
-
+	} 
+	if(crewcount == 1) {
 		var crew = {
 			crew_id : req.body.crewId,
-			crew_responsibility : req.body.crewResp 
+			crew_responsibility : req.body.crewResp,
+			crew_name : req.body.crewName 
 		};
 
 		crews.push(crew);
 	}
+
 	
 
 	var a = new Performance(
