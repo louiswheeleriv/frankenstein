@@ -4,7 +4,8 @@ var eventSchema = mongoose.Schema({
 	postgres_id : Number,
 	event_name : String,
 	event_dirty : Boolean,
-	event_deleted : Boolean
+	event_deleted : Boolean,
+	event_inserting : Boolean
 });
 
 // Instance functions
@@ -12,7 +13,7 @@ var eventSchema = mongoose.Schema({
 eventSchema.methods.saveEvent = function(){
 	var event = this;
 
-	if(this.postgres_id == -1){
+	if(this.postgres_id == -1 && this.event_inserting){
 		event.event_dirty = true;
 		event.save();
 
@@ -30,7 +31,8 @@ eventSchema.methods.saveEvent = function(){
 			"postgres_id" : this.postgres_id,
 			"event_name" : this.event_name,
 			"event_dirty" : this.event_dirty,
-			"event_deleted" : this.event_deleted
+			"event_deleted" : this.event_deleted,
+			"event_inserting" : false
 		}, function(err){
 			if(err)
 				console.log(err);

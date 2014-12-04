@@ -11,7 +11,7 @@ html
 		link(href='http://fonts.googleapis.com/css?family=IM+Fell+DW+Pica+SC' rel='stylesheet' type='text/css')
 		link(href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet")
 		
-		link(rel="shortcut icon" type="image/x-icon" href="/favicon.ico")
+		link(rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico")
 
 	body
 		#wrapper
@@ -30,7 +30,7 @@ html
 					li
 						a(href='/updatePerf/') Performances
 					li 
-						form.form(role='form' action="/logout" method="POST")
+						form.form(role='form' action="/send_to_postgres" method="POST")
 							button.btn.btn-danger(type='submit') Finish
 		
 			block content

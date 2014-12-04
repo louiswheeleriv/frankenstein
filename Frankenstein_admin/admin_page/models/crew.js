@@ -5,7 +5,8 @@ var crewSchema = mongoose.Schema({
 	crew_name : String,
 	crew_bio : String,
 	crew_dirty : Boolean,
-	crew_deleted : Boolean
+	crew_deleted : Boolean,
+	crew_inserting : Boolean
 });
 
 // Instance functions
@@ -13,7 +14,7 @@ var crewSchema = mongoose.Schema({
 crewSchema.methods.saveCrew = function(){
 	var crew = this;
 
-	if(this.postgres_id == -1){
+	if(this.postgres_id == -1 && this.crew_inserting){
 		crew.crew_dirty = true;
 		crew.save();
 
@@ -32,7 +33,8 @@ crewSchema.methods.saveCrew = function(){
 			"crew_name" : this.crew_name,
 			"crew_bio" : this.crew_bio,
 			"crew_dirty" : this.crew_dirty,
-			"crew_deleted" : this.crew_deleted
+			"crew_deleted" : this.crew_deleted,
+			"crew_inserting" : false
 		}, function(err){
 			if(err)
 				console.log(err);
