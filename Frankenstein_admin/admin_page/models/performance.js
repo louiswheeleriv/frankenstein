@@ -14,7 +14,7 @@ var performanceSchema = mongoose.Schema({
 		actor_role : String,
 		actor_appearance_time : Number,
 		actor_dirty : Boolean,
-		actor_deleted : Boolean
+		actor_deleted : Boolean,
 		actor_name : String
 	}],
 

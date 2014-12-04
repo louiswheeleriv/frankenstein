@@ -401,6 +401,9 @@ router.get('/updatePerf', isLoggedIn, function(req, res) {
 
 /* POST for updating an already exisiting actor */
 router.post('/update_perf', isLoggedIn, function(req, res) {
+	console.log("req body: ");
+	console.log(req.body);
+
 	var info = req.body.performance_info;
 	var stage = req.body.stage_id;
 	var time = req.body.performance_start_time;
