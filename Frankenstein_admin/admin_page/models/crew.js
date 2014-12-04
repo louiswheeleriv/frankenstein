@@ -74,6 +74,14 @@ crewSchema.statics.getDirtyCrew = function(callback){
 	});
 }
 
+crewSchema.statics.removeAll = function(callback){
+	this.find({}).remove().exec();
+	if(callback){
+		callback();
+	}
+}
+
+
 crewSchema.statics.getDeletedCrew = function(callback){
 	this.find({"crew_deleted" : true}, function(err, crew){
 		callback(crew);

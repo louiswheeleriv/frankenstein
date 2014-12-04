@@ -79,4 +79,11 @@ productionSchema.statics.getDeletedProductions = function(callback){
 	});
 }
 
+productionSchema.statics.removeAll = function(callback){
+	this.find({}).remove()
+	if(callback){
+		callback;
+	}
+}
+
 module.exports = mongoose.model('Production', productionSchema);

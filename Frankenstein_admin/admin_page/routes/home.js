@@ -7,7 +7,7 @@ var Crew = require('../models/crew');
 var Stage = require('../models/stage');
 var Production = require('../models/production');
 var Event = require('../models/event');
-var Performance = require('../models/event');
+var Performance = require('../models/performance');
 var import_export = require('../database/import_export')
 
 // Connect mongoose to the database
@@ -18,6 +18,7 @@ mongoose.connect('mongodb://localhost/admindb', function(err){
 	else
 		console.log('*** Mongoose connected successfully');
 });
+
 
 /* GET home page. */
 router.get('/home', function(req, res) {

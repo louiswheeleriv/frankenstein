@@ -78,4 +78,11 @@ eventSchema.statics.getDeletedEvents = function(callback){
 	});
 }
 
+eventSchema.statics.removeAll = function(callback){
+	this.find({}).remove().exec()
+	if(callback){
+		callback()
+	}
+}
+
 module.exports = mongoose.model('Event', eventSchema);

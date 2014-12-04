@@ -13,7 +13,7 @@ var Crew = require('../models/crew');
 var Stage = require('../models/stage');
 var Production = require('../models/production');
 var Event = require('../models/event');
-var Performance = require('../models/event');
+var Performance = require('../models/performance');
 
 client.connect(function(err){
     console.log(err);
@@ -23,14 +23,19 @@ function silly () {
 }
 var pull = function(){
     console.log('Pulling the stuff')
-    pull_actors(pull_crew(pull_significant_events(pull_stages(pull_production(pull_performances)))));
+    removeall(pull_actors(pull_crew(pull_significant_events(pull_stages(pull_production(pull_performances))))));
 }
 
-function removeall(){
+function removeall(callback){
     Actor.removeAll();
     Stage.removeAll();
     Event.removeAll();
+    Crew.removeAll();
     Performance.removeAll();
+    Production.removeAll();
+    if(callback){
+        callback()
+    }
 }
 var push_all = function(){
     push_actors()
@@ -43,16 +48,22 @@ function pull_performances(callback){
     var query = client.query("SELECT * FROM " + performances_table)
 
     query.on('row', function(row) {
+
         var perf = new Performance({
-            'postgres_id' : row.p_id, 
-            'performance_info' : row.performance_info, 
-            'performance_start_time' : row.performance_start_time,
-            'performance_dirty':false, 
-            'performance_deleted':false});
+            postgres_id : row.id, 
+            performance_info : row.performance_info, 
+            performance_start_time : row.performance_start_time,
+            performance_dirty:false, 
+            performance_deleted:false});
 
-        var production = Production.findOne({"postgres_id":row.production_id})
-        perf.performance_production_id = production._id
-
+        Production.findOne({"postgres_id":row.performance_production_id},function(err,production){
+            if(err){
+                console.log(err)
+            }else{
+                perf.performance_production_id = production.id
+            }
+        })
+        
         var query2 = client.query("SELECT  * FROM " + perfactor_table + " WHERE performance_id=$1", [row.id]);
         var query3 = client.query("SELECT  * FROM " + perfcrew_table + " WHERE performance_id=$1", [row.id]);
         var query4 = client.query("SELECT  * FROM " + significant_events_table + " WHERE performance_id=$1", [row.id]);
@@ -62,22 +73,22 @@ function pull_performances(callback){
                 'actor_role' : row.role,
                 'actor_appearance_time' : row.appearance_time
             }
+            if (perf.postgres_id == 347){
+                console.log(row)
+            }
             Actor.findOne({"postgres_id":row.actor_id},function(err,actor){
                 if(err){
                     console.log(err)
                 }else{
-                    perfactor.actor_id = actor._id
+                    perfactor.actor_id = actor.id
                     perf.performance_actors.push(perfactor)
                 } 
             })
         })
-        query2.on('end',function(err,result){
-            if(err){
-                console.log(err)
-            }else{
-                perf.save()
-            }
+        query2.on('end',function(result){
+            // perf.save()          
         })
+        
         query3.on('row', function(row){    
             var perfcrew = {
                 'crew_responsibility' : row.responsibilities,
@@ -86,41 +97,37 @@ function pull_performances(callback){
                 if(err){
                     console.log(err)
                 }else{
-                    perfactor.crew_id = crew._id
+                    perfcrew.crew_id = crew.id
                     perf.performance_crew.push(perfcrew)
                 } 
             })
         })
 
-        query3.on('end',function(err,result){
-            if(err){
-                console.log(err)
-            }else{
-                perf.save()
-            }
+        query3.on('end',function(result){
+            // perf.save()
         })
-
+        
         query4.on('row',function(row){
             Event.findOne({"postgres_id":row.id}, function(err, s_event){
                 if(err){
                     console.log(err)
                 }else{
-                    perf.performance_events.push(s_event._id)
+                    perf.performance_events.push(s_event.id)
                 }
             })
         })
 
-        query4.on('end',function(err,result){
-            if(err){
-                console.log(err)
-            }else{
-                perf.save()
-            }
-       });
+        query4.on('end',function(result){
+            perf.save(function(err, product, numberAffected){
+                console.log(numberAffected)
+            })
+        })
     })
-    if(callback){  
-        callback()
-    }
+    query.on('end',function(result){
+        if(callback){  
+            callback()
+        }
+   })
 }
 
 function pull_actors(callback){
@@ -141,9 +148,11 @@ function pull_actors(callback){
         console.log(err);
     })
 
-    if(callback){
-        callback()
-    }
+    query.on('end',function(result){
+        if(callback){
+            callback()
+        } 
+    })
 }
 
 function pull_production(callback){
@@ -161,10 +170,7 @@ function pull_production(callback){
         production.save();
     });
 
-    query.on('end',function (err,result) {
-        if(err){
-            console.log(err)
-        }
+    query.on('end',function (result){
         if(callback){
             callback()
         }   
@@ -182,10 +188,7 @@ function pull_crew(callback){
         console.log(err);
     })
     
-    query.on('end',function (err,result) {
-        if(err){
-            console.log(err)
-        }
+    query.on('end',function(result) {
         if(callback){
             callback()
         }   
@@ -206,9 +209,11 @@ function pull_stages(callback){
         })
         stage.save();
     });
-    if(callback){
-        callback()
-    }
+    query.on('end', function(result){
+        if(callback){
+            callback()
+        } 
+    })
 }
 
 function pull_significant_events(callback){
@@ -221,10 +226,13 @@ function pull_significant_events(callback){
             "event_deleted":false
         })
         evt.save();
-    });
-    if(callback){
-        callback()
-    }
+    })
+    query.on('end',function(result){
+        if(callback){
+            callback()
+        }
+    })
+
 }
 
 function push_actors(){

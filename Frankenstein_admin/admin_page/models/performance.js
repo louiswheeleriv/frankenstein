@@ -105,4 +105,11 @@ performanceSchema.statics.getDeletedPerformances = function(callback){
 	});
 }
 
+performanceSchema.statics.removeAll = function(callback){
+	this.find({}).remove().exec()
+	if(callback){
+		callback()
+	}
+}
+
 module.exports = mongoose.model('Performance', performanceSchema);
