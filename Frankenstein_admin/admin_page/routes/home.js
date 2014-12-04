@@ -32,9 +32,7 @@ router.get('/home', isLoggedIn, function(req, res) {
 });
 
 router.post('/send_to_postgres', isLoggedIn, function(req, res) {
-	console.log("done!");
-	res.render('/logout');
-	// res.redirect('/logout');
+	res.redirect('/logout');
 });
 
 // **********************************************************************
