@@ -22,7 +22,8 @@ mongoose.connect('mongodb://localhost/admindb', function(err){
 /* GET home page. */
 router.get('/home', function(req, res) {
 	var actorCollection = req.db.get('actors');
-	import_export();
+	// import_export.push_all();
+	import_export.pull();
 	res.render('home.jade', { title: 'Frankenstein' });
 });
 
@@ -442,9 +443,11 @@ router.post('/add_perf', function(req, res) {
 	//get crew
 
 	var a = new Performance(
+	{
 		"performance_info" : info,
 		"performance_start_time" : time,
 		"performance_stage_id" : stage
+	}
 	);
 
 	// var a = new Event(
