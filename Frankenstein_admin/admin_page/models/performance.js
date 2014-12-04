@@ -12,12 +12,14 @@ var performanceSchema = mongoose.Schema({
 	performance_actors : [{
 		actor_id : ObjectId,
 		actor_role : String,
-		actor_appearance_time : Number
+		actor_appearance_time : Number,
+		actor_name : String
 	}],
 
 	performance_crew : [{
 		crew_id : ObjectId,
-		crew_responsibility : String
+		crew_responsibility : String,
+		crew_name : String
 	}],
 
 	performance_dirty : Boolean,
