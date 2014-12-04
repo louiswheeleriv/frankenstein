@@ -602,5 +602,4 @@ router.post('/add_perf', isLoggedIn, function(req, res) {
         res.redirect('/updatePerf');
 });
 
-
-
+module.exports = router;
