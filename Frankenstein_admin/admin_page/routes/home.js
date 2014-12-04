@@ -74,7 +74,7 @@ router.post('/update_actor', isLoggedIn, function(req, res) {
 
 	a.saveActor();
 
-	res.redirect('/home');
+	res.redirect('/updateActor');
 })
 
 /* POST for removing an already exisiting actor */
@@ -93,7 +93,7 @@ router.post('/remove_actor', isLoggedIn, function(req, res) {
 
 	a.markDeleted();
 
-	res.redirect('/home');
+	res.redirect('/updateActor');
 
 });
 
@@ -115,7 +115,7 @@ router.post('/add_actor', isLoggedIn, function(req, res) {
 
 	a.saveActor();
 
-	res.redirect('/home');
+	res.redirect('/updateActor');
 });
 
 // **********************************************************************
@@ -157,7 +157,7 @@ router.post('/update_crew', isLoggedIn, function(req, res) {
 
 	a.saveCrew();
 
-	res.redirect('/home');
+	res.redirect('/updateCrew');
 })
 
 /* POST for removing an already exisiting actor */
@@ -176,7 +176,7 @@ router.post('/remove_crew', isLoggedIn, function(req, res) {
 
 	a.markDeleted();
 
-	res.redirect('/home');
+	res.redirect('/updateCrew');
 
 });
 
@@ -198,7 +198,7 @@ router.post('/add_crew', isLoggedIn, function(req, res) {
 
 	a.saveCrew();
 
-	res.redirect('/home');
+	res.redirect('/updateCrew');
 });
 
 // **********************************************************************
@@ -240,7 +240,7 @@ router.post('/update_stage', isLoggedIn, function(req, res) {
 
 	a.saveStage();
 
-	res.redirect('/home');
+	res.redirect('/updateStage');
 })
 
 /* POST for removing an already exisiting actor */
@@ -259,7 +259,7 @@ router.post('/remove_stage', isLoggedIn, function(req, res) {
 
 	a.markDeleted();
 
-	res.redirect('/home');
+	res.redirect('/updateStage');
 
 });
 
@@ -281,7 +281,7 @@ router.post('/add_stage', isLoggedIn, function(req, res) {
 
 	a.saveStage();
 
-	res.redirect('/home');
+	res.redirect('/updateStage');
 });
 
 // **********************************************************************
@@ -320,7 +320,7 @@ router.post('/update_event', isLoggedIn, function(req, res) {
 
 	a.saveEvent();
 
-	res.redirect('/home');
+	res.redirect('/updateEvent');
 })
 
 /* POST for removing an already exisiting actor */
@@ -339,7 +339,7 @@ router.post('/remove_event', isLoggedIn, function(req, res) {
 
 	a.markDeleted();
 
-	res.redirect('/home');
+	res.redirect('/updateEvent');
 
 });
 
@@ -359,7 +359,7 @@ router.post('/add_event', isLoggedIn, function(req, res) {
 
 	a.saveEvent();
 
-	res.redirect('/home');
+	res.redirect('/updateEvent');
 });
 
 
@@ -421,7 +421,7 @@ router.post('/update_perf', isLoggedIn, function(req, res) {
 
 	a.savePerformance();
 
-	res.redirect('/home');
+	res.redirect('/updatePerf');
 })
 
 /* POST for removing an already exisiting actor */
@@ -443,7 +443,7 @@ router.post('/remove_perf', isLoggedIn, function(req, res) {
 
 	// a.markDeleted();
 
-	res.redirect('/home');
+	res.redirect('/updatePerf');
 
 });
 
@@ -495,7 +495,7 @@ router.post('/add_perf', isLoggedIn, function(req, res) {
 
 	a.savePerformance();
 
-	res.redirect('/home');
+	res.redirect('/updatePerf');
 });
 
 
