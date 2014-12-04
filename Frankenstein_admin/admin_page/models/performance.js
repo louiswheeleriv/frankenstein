@@ -32,7 +32,8 @@ var performanceSchema = mongoose.Schema({
 	}],
 
 	performance_dirty : Boolean,
-	performance_deleted : Boolean
+	performance_deleted : Boolean,
+	performance_inserting : Boolean
 });
 
 // Instance functions
@@ -45,7 +46,7 @@ performanceSchema.methods.savePerformance = function(){
 
 	
 
-	if(this.postgres_id == -1 && this.performance_dirty == false){
+	if(this.postgres_id == -1 && this.performance_inserting){
 		// console.log("this is here");
 		// console.log(performance);
 		performance.performance_dirty = true;
@@ -72,7 +73,8 @@ performanceSchema.methods.savePerformance = function(){
 			"performance_actors" : this.performance_actors,
 			"performance_crew" : this.performance_crew,
 			"performance_dirty" : this.performance_dirty,
-			"performance_deleted" : this.performance_deleted
+			"performance_deleted" : this.performance_deleted,
+			"performance_inserting" : false
 		}, function(err){
 			if(err)
 				console.log(err);

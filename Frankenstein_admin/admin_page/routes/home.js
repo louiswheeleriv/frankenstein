@@ -401,9 +401,8 @@ router.get('/updatePerf', isLoggedIn, function(req, res) {
 
 /* POST for updating an already exisiting actor */
 router.post('/update_perf', isLoggedIn, function(req, res) {
-	console.log("req body: ");
-	console.log(req.body);
-
+	var id = req.body._id;
+	var postID = req.body.postgres_id;
 	var info = req.body.performance_info;
 	var stage = req.body.stage_id;
 	var time = req.body.performance_start_time;
@@ -469,13 +468,16 @@ router.post('/update_perf', isLoggedIn, function(req, res) {
 
 	var a = new Performance(
 	{
+		"_id" : id,
+		"postgres_id" : postID,
 		"performance_info" : info,
 		"performance_stage_id" : stage,
 		"performance_start_time" : time,
 		"performance_deleted" : false,
 		"performance_dirty" : false,
 		"performance_actors" : actors,
-		"performance_crew" : crews
+		"performance_crew" : crews,
+		"performance_inserting" : false
 		// "performance_production_id" : 1,
 	}
 	);
@@ -579,7 +581,8 @@ router.post('/add_perf', isLoggedIn, function(req, res) {
 		"performance_deleted" : false,
 		"performance_dirty" : false,
 		"performance_actors" : actors,
-		"performance_crew" : crews
+		"performance_crew" : crews,
+		"performance_inserting" : true
 		// "performance_production_id" : 1,
 	}
 	);
