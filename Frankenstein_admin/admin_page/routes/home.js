@@ -56,15 +56,28 @@ router.post('/update_actor', function(req, res) {
 
 	var a = new Actor(
 		{
-			"postgres_id" : id,
+			// "_id" : id,
 			"actor_name" : name,
 			"actor_bio" : bio,
 			"actor_dirty" : false,
 			"actor_deleted" : false
 		}
 	);
-	console.log("new actor: ");
-	console.log(a);
+
+	console.log("");
+	console.log(id);
+	console.log("");
+
+	Actor.findById(id, function(data) {
+		console.log("");
+		console.log(data);
+		console.log("");
+	})
+
+	console.log("");
+	// console.log("new actor: ");
+	// console.log(a);
+	// console.log("");
 
 	a.saveActor();
 
@@ -382,7 +395,6 @@ router.get('/updatePerf', function(req, res) {
 			}
 			);
 		})
-
 	})
 
 });
@@ -390,23 +402,33 @@ router.get('/updatePerf', function(req, res) {
 /* POST for updating an already exisiting actor */
 router.post('/update_perf', function(req, res) {
 
-	console.log(req.body);
+	// console.log("req body: ");
+	// console.log(req.body);
+	
+	var info = req.body.performance_info;
+	var stage = req.body.stage_id;
+	var time = req.body.performance_start_time;
 
-	// var id = req.body._id;
-	// var info = req.body.performance_info;
+	//get actors
+	//get crew
 
-	// var a = new Performance(
-	// 	{
-	// 		"postgres_id" : id,
-	// 		"performance_info" : info,
-	// 		"performance_dirty" : false,
-	// 		"performance_deleted" : false
-	// 	}
-	// );
+	var a = new Performance(
+	{
+		"postgres_id" : -1,
+		"performance_info" : info,
+		"performance_stage_id" : stage,
+		"performance_start_time" : time,
+		"performance_deleted" : false
+		// "performance_production_id" : 1
+		// "performance_actors" : [{}],
+		// "performance_crew" : [{}]
+	}
+	);
+
 	// console.log("new perf: ");
 	// console.log(a);
 
-	// a.savePerformance();
+	a.savePerformance();
 
 	res.redirect('/home');
 })
@@ -436,12 +458,13 @@ router.post('/remove_perf', function(req, res) {
 
 // Post for adding a new actor
 router.post('/add_perf', function(req, res) {
-	console.log("req body: ");
-	console.log(req.body);
+	// console.log("req body: ");
+	// console.log(req.body);
 	
 	var info = req.body.performance_info;
 	var stage = req.body.stage_id;
 	var time = req.body.performance_start_time;
+
 	// time : { type : Date, default: Date.now }
 	//get actors
 	//get crew
@@ -451,12 +474,17 @@ router.post('/add_perf', function(req, res) {
 		"postgres_id" : -1,
 		"performance_info" : info,
 		"performance_stage_id" : stage,
-		"performance_start_time" : 0,
+		"performance_start_time" : time,
+		"performance_deleted" : false,
+		"performance_dirty" : false
 		// "performance_production_id" : 1,
-		"performance_actors" : {},
-		"performance_crew" : {}
+		// "performance_actors" : [{}],
+		// "performance_crew" : [{}]
 	}
 	);
+
+	console.log("new perf: ")
+	console.log(a);
 
 	a.savePerformance();
 

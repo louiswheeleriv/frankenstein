@@ -103,6 +103,7 @@ function updateActor(currentActor) {
 	theID.setAttribute("type", "hidden");
 	theID.setAttribute("name", "_id");
 	theID.setAttribute("value", allActors[currentActor]._id);
+	console.log(allActors[currentActor]._id);
 	form.appendChild(theID);
 
 	var submit = document.createElement("button");
