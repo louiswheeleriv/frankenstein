@@ -18,6 +18,11 @@ $(document).ready(function() {
 
 });
 
+function updateThePerf() {
+	alert("working");
+}
+
+
 
 function newPerf() {
 	var mainDiv = document.getElementById("thisOne");
@@ -35,6 +40,7 @@ function newPerf() {
 	var perfInfo = document.createElement("label");
 	perfInfo.innerHTML = "Performance";
 	var perfInfoText = document.createElement("input");
+	perfInfoText.className = "form-control input-mysize";
 	perfInfoText.setAttribute("type", "text");
 	perfInfoText.setAttribute("placeholder", "Performance Info");
 	perfInfoText.setAttribute("id", "performance_info");
@@ -54,6 +60,7 @@ function newPerf() {
 	perfStage.innerHTML = "Performance Location";
 
 	var perfStageDrop = document.createElement("select");
+	perfStageDrop.className = "form-control input-mysize";
 	perfStageDrop.setAttribute("name", "stage_location");
 	perfStageDrop.setAttribute("id", "perfStageDrop");
 	perfStageDrop.setAttribute("onchange", "getStageID()");
@@ -88,8 +95,9 @@ function newPerf() {
 	perfTime.innerHTML = "Performance Start Time";
 
 	var startTime = document.createElement("input");
-	startTime.setAttribute("type", "time");
-	startTime.setAttribute("value", "19:00");
+	startTime.className = "form-control input-mysize";
+	startTime.setAttribute("type", "datetime-local");
+	startTime.setAttribute("value", "2015-04-22T19:00");
 	startTime.setAttribute("name", "performance_start_time");
 
 	formControl3.appendChild(perfTime);

@@ -30,6 +30,7 @@ html
 					li
 						a(href='/updatePerf/') Performances
 					li 
-						button.btn.btn-danger(type='button') Finish
+						form.form(role='form' action="/logout" method="POST")
+							button.btn.btn-danger(type='submit') Finish
 		
 			block content

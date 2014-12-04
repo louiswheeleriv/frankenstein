@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var ObjectId = Schema.ObjectId;
+var ObjectId = mongoose.Schema.ObjectId;
 
 var performanceSchema = mongoose.Schema({
 	postgres_id : Number,
@@ -20,6 +20,10 @@ var performanceSchema = mongoose.Schema({
 		crew_responsibility : String
 	}],
 
+	performance_events : [{
+		event_id : ObjectId
+	}],
+
 	performance_dirty : Boolean,
 	performance_deleted : Boolean
 });
@@ -30,6 +34,7 @@ performanceSchema.methods.savePerformance = function(){
 	var performance = this;
 
 	if(this.postgres_id == -1){
+		console.log("this is here");
 		performance.performance_dirty = true;
 		performance.save();
 

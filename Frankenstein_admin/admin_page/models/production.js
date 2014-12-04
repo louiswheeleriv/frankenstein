@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var productionSchema = mongoose.Schema({
 	postgres_id : Number,
 	production_name : String,
+	production_info : String,
 	production_dirty : Boolean,
 	production_deleted : Boolean
 });

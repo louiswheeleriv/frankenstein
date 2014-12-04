@@ -444,24 +444,17 @@ router.post('/add_perf', function(req, res) {
 
 	var a = new Performance(
 	{
+		"postgres_id" : -1,
 		"performance_info" : info,
-		"performance_start_time" : time,
-		"performance_stage_id" : stage
+		"performance_stage_id" : stage,
+		"performance_start_time" : 0,
+		// "performance_production_id" : 1,
+		"performance_actors" : {},
+		"performance_crew" : {}
 	}
 	);
 
-	// var a = new Event(
-	// 	{
-	// 		"postgres_id" : -1,
-	// 		"event_name" : name,
-	// 		"event_dirty" : false,
-	// 		"event_deleted" : false
-	// 	}
-	// );
-
-	// console.log(a);
-
-	// a.saveEvent();
+	a.savePerformance();
 
 	res.redirect('/home');
 });
