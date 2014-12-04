@@ -14,6 +14,7 @@ var Stage = require('../models/stage');
 var Production = require('../models/production');
 var Event = require('../models/event');
 var Performance = require('../models/performance');
+var async = require('async')
 
 client.connect(function(err){
     console.log(err);
@@ -22,11 +23,13 @@ function silly () {
     1+1    
 }
 var pull = function(){
-    console.log('Pulling the stuff')
-    removeall(pull_actors(pull_crew(pull_significant_events(pull_stages(pull_production(pull_performances))))));
+    async.series([removeall, pull_actors,pull_crew,pull_significant_events,pull_stages,pull_production,pull_performances])
+    // async.series([print('a'),print('b'),print('c')])
+    // print('a',print('b',print('c')))
 }
 
 function removeall(callback){
+    console.log('Pulling the stuff')
     Actor.removeAll();
     Stage.removeAll();
     Event.removeAll();
@@ -38,9 +41,14 @@ function removeall(callback){
     }
 }
 var push_all = function(){
-    push_actors()
-    push_stages()
-    push_events()    
+    async.series([push_actors,push_stages,push_events])
+}
+
+function print(x,callback){
+    console.log(x)
+    if(callback){
+        callback()
+    }
 }
 
 function pull_performances(callback){
@@ -73,20 +81,17 @@ function pull_performances(callback){
                 'actor_role' : row.role,
                 'actor_appearance_time' : row.appearance_time
             }
-            if (perf.postgres_id == 347){
-                console.log(row)
-            }
             Actor.findOne({"postgres_id":row.actor_id},function(err,actor){
                 if(err){
                     console.log(err)
                 }else{
-                    perfactor.actor_id = actor.id
+                    perfactor.actor_id = actor._id
                     perf.performance_actors.push(perfactor)
                 } 
             })
         })
         query2.on('end',function(result){
-            // perf.save()          
+            perf.save()          
         })
         
         query3.on('row', function(row){    
@@ -104,23 +109,28 @@ function pull_performances(callback){
         })
 
         query3.on('end',function(result){
-            // perf.save()
+            perf.save()
         })
         
         query4.on('row',function(row){
+            var evt = {
+                'event_dirty' : false,
+                'event_deleted' : false
+            }
+
             Event.findOne({"postgres_id":row.id}, function(err, s_event){
                 if(err){
                     console.log(err)
                 }else{
-                    perf.performance_events.push(s_event.id)
+                    evt.event_id = s_event.id
+                    perf.performance_events.push(evt)
+                    perf.save();
                 }
             })
         })
 
         query4.on('end',function(result){
-            perf.save(function(err, product, numberAffected){
-                console.log(numberAffected)
-            })
+            perf.save()
         })
     })
     query.on('end',function(result){
@@ -300,10 +310,130 @@ function push_stages(){
 }
 
 function push_performances(){
+    // " : this.performance_info,
+    // "" : this.performance_stage_id,
+    // "" : this.performance_start_time,
+    // "performance_production_id" : this.performance_production_id,
+    // "performance_actors" : this.performance_actors,
+    // "performance_crew" : this.performance_crew,
+    // "performance_dirty" : this.performance_dirty,
+    // "performance_deleted
+
     Performance.getDirtyPerformances(function(dirtyPerformances){
+        for (var i = dirtyPerformances.length - 1; i >= 0; i--) {
+            var perf = dirtyPerformances[i]
+            if(perf.postgres_id > 0){
+                client.query("UPDATE "+performances_table+" SET (performance_stage_id,performance_info,performance_start_time)"
+                    +" = ($2,$3,$4) WHERE id = $1",[perf.postgres_id,perf.performance_stage_id,perf.performance_info, perf.performance_start_time]) 
+            }else{
+                client.query("INSERT INTO "+performances_table
+                            +" (performance_stage_id,performance_info,performance_start_time) VALUES($1,$2,$3)",
+                            [perf.performance_stage_id,perf.performance_info, perf.performance_start_time])
+            }
+
+            // changed and deleted perfactors: 
+            var delPefActors = perf.performance_actors
+            for (var j = delPefActors.length - 1; j >= 0; j--) {
+                if(delPefActors[j].actor_deleted = true){
+                    client.query("DELETE FROM "+perfactor_table+" WHERE id=$1",[delPefActors[j].postgres_id])
+                }else if(delPefActors[j].actor_dirty = true){
+                    push_perfactor(perf[j].postgres_id,delPefActors[j])
+                }
+            };
+
+            // changed and deleted perfcrew: 
+            var delPefCrew = perf.performance_actors
+            for (var j = delPefCrew.length - 1; j >= 0; j--) {
+                if(delPefCrew[j].crew_deleted = true){
+                    client.query("DELETE FROM "+perfcrew_table+" WHERE id=$1",[delPefCrew[j].postgres_id])
+                }else if(delPefCrew[j].crew_dirty = true){
+                    push_perfcrew(perf[j].postgres_id,delPefCrew[j])
+                }
+            };
+
+            var sig_events = perf.performance_events
+            for (var k = Things.length - 1; k >= 0; k--) {
+                Events.find(sig_events[k],function(err,evt){
+                    if(err){
+                        console.log("Error updating sig events")
+                    }else{
+
+                        if(evt.postgres_id > 0){
+                            if(sig_events[k].event_deleted = true){
+                                client.query("DELETE FROM "+significant_events_table+" WHERE id=$1",[evt.postgres_id])
+                            }else if(delPefCrew[j].event_dirty = true){
+                                push_perfcrew(perf[j].postgres_id,delPefCrew[j])
+                            }
+                        }else{
+                            if(sig_events[k].event_dirty = true){
+                                client.query("INSERT INTO "+significant_events_table+" (perfromance_id, description)" 
+                                + " VALUES($1,$2)",[perf.postgres_id,evt.event_name])
+                            }
+                        }
+                        
+                    }
+                })
+            };
+
+        };
 
     })
 }
+
+function push_perfactor(performance_postgress_id, perfactor, callback){
+    Actor.findActorById(perfactor.actor_id,function(actor){
+        if(perfactor.postgres_id > 0){
+            client.query("UPDATE "+perfactor_table+" SET (actor_id,appearance_time,role) = VALUES($2,$3,$4) "
+                +"WHERE id = $1",[perfactor.postgres_id, actor.postgres_id, perfactor.actor_appearance_time, perfactor.actor_role],function(err,result){
+                    if(err){
+                        console.log("Error updating perfactor: "+err)
+                    }
+                    if(callback){
+                        callback()
+                    }
+            })
+        }else{
+            client.query("INSERT INTO "+perfactor_table+"(performance_id, actor_id,appearance_time,role)" 
+                +  " VALUES($1,$2,$3,$4)",[performance_postgress_id, actor.postgres_id, perfactor.actor_appearance_time, perfactor.actor_role],function(err,result){
+                    if(err){
+                        console.log("Error updating perfactor: "+err)
+                    }
+                    if(callback){
+                        callback()
+                    }
+            })    
+    
+        }
+    })
+}
+
+function push_perfcrew(performance_postgress_id, perfcrew, callback){
+    Crew.findCrewById(perfcrew.crew_id,function(crew){
+        if(perfcrew.postgres_id > 0){
+            client.query("UPDATE "+perfcrew_table+" SET (crew_id,responsibilities) = VALUES($2,$3) "
+                +"WHERE id = $1",[perfcrew.postgres_id, crew.postgres_id, perfcrew.crew_responsibility],function(err,result){
+                    if(err){
+                        console.log("Error updating perfcrew: "+err)
+                    }
+                    if(callback){
+                        callback()
+                    }
+            })
+        }else{
+            client.query("INSERT INTO "+perfcrew_table+"(performance_id,crew_id,responsibilities) "
+                +" VALUES($1,$2,$3)",[performance_postgress_id, crew.postgres_id, perfcrew.crew_responsibility],function(err,result){
+                    if(err){
+                        console.log("Error updating perfcrew: "+err)
+                    }
+                    if(callback){
+                        callback()
+                    }
+            })    
+    
+        }
+    })    
+}
+
 var import_export = {};
 import_export.pull = pull
 import_export.push_all = push_all
