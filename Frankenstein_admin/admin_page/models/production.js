@@ -31,6 +31,7 @@ productionSchema.methods.saveProduction = function(){
 		this.model('Production').findByIdAndUpdate(this._id, {
 			"postgres_id" : this.postgres_id,
 			"production_name" : this.production_name,
+			"production_info" : this.production_info,
 			"production_dirty" : this.production_dirty,
 			"production_deleted" : this.production_deleted,
 			"production_inserting" : false
@@ -58,7 +59,7 @@ productionSchema.methods.markDeleted = function(){
 // Static functions
 
 productionSchema.statics.findProductionById = function(id, callback){
-	this.model('Production').findById(id, function(productionSelected){
+	this.model('Production').findById(id, function(err, productionSelected){
 		callback(productionSelected);
 	});
 }

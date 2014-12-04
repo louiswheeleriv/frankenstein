@@ -59,7 +59,7 @@ stageSchema.methods.markDeleted = function(){
 // Static functions
 
 stageSchema.statics.findStageById = function(id, callback){
-	this.model('Stage').findById(id, function(stageSelected){
+	this.model('Stage').findById(id, function(err, stageSelected){
 		callback(stageSelected);
 	});
 }

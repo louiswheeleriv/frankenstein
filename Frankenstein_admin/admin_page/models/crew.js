@@ -59,7 +59,7 @@ crewSchema.methods.markDeleted = function(){
 // Static functions
 
 crewSchema.statics.findCrewById = function(id, callback){
-	this.model('Crew').findById(id, function(crewSelected){
+	this.model('Crew').findById(id, function(err,crewSelected){
 		callback(crewSelected);
 	});
 }

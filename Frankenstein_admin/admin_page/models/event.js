@@ -57,7 +57,7 @@ eventSchema.methods.markDeleted = function(){
 // Static functions
 
 eventSchema.statics.findEventById = function(id, callback){
-	this.model('Event').findById(id, function(eventSelected){
+	this.model('Event').findById(id, function(err,eventSelected){
 		callback(eventSelected);
 	});
 }

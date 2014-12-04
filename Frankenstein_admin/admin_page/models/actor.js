@@ -59,7 +59,7 @@ actorSchema.methods.markDeleted = function(){
 // Static functions
 
 actorSchema.statics.findActorById = function(id, callback){
-	this.model('Actor').findById(id, function(actorSelected){
+	this.model('Actor').findById(id, function(err,actorSelected){
 		callback(actorSelected);
 	});
 }

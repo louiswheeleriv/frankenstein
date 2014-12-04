@@ -29,11 +29,14 @@ function isLoggedIn(req, res, next){
 /* GET home page. */
 router.get('/home', isLoggedIn, function(req, res) {
 	var actorCollection = req.db.get('actors');
-	// import_export.push_all();
-	import_export.pull();
+	// import_export.pull();
 	res.render('home.jade', { title: 'Frankenstein' });
 });
 
+router.post('/send_to_postgres', isLoggedIn, function(req, res) {
+	import_export.push_all();    
+	res.redirect('/logout');
+});
 // **********************************************************************
 
 
@@ -176,10 +179,6 @@ router.post('/remove_crew', function(req, res) {
 
 });
 
-// Post for adding a new actor
-	res.redirect('/updateActor');
-
-});
 
 // Post for adding a new actor
 router.post('/add_actor', isLoggedIn, function(req, res) {

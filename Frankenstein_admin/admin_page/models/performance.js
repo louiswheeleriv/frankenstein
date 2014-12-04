@@ -96,7 +96,7 @@ performanceSchema.methods.markDeleted = function(){
 // Static functions
 
 performanceSchema.statics.findPerformanceById = function(id, callback){
-	this.model('Performance').findById(id, function(performanceSelected){
+	this.model('Performance').findById(id, function(err,performanceSelected){
 		callback(performanceSelected);
 	});
 }
