@@ -5,7 +5,8 @@ var stageSchema = mongoose.Schema({
 	stage_location : String,
 	stage_description : String,
 	stage_dirty : Boolean,
-	stage_deleted : Boolean
+	stage_deleted : Boolean,
+	stage_inserting : Boolean
 });
 
 // Instance functions
@@ -13,7 +14,7 @@ var stageSchema = mongoose.Schema({
 stageSchema.methods.saveStage = function(){
 	var stage = this;
 
-	if(this.postgres_id == -1){
+	if(this.postgres_id == -1 && this.stage_inserting){
 		stage.stage_dirty = true;
 		stage.save();
 
@@ -32,7 +33,8 @@ stageSchema.methods.saveStage = function(){
 			"stage_location" : this.stage_location,
 			"stage_description" : this.stage_description,
 			"stage_dirty" : this.stage_dirty,
-			"stage_deleted" : this.stage_deleted
+			"stage_deleted" : this.stage_deleted,
+			"stage_inserting" : false
 		}, function(err){
 			if(err)
 				console.log(err);
