@@ -44,8 +44,8 @@ function removeall(callback){
 var push_all = function(){
     // drop_all(push_all_actors(push_all_crew(push_all_production(push_all_stages(push_all_performances())))))
     // push_all_performances(push_all_actors(push_all_production(push_all_crew(push_all_stages(drop_all)))))
-    async.series([push_all_production,push_all_crew,push_all_actors,push_all_stages,push_all_performances])
-    
+    async.series([drop_all, push_all_production,push_all_crew,push_all_actors,push_all_stages,push_all_performances,removeall])
+
 }
 
 function push_all_actors(callback){
@@ -133,28 +133,31 @@ function push_all_events(performance_postgress_id){
 function push_all_crew(callback){
     print('pushing all crew')
     Crew.getCrew(function(crews){
-        for (var i = crews.length - 1; i >= 0; i--) {
-            var crew = crews[i]
+        async.each(crews,function(crew, cb){
             client.query("INSERT INTO "+crew_table+" (crew_name,crew_bio) VALUES ($1,$2)",
                 [crew.crew_name,crew.crew_bio],
                 function(err, result){
                     if(err){
-                        console.log(err)
+                        cb(err)
                     }else{
                         crew.postgres_id = result.oid
+                        cb(null)
                     }
-                })
-        };
-        if(callback){
-            callback()
-        }
+                })  
+        }, function(err){
+            if(err){
+                console.log("Error while pushing crew: "+err)
+            }
+            if(callback){
+                callback()
+            }
+        })
     });
 }
 
 function push_all_production(callback){
-    Production.getProductions(function(productions){
-        async.each(productions, function(prod, cb){
-            client.query("INSERT INTO "+production_table+" (production_name,production_info) VALUES ($1,$2)",
+    Production.findOne({},function(err,prod){
+        client.query("INSERT INTO "+production_table+" (production_name,production_info) VALUES ($1,$2)",
                 [prod.production_name,prod.production_info],
                 function(err, result){
                     if(err){
@@ -162,18 +165,12 @@ function push_all_production(callback){
                     }else{
                         prod.postgres_id = result.oid;
                         prod.save();
-                        cb(null)
+                        if(callback){
+                            callback()
+                        }
                     }
-                })
-        },function(err){
-            if(err){
-                console.log("Error pushing productions: "+err)
-            }
-            if(callback){
-                callback()
-            }
-        })
-    })
+        })  
+    });
 }
 
 function push_all_performances(callback){
@@ -183,9 +180,10 @@ function push_all_performances(callback){
 
             Stage.findStageById(perf.performance_stage_id,function(stage){
 
-                Production.findProductionById(perf.performance_production_id,function(production){
+                Production.findOne({},function(err,production){
 
-                    client.query("INSERT INTO "+performances_table+" (performance_stage_id,performance_info,"
+                    if(production){
+                        client.query("INSERT INTO "+performances_table+" (performance_stage_id,performance_info,"
                         +"performance_start_time, performance_production_id) VALUES($1,$2,$3,$4)",[stage.postgres_id,perf.performance_info, perf.performance_start_time, production.postgres_id],function(err, result){
                         if(err){
                             cb(err)
@@ -253,7 +251,9 @@ function push_all_performances(callback){
                             });                            
                             });                            
                         }
-                    })
+                    })   
+                    }
+                    
                 })
             })
 
