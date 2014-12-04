@@ -18,13 +18,20 @@ mongoose.connect('mongodb://localhost/admindb', function(err){
 		console.log('*** Mongoose connected successfully');
 });
 
+// route middleware to make sure a user is logged in
+function isLoggedIn(req, res, next){
+	if(req.isAuthenticated())
+		return next();
+	res.redirect('/');
+}
+
 /* GET home page. */
-router.get('/home', function(req, res) {
+router.get('/home', isLoggedIn, function(req, res) {
 	var actorCollection = req.db.get('actors');
 	res.render('home.jade', { title: 'Frankenstein' });
 });
 
-router.post('/send_to_postgres', function(req, res) {
+router.post('/send_to_postgres', isLoggedIn, function(req, res) {
 	console.log("done!");
 	res.render('/logout');
 	// res.redirect('/logout');
@@ -34,7 +41,7 @@ router.post('/send_to_postgres', function(req, res) {
 
 
 /* GET for the update actor page */
-router.get('/updateActor', function(req, res) {
+router.get('/updateActor', isLoggedIn, function(req, res) {
 	
 	Actor.getActors(function(response) {
 		console.log("response: ");
@@ -49,7 +56,7 @@ router.get('/updateActor', function(req, res) {
 });
 
 /* POST for updating an already exisiting actor */
-router.post('/update_actor', function(req, res) {
+router.post('/update_actor', isLoggedIn, function(req, res) {
 	var id = req.body._id;
 	var name = req.body.actor_name;
 	var bio = req.body.actor_bio;
@@ -73,7 +80,7 @@ router.post('/update_actor', function(req, res) {
 })
 
 /* POST for removing an already exisiting actor */
-router.post('/remove_actor', function(req, res) {
+router.post('/remove_actor', isLoggedIn, function(req, res) {
 	var id = req.body._id;
 	var name = req.body.actor_name;
 
@@ -93,7 +100,7 @@ router.post('/remove_actor', function(req, res) {
 });
 
 // Post for adding a new actor
-router.post('/add_actor', function(req, res) {
+router.post('/add_actor', isLoggedIn, function(req, res) {
 	var name = req.body.actor_name;
 	var bio = req.body.actor_bio;
 
@@ -116,7 +123,7 @@ router.post('/add_actor', function(req, res) {
 // **********************************************************************
 
 /* GET for the update actor page*/
-router.get('/updateCrew', function(req, res) {
+router.get('/updateCrew', isLoggedIn, function(req, res) {
 
 	Crew.getCrew(function(response) {
 		console.log("response: ");
@@ -132,7 +139,7 @@ router.get('/updateCrew', function(req, res) {
 });
 
 /* POST for updating an already exisiting actor */
-router.post('/update_crew', function(req, res) {
+router.post('/update_crew', isLoggedIn, function(req, res) {
 	var id = req.body._id;
 	var name = req.body.crew_name;
 	var bio = req.body.crew_bio;
@@ -156,7 +163,7 @@ router.post('/update_crew', function(req, res) {
 })
 
 /* POST for removing an already exisiting actor */
-router.post('/remove_crew', function(req, res) {
+router.post('/remove_crew', isLoggedIn, function(req, res) {
 	var id = req.body._id;
 	var name = req.body.actor_name;
 
@@ -176,7 +183,7 @@ router.post('/remove_crew', function(req, res) {
 });
 
 // Post for adding a new actor
-router.post('/add_crew', function(req, res) {
+router.post('/add_crew', isLoggedIn, function(req, res) {
 	var name = req.body.crew_name;
 	var bio = req.body.crew_bio;
 
@@ -199,7 +206,7 @@ router.post('/add_crew', function(req, res) {
 // **********************************************************************
 
 /* GET for the update stage page */
-router.get('/updateStage', function(req, res) {
+router.get('/updateStage', isLoggedIn, function(req, res) {
 	
 	Stage.getStages(function(response) {
 		console.log("response: ");
@@ -215,7 +222,7 @@ router.get('/updateStage', function(req, res) {
 
 
 /* POST for updating an already exisiting actor */
-router.post('/update_stage', function(req, res) {
+router.post('/update_stage', isLoggedIn, function(req, res) {
 	var id = req.body._id;
 	var location = req.body.stage_location;
 	var description = req.body.stage_description;
@@ -239,7 +246,7 @@ router.post('/update_stage', function(req, res) {
 })
 
 /* POST for removing an already exisiting actor */
-router.post('/remove_stage', function(req, res) {
+router.post('/remove_stage', isLoggedIn, function(req, res) {
 	var id = req.body._id;
 	var location = req.body.actor_name;
 
@@ -259,7 +266,7 @@ router.post('/remove_stage', function(req, res) {
 });
 
 // Post for adding a new actor
-router.post('/add_stage', function(req, res) {
+router.post('/add_stage', isLoggedIn, function(req, res) {
 	var location = req.body.stage_location;
 	var description = req.body.stage_description;
 
@@ -282,7 +289,7 @@ router.post('/add_stage', function(req, res) {
 // **********************************************************************
 
 /* GET for the update stage page */
-router.get('/updateEvent', function(req, res) {
+router.get('/updateEvent', isLoggedIn, function(req, res) {
 	
 	Event.getEvents(function(response) {
 		console.log("response: ");
@@ -297,7 +304,7 @@ router.get('/updateEvent', function(req, res) {
 });
 
 /* POST for updating an already exisiting actor */
-router.post('/update_event', function(req, res) {
+router.post('/update_event', isLoggedIn, function(req, res) {
 	var id = req.body._id;
 	var name = req.body.event_name;
 	var postID = req.body.postgres_id;
@@ -319,7 +326,7 @@ router.post('/update_event', function(req, res) {
 })
 
 /* POST for removing an already exisiting actor */
-router.post('/remove_event', function(req, res) {
+router.post('/remove_event', isLoggedIn, function(req, res) {
 	var id = req.body._id;
 	var name = req.body.event_name;
 
@@ -339,7 +346,7 @@ router.post('/remove_event', function(req, res) {
 });
 
 // Post for adding a new actor
-router.post('/add_event', function(req, res) {
+router.post('/add_event', isLoggedIn, function(req, res) {
 	var name = req.body.event_name;
 
 	var a = new Event(
@@ -363,8 +370,8 @@ router.post('/add_event', function(req, res) {
 
 
 /* GET for the update stage page */
-router.get('/updatePerf', function(req, res) {
-
+router.get('/updatePerf', isLoggedIn, function(req, res) {
+	
 	Performance.getPerformances(function(response) {
 		// console.log("response: ");
 		// console.log(response);
@@ -392,7 +399,7 @@ router.get('/updatePerf', function(req, res) {
 	
 
 /* POST for updating an already exisiting actor */
-router.post('/update_perf', function(req, res) {
+router.post('/update_perf', isLoggedIn, function(req, res) {
 	
 	var id = req.body._id;
 	var info = req.body.performance_info;
@@ -420,7 +427,7 @@ router.post('/update_perf', function(req, res) {
 })
 
 /* POST for removing an already exisiting actor */
-router.post('/remove_perf', function(req, res) {
+router.post('/remove_perf', isLoggedIn, function(req, res) {
 	// var id = req.body._id;
 	// var name = req.body.event_name;
 
@@ -443,9 +450,9 @@ router.post('/remove_perf', function(req, res) {
 });
 
 // Post for adding a new actor
-router.post('/add_perf', function(req, res) {
-	console.log("req body: ");
-	console.log(req.body);
+router.post('/add_perf', isLoggedIn, function(req, res) {
+	// console.log("req body: ");
+	// console.log(req.body);
 	
 	var info = req.body.performance_info;
 	var stage = req.body.stage_id;
