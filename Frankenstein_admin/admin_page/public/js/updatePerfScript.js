@@ -279,9 +279,10 @@ function updatePerf(currentPerf) {
 			crewNameText.setAttribute("name", "crew_name_" + crewcount);
 
 			crewNameText.innerHTML = allCrew[i].crew_name;
+			crewNameText.value = allCrew[i].crew_name
 
 			if(allCrew[i]._id == allPerfs[currentPerf].performance_crew[j].crew_id) {
-				actorNameText.setAttribute("selected", "selected");
+				crewNameText.setAttribute("selected", "selected");
 			}
 
 			crewNameDrop.appendChild(crewNameText);
@@ -341,6 +342,18 @@ function updatePerf(currentPerf) {
 	cCount.setAttribute("name", "crewcount");
 	cCount.setAttribute("value", crewcount);
 	form.appendChild(cCount);
+
+	var aID = document.createElement("input");
+	aID.setAttribute("type", "hidden");
+	aID.setAttribute("name", "_id");
+	aID.value = allPerfs[currentPerf]._id;
+	form.appendChild(aID);
+
+	var pID = document.createElement("input");
+	pID.setAttribute("type", "hidden");
+	pID.setAttribute("name", "postgres_id");
+	pID.value = allPerfs[currentPerf].postgres_id;
+	form.appendChild(pID);
 
 
 	var submit = document.createElement("button");

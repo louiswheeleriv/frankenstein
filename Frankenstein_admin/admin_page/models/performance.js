@@ -62,14 +62,14 @@ performanceSchema.methods.savePerformance = function(){
 		*/
 
 	}else{
-		// console.log("already in postgres");
-		// console.log(this);
+		console.log("already in postgres");
+		console.log(this);
 		this.model('Performance').findByIdAndUpdate(this._id, {
 			"postgres_id" : this.postgres_id,
 			"performance_info" : this.performance_info,
 			"performance_stage_id" : this.performance_stage_id,
 			"performance_start_time" : this.performance_start_time,
-			"performance_production_id" : this.performance_production_id,
+			// "performance_production_id" : this.performance_production_id,
 			"performance_actors" : this.performance_actors,
 			"performance_crew" : this.performance_crew,
 			"performance_dirty" : this.performance_dirty,

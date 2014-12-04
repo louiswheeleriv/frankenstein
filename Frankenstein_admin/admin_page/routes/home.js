@@ -401,7 +401,12 @@ router.get('/updatePerf', isLoggedIn, function(req, res) {
 
 /* POST for updating an already exisiting actor */
 router.post('/update_perf', isLoggedIn, function(req, res) {
+
+	console.log("req body: ");
+	console.log(req.body);
+
 	var id = req.body._id;
+	console.log(id);
 	var postID = req.body.postgres_id;
 	var info = req.body.performance_info;
 	var stage = req.body.stage_id;
