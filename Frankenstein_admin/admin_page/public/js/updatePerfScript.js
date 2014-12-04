@@ -252,6 +252,7 @@ function newPerf() {
 	// ACTORS
 	var formControl4 = document.createElement("div");
 	formControl4.className = "form-group";
+	formControl4.id = "actorsDiv";
 
 	var perfActors = document.createElement("label");
 	perfActors.innerHTML = "Actors in this performance";
@@ -305,8 +306,43 @@ function getStageID() {
 }
 
 
+var count = 1;
 function makeNewActor() {
-	alert("yay!");
+	var actorsDiv = document.getElementById("actorsDiv");
+
+	var actorName = document.createElement("label");
+	actorName.innerHTML = "Actor's Name";
+	var actorNameText = document.createElement("input");
+	actorNameText.setAttribute("type", "text");
+	actorNameText.setAttribute("placeholder", "Name");
+	actorNameText.setAttribute("id", "actor_name_" + count);
+	count = count+1;
+	actorNameText.setAttribute("name", "actor_name");
+
+	actorsDiv.appendChild(actorName);
+	actorsDiv.appendChild(actorNameText);
+
+	
+	var actorRole = document.createElement("input");
+	actorRole.setAttribute("type", "text");
+	actorRole.setAttribute("placeholder", "Role");
+	actorRole.setAttribute("name", "actor_role");
+	actorRole.setAttribute("id", "actor_role_" + count);
+
+	actorsDiv.appendChild(actorRole);
+
+	var actorAppTime = document.createElement("input");
+	actorAppTime.setAttribute("type", "time");
+	actorAppTime.setAttribute("value", "19:00");
+	actorAppTime.setAttribute("name", "actor_appTime");
+	actorAppTime.setAttribute("id", "actor_time_" + count);
+
+	actorsDiv.appendChild(actorAppTime);
+
+
+	var hr = document.createElement("hr");
+	actorsDiv.appendChild(hr);
+
 }
 
 function makeNewCrew() {
