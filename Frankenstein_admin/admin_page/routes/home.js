@@ -604,4 +604,3 @@ router.post('/add_perf', isLoggedIn, function(req, res) {
 
 
 
-module.exports = router;
