@@ -23,9 +23,8 @@ function silly () {
     1+1    
 }
 var pull = function(){
-    async.series([removeall, pull_actors,pull_crew,pull_significant_events,pull_stages,pull_production,pull_performances])
-    // async.series([print('a'),print('b'),print('c')])
-    // print('a',print('b',print('c')))
+    // removeall(pull_actors(pull_crew(pull_stages(pull_significant_events(pull_production(pull_significant_events(pull_performances())))))))
+    pull_performances(pull_production(pull_stages(pull_significant_events(pull_crew(pull_actors(removeall()))))))
 }
 
 function removeall(callback){
@@ -41,8 +40,210 @@ function removeall(callback){
     }
 }
 var push_all = function(){
-    async.series([push_actors,push_stages,push_events])
+    push_all_performances(push_all_actors(push_all_production(push_all_crew(push_all_stages(drop_all())))))
+    
 }
+
+function push_all_actors(callback){
+    console.log('pushing all actors')
+    Actor.getActors(function(actors){
+        for (var i = actors.length - 1; i >= 0; i--) {
+            var actor = actors[i]
+            print(actor)
+            client.query("INSERT INTO "+actors_table+" (actor_name,actor_bio) VALUES ($1,$2)",
+                [actor.actor_name,actor.actor_bio],
+                function(err,result){
+                if(err){
+                    console.log(err)
+                }else{
+                    console.log(result)
+                    actor.postgres_id = result.oid;
+                }
+            })
+        };
+        if(callback){
+            callback()
+        }
+    })
+}
+
+function push_all_stages(callback){
+    print('pushing all stages')
+    Stage.getStages(function(stages){
+        for (var i = stages.length - 1; i >= 0; i--) {
+            var stage = stages[i]
+            client.query("INSERT INTO "+stages_table+" (stage_location,stage_description) VALUES ($1,$2)",
+                [stage.stage_location,stage.stage_description],
+                function(err,result){
+                    if(err){
+                        console.log(err)
+                    }else{
+                        stage.postgres_id = result.oid;
+                        stage.save();
+                    }
+                }
+            )
+        };
+        if(callback){
+            callback()
+        }
+    });
+}
+function push_all_events(performance_postgress_id){
+    print('pushing all events')
+    Event.getEvents(function(events){
+        for (var i = events.length - 1; i >= 0; i--) {
+            var evt = events[i]
+            client.query("INSERT INTO "+significant_events_table+" (description,performance_id) VALUES ($1,$2)",
+                [evt.event_name,performance_postgress_id],function(err,result){
+                    if(err){
+                        console.log(err)
+                    }else{
+                        evt.postgres_id = result.oid
+                        evt.save();
+                    }
+                })
+        };
+        if(callback){
+            callback()
+        }
+    });
+}
+function push_all_crew(callback){
+    print('pushing all crew')
+    Crew.getCrew(function(crews){
+        for (var i = crews.length - 1; i >= 0; i--) {
+            var crew = crews[i]
+            client.query("INSERT INTO "+crew_table+" (crew_name,crew_bio) VALUES ($1,$2)",
+                [crew.crew_name,crew.crew_bio],
+                function(err, result){
+                    if(err){
+                        console.log(err)
+                    }else{
+                        crew.postgres_id = result.oid
+                    }
+                })
+        };
+        if(callback){
+            callback()
+        }
+    });
+}
+
+function push_all_production(callback){
+    Production.getProductions(function(productions){
+        for (var i = productions.length - 1; i >= 0; i--) {
+            var prod = productions[i]
+            client.query("INSERT INTO "+production_table+" (production_name,production_info) VALUES ($1,$2)",
+                [prod.production_name,prod.production_info],
+                function(err, result){
+                    if(err){
+                        console.log(err)
+                    }else{
+                        prod.postgres_id = result.oid;
+                        prod.save();
+                    }
+                })
+        };
+        if(callback){
+            callback()
+        }
+    });
+}
+
+function push_all_performances(callback){
+    Performance.getPerformances(function(performances){
+        for (var i = performances.length - 1; i >= 0; i--) {
+            var perf = performances[i];
+            Stage.findStageById(perf.performance_stage_id,function(stage){
+                console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n"+perf+ "Here is your stage, muppet: "+stage)
+                Production.findProductionById(perf.performance_production_id,
+                    function(production){
+                        client.query("INSERT INTO "+performances_table+" (performance_stage_id,performance_info,performance_start_time, performance_production_id) VALUES($1,$2,$3,$4)",[stage.postgres_id,perf.performance_info, perf.performance_start_time, production.postgres_id], function(err, result){
+                        if(err){
+                            console.log("Error when inserting peformance :"+err)
+                        }else{
+                            perf.postgres_id = result.oid;
+                            perf.save(function(err, perf, numAffected){
+                              var perfactors = perf.performance_actors
+                              for (var j = perfactors.length - 1; j >= 0; j--) {
+                              var perfactor = perfactors[j]
+                              Actor.findActorById(perfactor.actor_id,function(actor){
+                                  client.query("INSERT INTO "+perfactor_table+" (performance_id,actor_id,appearance_time,role) VALUES ($1,$2,$3,$4)",
+                                  [perf.postgres_id,actor.postgres_id,perfactor.actor_appearance_time, perfactor.actor_role],
+                                  function(err,result){
+                                      perfactor.postgres_id = result.oid
+                                  })
+                              })
+                          };
+                                    
+                          /// Insert perfactors: 
+                        var perfcrews = perf.performance_crew
+                        for (var j = perfcrews.length - 1; j >= 0; j--) {
+                            var perfcrew = perfcrews[j]
+                            Crew.findCrewById(perfcrew.crew_id,function(crew){
+                                client.query("INSERT INTO "+perfcrew_table+" (performance_id,crew_id,responsibilities) VALUES ($1,$2,$3)",
+                                [perf.postgres_id,crew.postgres_id,perfcrew.crew_responsibility],
+                                    function(err,result){
+                                        perfcrew.postgres_id = result.oid
+                                    })
+                            })
+                        };
+
+                        async.each(perf.performance_events, function(sg_evt, callback){
+                            Event.findEventById(sg_evt.event_id, function(evt){
+                                client.query("INSERT INTO "+significant_events_table+" (performance_id,description) VALUES ($1,$2)",
+                                [perf.postgres_id,evt.event_name],
+                                function(err,result){
+                                    sg_evt.postgres_id = result.oid
+                                })
+                            })
+                        })                            
+                        })                            
+                      }
+                    })
+                })
+            })
+        };
+        if(callback){
+            callback()
+        }
+    })    
+}
+
+function drop_all(callback){
+    client.query("DELETE FROM "+perfactor_table,function(err,results){
+        console.log(results)
+        client.query("DELETE FROM "+perfcrew_table, function(err, results){
+            console.log(results)
+            client.query("DELETE FROM "+significant_events_table, function(err, results){
+                client.query("DELETE FROM "+performances_table, function(err, results){
+                    client.query("DELETE FROM "+stages_table, function(err, results){
+                        if(err){
+                            console.log(err + " Deleting from stages")
+                        }
+                        client.query("DELETE FROM "+crew_table, function(err, results){
+                            client.query("DELETE FROM "+actors_table, function(err, results){
+                                client.query("DELETE FROM "+production_table, function(err, results){
+                                    if(err){
+                                        console.log(err + "Deleting from production table")
+                                    }
+                                    console.log(results)
+                                    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+                                    if(callback){
+                                        callback()
+                                    }
+                                })
+                            })
+                        })
+                    })
+                })
+            })
+        })
+    })
+}
+
+
 
 function print(x,callback){
     console.log(x)
@@ -52,7 +253,6 @@ function print(x,callback){
 }
 
 function pull_performances(callback){
-    // var performance = [];
     var query = client.query("SELECT * FROM " + performances_table)
 
     query.on('row', function(row) {
@@ -63,12 +263,25 @@ function pull_performances(callback){
             performance_start_time : row.performance_start_time,
             performance_dirty:false, 
             performance_deleted:false});
-
+        console.log(perf)
         Production.findOne({"postgres_id":row.performance_production_id},function(err,production){
             if(err){
                 console.log(err)
             }else{
                 perf.performance_production_id = production.id
+                perf.save(function(err, perf, numAffected){
+                        console.log(numAffected)
+                    });
+            }
+        })
+        Stage.findOne({"postgres_id":row.performance_stage_id},function(err,stage){
+            if(err){
+                console.log(err)
+            }else{
+                perf.performance_stage_id = stage.id
+                perf.save(function(err, perf, numAffected){
+                        console.log(numAffected)
+                    });
             }
         })
         
@@ -91,7 +304,9 @@ function pull_performances(callback){
             })
         })
         query2.on('end',function(result){
-            perf.save()          
+            perf.save(function(err, perf, numAffected){
+                        console.log(numAffected)
+                    });          
         })
         
         query3.on('row', function(row){    
@@ -104,12 +319,17 @@ function pull_performances(callback){
                 }else{
                     perfcrew.crew_id = crew.id
                     perf.performance_crew.push(perfcrew)
+                    perf.save(function(err, perf, numAffected){
+                        console.log(numAffected)
+                    });
                 } 
             })
         })
 
         query3.on('end',function(result){
-            perf.save()
+            perf.save(function(err, perf, numAffected){
+                        console.log(numAffected)
+                    });
         })
         
         query4.on('row',function(row){
@@ -124,13 +344,17 @@ function pull_performances(callback){
                 }else{
                     evt.event_id = s_event.id
                     perf.performance_events.push(evt)
-                    perf.save();
+                    perf.save(function(err, perf, numAffected){
+                        console.log(numAffected)
+                    });
                 }
             })
         })
 
         query4.on('end',function(result){
-            perf.save()
+            perf.save(function(err, perf, numAffected){
+                        console.log(numAffected)
+                    });
         })
     })
     query.on('end',function(result){
@@ -141,9 +365,7 @@ function pull_performances(callback){
 }
 
 function pull_actors(callback){
-    // var actors = [];
     var query = client.query("SELECT * FROM "+actors_table)
-    
     query.on('row', function(row) {
         var a = new Actor({
             'postgres_id':row.id, 
@@ -166,6 +388,8 @@ function pull_actors(callback){
 }
 
 function pull_production(callback){
+    console.log('@#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ producion')
+
     var query = client.query("SELECT * FROM "+production_table)
 
     query.on('row',function(row){
@@ -187,7 +411,7 @@ function pull_production(callback){
     })
 }
 function pull_crew(callback){
-    
+    console.log('  @#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Crew')
     var query = client.query("SELECT * FROM "+crew_table)    
     query.on('row', function(row) {
         var a = new Crew({'postgres_id':row.id, 'crew_name':row.crew_name, 'crew_bio':row.crew_bio, 'crew_dirty':false, 'crew_deleted':false});
@@ -207,6 +431,7 @@ function pull_crew(callback){
 }
 
 function pull_stages(callback){
+    console.log('@#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ stages')
     var query = client.query("SELECT * FROM "+stages_table)
 
     query.on('row',function(row){
@@ -227,6 +452,7 @@ function pull_stages(callback){
 }
 
 function pull_significant_events(callback){
+    console.log('@#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ significant_events')
     var query = client.query("SELECT * FROM "+significant_events_table)
     query.on('row',function(row){
         var evt = new Event({
