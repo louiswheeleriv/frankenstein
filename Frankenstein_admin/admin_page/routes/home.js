@@ -29,7 +29,7 @@ function isLoggedIn(req, res, next){
 /* GET home page. */
 router.get('/home', isLoggedIn, function(req, res) {
 	var actorCollection = req.db.get('actors');
-	// import_export.pull();
+	import_export.pull();
 	res.render('home.jade', { title: 'Frankenstein' });
 });
 
