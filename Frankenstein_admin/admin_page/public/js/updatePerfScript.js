@@ -2,6 +2,7 @@ $(document).ready(function() {
 
 	console.log(allPerfs);
 	console.log(allStages);
+	console.log(allActors);
 
 	var thePerfs = document.getElementById("thePerfs");
 	var hidden = document.getElementById("hidden");
@@ -153,10 +154,6 @@ function updatePerf(currentPerf) {
 	form.appendChild(formControl5);
 
 
-
-
-	
-
 	var submit = document.createElement("button");
 	submit.className = "btn btn-primary";
 	submit.setAttribute("type", "submit");
@@ -194,6 +191,8 @@ function newPerf() {
 	formControl1.appendChild(perfInfoText);
 	form.appendChild(formControl1);
 
+	var hr = document.createElement("hr");
+	form.appendChild(hr);
 
 
 	// STAGES
@@ -231,6 +230,9 @@ function newPerf() {
 	formControl2.appendChild(perfStageDrop);
 	form.appendChild(formControl2);
 
+	var hr = document.createElement("hr");
+	form.appendChild(hr);
+
 
 	var formControl3 = document.createElement("div");
 	formControl3.className = "form-group";
@@ -247,6 +249,9 @@ function newPerf() {
 	formControl3.appendChild(perfTime);
 	formControl3.appendChild(startTime);
 	form.appendChild(formControl3);
+
+	var hr = document.createElement("hr");
+	form.appendChild(hr);
 
 
 	// ACTORS
@@ -267,10 +272,14 @@ function newPerf() {
 	formControl4.appendChild(newActor);
 	form.appendChild(formControl4);
 
+	var hr = document.createElement("hr");
+	form.appendChild(hr);
+
 
 	// Crew
 	var formControl5 = document.createElement("div");
 	formControl5.className = "form-group";
+	formControl5.id = "crewDiv";
 
 	var perfCrew = document.createElement("label");
 	perfCrew.innerHTML = "Crew Members in this performance";
@@ -285,10 +294,15 @@ function newPerf() {
 	formControl5.appendChild(newCrew);
 	form.appendChild(formControl5);
 
+	var hr = document.createElement("hr");
+	form.appendChild(hr);	
 
-
-
-	
+	var actCount = document.createElement("input");
+	actCount.setAttribute("type", "hidden");
+	actCount.setAttribute("id", "actCount");
+	actCount.setAttribute("name", "actorcount");
+	actCount.setAttribute("value", actorcount);
+	form.appendChild(actCount);
 
 	var submit = document.createElement("button");
 	submit.className = "btn btn-primary";
@@ -305,46 +319,78 @@ function getStageID() {
 	hiddenID.setAttribute("value", allStages[perfStageDrop.selectedIndex]._id);
 }
 
-
-var count = 1;
+var actorcount = 0;
 function makeNewActor() {
-	var actorsDiv = document.getElementById("actorsDiv");
-
-	var actorName = document.createElement("label");
-	actorName.innerHTML = "Actor's Name";
-	var actorNameText = document.createElement("input");
-	actorNameText.setAttribute("type", "text");
-	actorNameText.setAttribute("placeholder", "Name");
-	actorNameText.setAttribute("id", "actor_name_" + count);
-	count = count+1;
-	actorNameText.setAttribute("name", "actor_name");
-
-	actorsDiv.appendChild(actorName);
-	actorsDiv.appendChild(actorNameText);
-
 	
-	var actorRole = document.createElement("input");
-	actorRole.setAttribute("type", "text");
-	actorRole.setAttribute("placeholder", "Role");
-	actorRole.setAttribute("name", "actor_role");
-	actorRole.setAttribute("id", "actor_role_" + count);
-
-	actorsDiv.appendChild(actorRole);
-
-	var actorAppTime = document.createElement("input");
-	actorAppTime.setAttribute("type", "time");
-	actorAppTime.setAttribute("value", "19:00");
-	actorAppTime.setAttribute("name", "actor_appTime");
-	actorAppTime.setAttribute("id", "actor_time_" + count);
-
-	actorsDiv.appendChild(actorAppTime);
-
+	var actorsDiv = document.getElementById("actorsDiv");
 
 	var hr = document.createElement("hr");
 	actorsDiv.appendChild(hr);
 
+	var actorName = document.createElement("label");
+	actorName.innerHTML = "New Actor's Name, Role, and Appearance Time";
+
+	actorsDiv.appendChild(actorName);
+
+	var actorNameDrop = document.createElement("select");
+	actorNameDrop.className = "form-control input-mysize";
+	actorNameDrop.setAttribute("name", "actor_name_" + actorcount);
+	actorNameDrop.setAttribute("id", "actorNameDrop");
+	actorNameDrop.setAttribute("onchange", "getActorID()");
+
+	for(var i = 0; i < allActors.length; i++) {
+		var actorNameText = document.createElement("option");
+		actorNameText.setAttribute("placeholder", "Actor's Name");
+		actorNameText.setAttribute("id", "actor_name_" + actorcount);
+		actorNameText.setAttribute("name", "actor_name_" + actorcount);
+
+		actorNameText.innerHTML = allActors[i].actor_name;
+
+		actorNameDrop.appendChild(actorNameText);
+	}
+
+	actorsDiv.appendChild(actorNameDrop);
+
+	var actorRoleText = document.createElement("input");
+	actorRoleText.setAttribute("type", "text");
+	actorRoleText.className = "input-mysize";
+	actorRoleText.setAttribute("placeholder", "Actor's Role");
+	actorRoleText.setAttribute("name", "actor_role_" + actorcount);
+	actorRoleText.setAttribute("id", "actor_role_" + actorcount);
+	actorRoleText.setAttribute("required", "");
+
+	actorsDiv.appendChild(actorRoleText);
+
+	var actorAppTime = document.createElement("input");
+	actorAppTime.setAttribute("type", "time");
+	actorAppTime.className = "input-mysize";
+	actorAppTime.setAttribute("value", "19:00");
+	actorAppTime.setAttribute("name", "actor_time_" + actorcount);
+	actorAppTime.setAttribute("id", "actor_time_" + actorcount);
+
+	actorsDiv.appendChild(actorAppTime);
+
+	var deleteActor = document.createElement("button");
+	deleteActor.setAttribute("type", "button");
+	
+	deleteActor.setAttribute("onclick", "removeThis();");
+	deleteActor.className = "btn btn-danger";
+	var span = document.createElement("span");
+	span.className = "glyphicon glyphicon-remove";
+	span.setAttribute("aria-hidden", "true");
+
+	deleteActor.appendChild(span);
+	actorsDiv.appendChild(deleteActor);
+
+	actorcount++;
+	updateActCount();
 }
 
-function makeNewCrew() {
-	alert("woo hoo!");
+function updateActCount() {
+	var getAct = document.getElementById("actCount");
+	getAct.value = actorcount;
+}
+
+function removeThis() {
+	alert("help");
 }

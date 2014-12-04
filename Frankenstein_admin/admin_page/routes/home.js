@@ -364,24 +364,32 @@ router.post('/add_event', function(req, res) {
 
 /* GET for the update stage page */
 router.get('/updatePerf', function(req, res) {
-	
+
 	Performance.getPerformances(function(response) {
-		console.log("response: ");
-		console.log(response);
-		
+		// console.log("response: ");
+		// console.log(response);
+
 		Stage.getStages(function(allStages) {
 
-			res.render('updatePerf.jade', 
-			{
-				title: 'Frankenstein',
-				allPerfs:JSON.stringify(response),
-				allStages:JSON.stringify(allStages)
-			}
-			);
+			Actor.getActors(function(allActors) {
+				res.render('updatePerf.jade', 
+				{
+					title: 'Frankenstein',
+					allPerfs:JSON.stringify(response),
+					allStages:JSON.stringify(allStages),
+					allActors:JSON.stringify(allActors)
+				}
+				);
+
+			})
+
 		})
+
 	})
 
 });
+
+	
 
 /* POST for updating an already exisiting actor */
 router.post('/update_perf', function(req, res) {
@@ -436,15 +444,30 @@ router.post('/remove_perf', function(req, res) {
 
 // Post for adding a new actor
 router.post('/add_perf', function(req, res) {
-	// console.log("req body: ");
-	// console.log(req.body);
+	console.log("req body: ");
+	console.log(req.body);
 	
 	var info = req.body.performance_info;
 	var stage = req.body.stage_id;
 	var time = req.body.performance_start_time;
+	var actorcount = req.body.actorcount;
 
-	// time : { type : Date, default: Date.now }
 	//get actors
+	var actors = new Array(actorcount);
+
+	for(var i = 0; i < actorcount; i++) {
+		var role = "actor_role_" + actorcount;
+		
+		var actor = {
+			// "actor_id" : ,
+			actor_role : req.body.role
+			// actor_appearance_time :
+		};
+
+		actors.push(actor);
+
+	}
+
 	//get crew
 
 	var a = new Performance(
@@ -454,7 +477,8 @@ router.post('/add_perf', function(req, res) {
 		"performance_stage_id" : stage,
 		"performance_start_time" : time,
 		"performance_deleted" : false,
-		"performance_dirty" : false
+		"performance_dirty" : false,
+		"performance_actors" : actors
 		// "performance_production_id" : 1,
 		// "performance_actors" : [{}],
 		// "performance_crew" : [{}]
