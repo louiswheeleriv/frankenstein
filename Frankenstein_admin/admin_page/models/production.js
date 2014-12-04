@@ -4,7 +4,8 @@ var productionSchema = mongoose.Schema({
 	postgres_id : Number,
 	production_name : String,
 	production_dirty : Boolean,
-	production_deleted : Boolean
+	production_deleted : Boolean,
+	production_inserting : Boolean
 });
 
 // Instance functions
@@ -12,7 +13,7 @@ var productionSchema = mongoose.Schema({
 productionSchema.methods.saveProduction = function(){
 	var production = this;
 
-	if(this.postgres_id == -1){
+	if(this.postgres_id == -1 && this.production_inserting){
 		production.production_dirty = true;
 		production.save();
 
@@ -30,7 +31,8 @@ productionSchema.methods.saveProduction = function(){
 			"postgres_id" : this.postgres_id,
 			"production_name" : this.production_name,
 			"production_dirty" : this.production_dirty,
-			"production_deleted" : this.production_deleted
+			"production_deleted" : this.production_deleted,
+			"production_inserting" : false
 		}, function(err){
 			if(err)
 				console.log(err);

@@ -5,7 +5,8 @@ var actorSchema = mongoose.Schema({
 	actor_name : String,
 	actor_bio : String,
 	actor_dirty : Boolean,
-	actor_deleted : Boolean
+	actor_deleted : Boolean,
+	actor_inserting : Boolean
 });
 
 // Instance functions
@@ -13,7 +14,7 @@ var actorSchema = mongoose.Schema({
 actorSchema.methods.saveActor = function(){
 	var actor = this;
 
-	if(this.postgres_id == -1){
+	if(this.postgres_id == -1 && this.actor_inserting){
 		actor.actor_dirty = true;
 		actor.save();
 
@@ -32,7 +33,8 @@ actorSchema.methods.saveActor = function(){
 			"actor_name" : this.actor_name,
 			"actor_bio" : this.actor_bio,
 			"actor_dirty" : this.actor_dirty,
-			"actor_deleted" : this.actor_deleted
+			"actor_deleted" : this.actor_deleted,
+			"actor_inserting" : false
 		}, function(err){
 			if(err)
 				console.log(err);

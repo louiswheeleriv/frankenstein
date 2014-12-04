@@ -57,29 +57,15 @@ router.post('/update_actor', function(req, res) {
 
 	var a = new Actor(
 		{
-			// "_id" : id,
+			"_id" : id,
 			"postgres_id" : postID,
 			"actor_name" : name,
 			"actor_bio" : bio,
 			"actor_dirty" : false,
-			"actor_deleted" : false
+			"actor_deleted" : false,
+			"actor_inserting" : false
 		}
 	);
-
-	console.log("");
-	console.log(id);
-	console.log("");
-
-	Actor.findById(id, function(data) {
-		console.log("");
-		console.log(data);
-		console.log("");
-	})
-
-	console.log("");
-	// console.log("new actor: ");
-	// console.log(a);
-	// console.log("");
 
 	a.saveActor();
 
@@ -93,15 +79,12 @@ router.post('/remove_actor', function(req, res) {
 
 	var a = new Actor( 
 		{
-			"postgres_id" : id,
+			"_id" : id,
 			"actor_name" : name,
 			"actor_dirty" : false,
 			"actor_deleted" : false
 		}
 	);
-
-	console.log("actor to delete: ");
-	console.log(a);
 
 	a.markDeleted();
 
@@ -120,7 +103,8 @@ router.post('/add_actor', function(req, res) {
 			"actor_name" : name,
 			"actor_bio" : bio,
 			"actor_dirty" : false,
-			"actor_deleted" : false
+			"actor_deleted" : false,
+			"actor_inserting" : true
 		}
 	);
 
@@ -152,14 +136,17 @@ router.post('/update_crew', function(req, res) {
 	var id = req.body._id;
 	var name = req.body.crew_name;
 	var bio = req.body.crew_bio;
+	var postID = req.body.postgres_id;
 
 	var a = new Crew(
 		{
-			"postgres_id" : id,
+			"_id" : id,
+			"postgres_id" : postID,
 			"crew_name" : name,
 			"crew_bio" : bio,
 			"crew_dirty" : false,
-			"crew_deleted" : false
+			"crew_deleted" : false,
+			"crew_inserting" : false
 		}
 	);
 
@@ -175,7 +162,7 @@ router.post('/remove_crew', function(req, res) {
 
 	var a = new Crew( 
 		{
-			"postgres_id" : id,
+			"_id" : id,
 			"crew_name" : name,
 			"crew_dirty" : false,
 			"crew_deleted" : false
@@ -199,7 +186,8 @@ router.post('/add_crew', function(req, res) {
 			"crew_name" : name,
 			"crew_bio" : bio,
 			"crew_dirty" : false,
-			"crew_deleted" : false
+			"crew_deleted" : false,
+			"crew_inserting" : true
 		}
 	);
 
@@ -231,18 +219,19 @@ router.post('/update_stage', function(req, res) {
 	var id = req.body._id;
 	var location = req.body.stage_location;
 	var description = req.body.stage_description;
+	var postID = req.body.postgres_id;
 
 	var a = new Stage(
 		{
-			"postgres_id" : id,
+			"_id" : id,
+			"postgres_id" : postID,
 			"stage_location" : location,
 			"stage_description" : description,
 			"stage_dirty" : false,
-			"stage_deleted" : false
+			"stage_deleted" : false,
+			"stage_inserting" : false
 		}
 	);
-	console.log("new stage: ");
-	console.log(a);
 
 	a.saveStage();
 
@@ -256,15 +245,12 @@ router.post('/remove_stage', function(req, res) {
 
 	var a = new Stage( 
 		{
-			"postgres_id" : id,
+			"_id" : id,
 			"stage_location" : location,
 			"stage_dirty" : false,
 			"stage_deleted" : false
 		}
 	);
-
-	console.log("stage to delete: ");
-	console.log(a);
 
 	a.markDeleted();
 
@@ -283,7 +269,8 @@ router.post('/add_stage', function(req, res) {
 			"stage_location" : location,
 			"stage_description" : description,
 			"stage_dirty" : false,
-			"stage_deleted" : false
+			"stage_deleted" : false,
+			"stage_inserting" : true
 		}
 	);
 
@@ -313,17 +300,18 @@ router.get('/updateEvent', function(req, res) {
 router.post('/update_event', function(req, res) {
 	var id = req.body._id;
 	var name = req.body.event_name;
+	var postID = req.body.postgres_id;
 
 	var a = new Event(
 		{
-			"postgres_id" : id,
+			"_id" : id,
+			"postgres_id" : postID,
 			"event_name" : name,
 			"event_dirty" : false,
-			"event_deleted" : false
+			"event_deleted" : false,
+			"event_inserting" : false
 		}
 	);
-	console.log("new event: ");
-	console.log(a);
 
 	a.saveEvent();
 
@@ -337,15 +325,12 @@ router.post('/remove_event', function(req, res) {
 
 	var a = new Event(
 		{
-			"postgres_id" : id,
+			"_id" : id,
 			"event_name" : name,
 			"event_dirty" : false,
 			"event_deleted" : false
 		}
 	);
-
-	console.log("event to delete: ");
-	console.log(a);
 
 	a.markDeleted();
 
@@ -357,18 +342,15 @@ router.post('/remove_event', function(req, res) {
 router.post('/add_event', function(req, res) {
 	var name = req.body.event_name;
 
-	console.log(name);
-
 	var a = new Event(
 		{
 			"postgres_id" : -1,
 			"event_name" : name,
 			"event_dirty" : false,
-			"event_deleted" : false
+			"event_deleted" : false,
+			"event_inserting" : true
 		}
 	);
-
-	console.log(a);
 
 	a.saveEvent();
 
@@ -403,20 +385,17 @@ router.get('/updatePerf', function(req, res) {
 
 /* POST for updating an already exisiting actor */
 router.post('/update_perf', function(req, res) {
-
-	// console.log("req body: ");
-	// console.log(req.body);
 	
+	var id = req.body._id;
 	var info = req.body.performance_info;
 	var stage = req.body.stage_id;
 	var time = req.body.performance_start_time;
-
-	//get actors
-	//get crew
+	//var postID = req.body.postgres_id;
 
 	var a = new Performance(
 	{
-		"postgres_id" : -1,
+		"_id" : id,
+		//"postgres_id" : postID,
 		"performance_info" : info,
 		"performance_stage_id" : stage,
 		"performance_start_time" : time,
@@ -426,9 +405,6 @@ router.post('/update_perf', function(req, res) {
 		// "performance_crew" : [{}]
 	}
 	);
-
-	// console.log("new perf: ");
-	// console.log(a);
 
 	a.savePerformance();
 
