@@ -371,20 +371,23 @@ router.post('/add_event', isLoggedIn, function(req, res) {
 router.get('/updatePerf', isLoggedIn, function(req, res) {
 	
 	Performance.getPerformances(function(response) {
-		// console.log("response: ");
-		// console.log(response);
 
 		Stage.getStages(function(allStages) {
 
 			Actor.getActors(function(allActors) {
-				res.render('updatePerf.jade', 
-				{
-					title: 'Frankenstein',
-					allPerfs:JSON.stringify(response),
-					allStages:JSON.stringify(allStages),
-					allActors:JSON.stringify(allActors)
-				}
-				);
+
+				Crew.getCrew(function(allCrew) {
+					res.render('updatePerf.jade', 
+					{
+						title: 'Frankenstein',
+						allPerfs:JSON.stringify(response),
+						allStages:JSON.stringify(allStages),
+						allActors:JSON.stringify(allActors),
+						allCrew:JSON.stringify(allCrew)
+					}
+					);
+
+				})
 
 			})
 
@@ -456,24 +459,58 @@ router.post('/add_perf', isLoggedIn, function(req, res) {
 	var stage = req.body.stage_id;
 	var time = req.body.performance_start_time;
 	var actorcount = req.body.actorcount;
+	var crewcount = req.body.crewcount;
 
 	//get actors
-	var actors = new Array(actorcount);
+	var actors = [];
 
-	for(var i = 0; i < actorcount; i++) {
-		var role = "actor_role_" + actorcount;
-		
+	if(actorcount > 1) {
+		for(var i = 0; i < actorcount; i++) {
+
+			var actor = {
+				actor_id : req.body.actorId[i],
+				actor_role : req.body.actorRole[i],
+				actor_appearance_time : req.body.actorTime[i]
+			};
+
+			actors.push(actor);
+
+		}		
+	} else {
 		var actor = {
-			// "actor_id" : ,
-			actor_role : req.body.role
-			// actor_appearance_time :
+			actor_id : req.body.actorId,
+			actor_role : req.body.actorRole,
+			actor_appearance_time : req.body.actorTime
 		};
 
 		actors.push(actor);
-
 	}
 
+	
+
 	//get crew
+	var crews = [];
+
+	if(crewcount > 1) {
+		for(var i = 0; i < crewcount; i++) {
+
+			var crew = {
+				crew_id : req.body.crewId[i],
+				crew_responsibility : req.body.crewResp[i] 
+			};
+
+			crews.push(crew);
+		}
+	} else {
+
+		var crew = {
+			crew_id : req.body.crewId,
+			crew_responsibility : req.body.crewResp 
+		};
+
+		crews.push(crew);
+	}
+	
 
 	var a = new Performance(
 	{
@@ -483,10 +520,9 @@ router.post('/add_perf', isLoggedIn, function(req, res) {
 		"performance_start_time" : time,
 		"performance_deleted" : false,
 		"performance_dirty" : false,
-		"performance_actors" : actors
+		"performance_actors" : actors,
+		"performance_crew" : crews
 		// "performance_production_id" : 1,
-		// "performance_actors" : [{}],
-		// "performance_crew" : [{}]
 	}
 	);
 

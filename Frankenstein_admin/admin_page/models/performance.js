@@ -29,14 +29,14 @@ var performanceSchema = mongoose.Schema({
 performanceSchema.methods.savePerformance = function(){
 	var performance = this;
 
-	console.log(performance);
-	console.log(performance._id);
+	// console.log(performance);
+	// console.log(performance._id);
 
 	
 
 	if(this.postgres_id == -1 && this.performance_dirty == false){
-		console.log("this is here");
-		console.log(performance);
+		// console.log("this is here");
+		// console.log(performance);
 		performance.performance_dirty = true;
 		performance.save();
 
@@ -50,8 +50,8 @@ performanceSchema.methods.savePerformance = function(){
 		*/
 
 	}else{
-		console.log("already in postgres");
-		console.log(this);
+		// console.log("already in postgres");
+		// console.log(this);
 		this.model('Performance').findByIdAndUpdate(this._id, {
 			"postgres_id" : this.postgres_id,
 			"performance_info" : this.performance_info,

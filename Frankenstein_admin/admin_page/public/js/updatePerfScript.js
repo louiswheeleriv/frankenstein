@@ -3,6 +3,7 @@ $(document).ready(function() {
 	console.log(allPerfs);
 	console.log(allStages);
 	console.log(allActors);
+	console.log(allCrew);
 
 	var thePerfs = document.getElementById("thePerfs");
 	var hidden = document.getElementById("hidden");
@@ -304,6 +305,13 @@ function newPerf() {
 	actCount.setAttribute("value", actorcount);
 	form.appendChild(actCount);
 
+	var cCount = document.createElement("input");
+	cCount.setAttribute("type", "hidden");
+	cCount.setAttribute("id", "cCount");
+	cCount.setAttribute("name", "crewcount");
+	cCount.setAttribute("value", crewcount);
+	form.appendChild(cCount);
+
 	var submit = document.createElement("button");
 	submit.className = "btn btn-primary";
 	submit.setAttribute("type", "submit");
@@ -334,7 +342,7 @@ function makeNewActor() {
 
 	var actorNameDrop = document.createElement("select");
 	actorNameDrop.className = "form-control input-mysize";
-	actorNameDrop.setAttribute("name", "actor_name_" + actorcount);
+	actorNameDrop.setAttribute("name", "actorName");
 	actorNameDrop.setAttribute("id", "actorNameDrop");
 	actorNameDrop.setAttribute("onchange", "getActorID()");
 
@@ -355,24 +363,31 @@ function makeNewActor() {
 	actorRoleText.setAttribute("type", "text");
 	actorRoleText.className = "input-mysize";
 	actorRoleText.setAttribute("placeholder", "Actor's Role");
-	actorRoleText.setAttribute("name", "actor_role_" + actorcount);
+	actorRoleText.setAttribute("name", "actorRole");
 	actorRoleText.setAttribute("id", "actor_role_" + actorcount);
 	actorRoleText.setAttribute("required", "");
 
 	actorsDiv.appendChild(actorRoleText);
 
 	var actorAppTime = document.createElement("input");
-	actorAppTime.setAttribute("type", "time");
+	actorAppTime.setAttribute("type", "text");
 	actorAppTime.className = "input-mysize";
-	actorAppTime.setAttribute("value", "19:00");
-	actorAppTime.setAttribute("name", "actor_time_" + actorcount);
+	actorAppTime.setAttribute("placeholder", "Actor's Appearance Time (in min)");
+	actorAppTime.setAttribute("name", "actorTime");
 	actorAppTime.setAttribute("id", "actor_time_" + actorcount);
 
 	actorsDiv.appendChild(actorAppTime);
 
+	var theID = document.createElement("input");
+	theID.setAttribute("type", "hidden");
+	theID.setAttribute("name", "actorId");
+	theID.id = "theID";
+	theID.setAttribute("value", allActors[0]._id);
+	actorsDiv.appendChild(theID);
+
+
 	var deleteActor = document.createElement("button");
 	deleteActor.setAttribute("type", "button");
-	
 	deleteActor.setAttribute("onclick", "removeThis();");
 	deleteActor.className = "btn btn-danger";
 	var span = document.createElement("span");
@@ -390,6 +405,96 @@ function updateActCount() {
 	var getAct = document.getElementById("actCount");
 	getAct.value = actorcount;
 }
+
+function getActorID() {
+	var hidden = document.getElementById("theID");
+	var yourSelect = document.getElementById( "actorNameDrop" );
+	var currentActor = yourSelect.selectedIndex;
+	hidden.setAttribute("value", allActors[currentActor]._id);
+}
+
+
+var crewcount = 0;
+function makeNewCrew() {
+
+	var crewDiv = document.getElementById("crewDiv");
+
+	var hr = document.createElement("hr");
+	crewDiv.appendChild(hr);
+
+	var crewName = document.createElement("label");
+	crewName.innerHTML = "New Crew Members's Name and Responsiblity";
+
+	crewDiv.appendChild(crewName);
+
+	var crewNameDrop = document.createElement("select");
+	crewNameDrop.className = "form-control input-mysize";
+	crewNameDrop.setAttribute("name", "crewName");
+	crewNameDrop.setAttribute("id", "crewNameDrop");
+	crewNameDrop.setAttribute("onchange", "getCrewID()");
+
+	for(var i = 0; i < allCrew.length; i++) {
+		var crewNameText = document.createElement("option");
+		crewNameText.setAttribute("placeholder", "Crew Member's Name");
+		crewNameText.setAttribute("name", "crew_name_" + crewcount);
+
+		crewNameText.innerHTML = allCrew[i].crew_name;
+
+		crewNameDrop.appendChild(crewNameText);
+	}
+
+	crewDiv.appendChild(crewNameDrop);
+
+
+	var crewRespText = document.createElement("input");
+	crewRespText.setAttribute("type", "text");
+	crewRespText.className = "input-mysize";
+	crewRespText.setAttribute("placeholder", "Crew Member's Responsiblity");
+	crewRespText.setAttribute("name", "crewResp");
+	crewRespText.setAttribute("required", "");
+
+	crewDiv.appendChild(crewRespText);
+
+	var crewID = document.createElement("input");
+	crewID.setAttribute("type", "hidden");
+	crewID.setAttribute("name", "crewId");
+	crewID.id = "crewId";
+	crewID.setAttribute("value", allCrew[0]._id);
+	crewDiv.appendChild(crewID);
+
+	var deleteActor = document.createElement("button");
+	deleteActor.setAttribute("type", "button");
+	deleteActor.setAttribute("onclick", "removeThis();");
+	deleteActor.className = "btn btn-danger";
+	var span = document.createElement("span");
+	span.className = "glyphicon glyphicon-remove";
+	span.setAttribute("aria-hidden", "true");
+
+	deleteActor.appendChild(span);
+	crewDiv.appendChild(deleteActor);
+
+	crewcount++;
+	updateCrewCount();
+}
+
+function updateCrewCount() {
+	var getCrew = document.getElementById("cCount");
+	getCrew.value = crewcount;
+}
+
+
+function getCrewID() {
+	var hidden = document.getElementById("crewId");
+	var yourSelect = document.getElementById( "crewNameDrop" );
+	var currentCrew = yourSelect.selectedIndex;
+	hidden.setAttribute("value", allCrew[currentCrew]._id);
+	console.log(hidden.value);
+}
+
+
+
+
+
 
 function removeThis() {
 	alert("help");
