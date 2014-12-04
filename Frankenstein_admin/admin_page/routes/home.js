@@ -301,6 +301,153 @@ router.get('/updateStage', isLoggedIn, function(req, res) {
 	})
 });
 
+/* POST for updating an already exisiting actor */
+router.post('/update_crew', isLoggedIn, function(req, res) {
+	var id = req.body._id;
+	var name = req.body.crew_name;
+	var bio = req.body.crew_bio;
+	var postID = req.body.postgres_id;
+
+	var a = new Crew(
+		{
+			"_id" : id,
+			"postgres_id" : postID,
+			"crew_name" : name,
+			"crew_bio" : bio,
+			"crew_dirty" : false,
+			"crew_deleted" : false,
+			"crew_inserting" : false
+		}
+	);
+
+	a.saveCrew();
+
+	res.redirect('/updateCrew');
+})
+
+/* POST for removing an already exisiting actor */
+router.post('/remove_crew', isLoggedIn, function(req, res) {
+	var id = req.body._id;
+	var name = req.body.actor_name;
+
+	var a = new Crew( 
+		{
+			"_id" : id,
+			"crew_name" : name,
+			"crew_dirty" : false,
+			"crew_deleted" : false
+		}
+	);
+
+	a.markDeleted();
+
+	res.redirect('/updateCrew');
+
+});
+
+// Post for adding a new actor
+router.post('/add_crew', isLoggedIn, function(req, res) {
+	var name = req.body.crew_name;
+	var bio = req.body.crew_bio;
+
+	var a = new Crew(
+		{
+			"postgres_id" : -1,
+			"crew_name" : name,
+			"crew_bio" : bio,
+			"crew_dirty" : false,
+			"crew_deleted" : false,
+			"crew_inserting" : true
+		}
+	);
+
+	a.saveCrew();
+
+	res.redirect('/updateCrew');
+});
+
+// **********************************************************************
+
+/* GET for the update stage page */
+router.get('/updateStage', isLoggedIn, function(req, res) {
+	
+	Stage.getStages(function(response) {
+		console.log("response: ");
+		console.log(response);
+		res.render('updateStage.jade', 
+			{
+				title: 'Frankenstein',
+				allStages:JSON.stringify(response)
+			}
+		);
+	})
+});
+
+
+/* POST for updating an already exisiting actor */
+router.post('/update_stage', isLoggedIn, function(req, res) {
+	var id = req.body._id;
+	var location = req.body.stage_location;
+	var description = req.body.stage_description;
+	var postID = req.body.postgres_id;
+
+	var a = new Stage(
+		{
+			"_id" : id,
+			"postgres_id" : postID,
+			"stage_location" : location,
+			"stage_description" : description,
+			"stage_dirty" : false,
+			"stage_deleted" : false,
+			"stage_inserting" : false
+		}
+	);
+
+	a.saveStage();
+
+	res.redirect('/updateStage');
+})
+
+/* POST for removing an already exisiting actor */
+router.post('/remove_stage', isLoggedIn, function(req, res) {
+	var id = req.body._id;
+	var location = req.body.actor_name;
+
+	var a = new Stage( 
+		{
+			"_id" : id,
+			"stage_location" : location,
+			"stage_dirty" : false,
+			"stage_deleted" : false
+		}
+	);
+
+	a.markDeleted();
+
+	res.redirect('/updateStage');
+
+});
+
+// Post for adding a new actor
+router.post('/add_stage', isLoggedIn, function(req, res) {
+	var location = req.body.stage_location;
+	var description = req.body.stage_description;
+
+	var a = new Stage(
+		{
+			"postgres_id" : -1,
+			"stage_location" : location,
+			"stage_description" : description,
+			"stage_dirty" : false,
+			"stage_deleted" : false,
+			"stage_inserting" : true
+		}
+	);
+
+	a.saveStage();
+
+	res.redirect('/updateStage');
+});
 
 /* POST for updating an already exisiting actor */
 router.post('/update_stage', isLoggedIn, function(req, res) {
