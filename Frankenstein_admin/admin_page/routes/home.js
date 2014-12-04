@@ -487,6 +487,8 @@ router.post('/update_perf', isLoggedIn, function(req, res) {
 	}
 	);
 
+    console.log(a);
+
 	a.savePerformance();
 
 	res.redirect('/updatePerf');
@@ -553,7 +555,7 @@ router.post('/add_perf', isLoggedIn, function(req, res) {
 	//get crew
 	var crews = [];
 
-	if(crewcount > 1) {
+	if(crewcount > 2) {
 		for(var i = 0; i < crewcount; i++) {
 
 			var crew = {
@@ -565,7 +567,7 @@ router.post('/add_perf', isLoggedIn, function(req, res) {
 			crews.push(crew);
 		}
 	} 
-	if(crewcount == 1) {
+	if(crewcount == 2) {
 		var crew = {
 			crew_id : req.body.crewId,
 			crew_responsibility : req.body.crewResp,
