@@ -20,6 +20,10 @@ var performanceSchema = mongoose.Schema({
 		crew_responsibility : String
 	}],
 
+	performance_events : [{
+		event_id : ObjectId
+	}],
+
 	performance_dirty : Boolean,
 	performance_deleted : Boolean
 });
