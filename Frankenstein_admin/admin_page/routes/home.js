@@ -513,93 +513,95 @@ router.post('/remove_perf', isLoggedIn, function(req, res) {
 
 // Post for adding a new actor
 router.post('/add_perf', isLoggedIn, function(req, res) {
-        console.log("req body: ");
-        console.log(req.body);
+	console.log("req body: ");
+	console.log(req.body);
+	
+	var info = req.body.performance_info;
+	var stage = req.body.stage_id;
+	var time = req.body.performance_start_time;
+	var actorcount = req.body.actorcount;
+	var crewcount = req.body.crewcount;
 
-        var info = req.body.performance_info;
-        var stage = req.body.stage_id;
-        var time = req.body.performance_start_time;
-        var actorcount = req.body.actorcount;
-        var crewcount = req.body.crewcount;
+	//get actors
+	var actors = [];
 
-        //get actors
-        var actors = [];
+	if(actorcount > 1) {
+		for(var i = 0; i < actorcount; i++) {
 
-        if(actorcount > 1) {
-                for(var i = 0; i < actorcount; i++) {
+			var actor = {
+				actor_id : req.body.actorId[i],
+				actor_role : req.body.actorRole[i],
+				actor_appearance_time : req.body.actorTime[i],
+				actor_name : req.body.actorName[i]
+			};
 
-                        var actor = {
-                                actor_id : req.body.actorId[i],
-                                actor_role : req.body.actorRole[i],
-                                actor_appearance_time : req.body.actorTime[i],
-                                actor_name : req.body.actorName[i]
-                        };
+			actors.push(actor);
 
-                        actors.push(actor);
+		}
+	}		
+	if(actorcount == 1) {
+		var actor = {
+			actor_id : req.body.actorId,
+			actor_role : req.body.actorRole,
+			actor_appearance_time : req.body.actorTime,
+			actor_name : req.body.actorName
+		};
 
-                }
-        }
-        if(actorcount == 1) {
-                var actor = {
-                        actor_id : req.body.actorId,
-                        actor_role : req.body.actorRole,
-                        actor_appearance_time : req.body.actorTime,
-                        actor_name : req.body.actorName
-                };
+		actors.push(actor);
+	}
 
-                actors.push(actor);
-        }
+	
 
+	//get crew
+	var crews = [];
 
+	if(crewcount > 2) {
+		for(var i = 0; i < crewcount; i++) {
 
-        //get crew
-        var crews = [];
+			var crew = {
+				crew_id : req.body.crewId[i],
+				crew_responsibility : req.body.crewResp[i],
+				crew_name : req.body.crewName[i]
+			};
 
-        if(crewcount > 1) {
-                for(var i = 0; i < crewcount; i++) {
+			crews.push(crew);
+		}
+	} 
+	if(crewcount == 2) {
+		var crew = {
+			crew_id : req.body.crewId,
+			crew_responsibility : req.body.crewResp,
+			crew_name : req.body.crewName 
+		};
 
-                        var crew = {
-                                crew_id : req.body.crewId[i],
-                                crew_responsibility : req.body.crewResp[i],
-                                crew_name : req.body.crewName[i]
-                        };
+		crews.push(crew);
+	}
 
-                        crews.push(crew);
-                }
-        }
-        if(crewcount == 1) {
-                var crew = {
-                        crew_id : req.body.crewId,
-                        crew_responsibility : req.body.crewResp,
-                        crew_name : req.body.crewName
-                };
+	
 
-                crews.push(crew);
-        }
+	var a = new Performance(
+	{
+		"postgres_id" : -1,
+		"performance_info" : info,
+		"performance_stage_id" : stage,
+		"performance_start_time" : time,
+		"performance_deleted" : false,
+		"performance_dirty" : false,
+		"performance_actors" : actors,
+		"performance_crew" : crews,
+		"performance_inserting" : true
+		// "performance_production_id" : 1,
+	}
+	);
 
+	console.log("new perf: ")
+	console.log(a);
 
+	a.savePerformance();
 
-        var a = new Performance(
-        {
-                "postgres_id" : -1,
-                "performance_info" : info,
-                "performance_stage_id" : stage,
-                "performance_start_time" : time,
-                "performance_deleted" : false,
-                "performance_dirty" : false,
-                "performance_actors" : actors,
-                "performance_crew" : crews,
-                "performance_inserting" : true
-                // "performance_production_id" : 1,
-        }
-        );
-
-        console.log("new perf: ")
-        console.log(a);
-
-        a.savePerformance();
-
-        res.redirect('/updatePerf');
+	res.redirect('/updatePerf');
 });
+
+
 
 module.exports = router;
