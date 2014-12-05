@@ -59,7 +59,7 @@ crewSchema.methods.markDeleted = function(){
 // Static functions
 
 crewSchema.statics.findCrewById = function(id, callback){
-	this.model('Crew').findById(id, function(crewSelected){
+	this.model('Crew').findById(id, function(err,crewSelected){
 		callback(crewSelected);
 	});
 }
@@ -75,6 +75,14 @@ crewSchema.statics.getDirtyCrew = function(callback){
 		callback(crew);
 	});
 }
+
+crewSchema.statics.removeAll = function(callback){
+	this.find({}).remove().exec();
+	if(callback){
+		callback();
+	}
+}
+
 
 crewSchema.statics.getDeletedCrew = function(callback){
 	this.find({"crew_deleted" : true}, function(err, crew){

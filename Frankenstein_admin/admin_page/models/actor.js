@@ -59,8 +59,7 @@ actorSchema.methods.markDeleted = function(){
 // Static functions
 
 actorSchema.statics.findActorById = function(id, callback){
-	this.model('Actor').findById(id, function(actorSelected){
-		console.log(actorSelected);
+	this.model('Actor').findById(id, function(err,actorSelected){
 		callback(actorSelected);
 	});
 }
@@ -85,6 +84,9 @@ actorSchema.statics.getDeletedActors = function(callback){
 
 actorSchema.statics.removeAll = function(callback){
 	this.find({}).remove().exec();
+	if (callback){
+		callback()
+	}
 }
 
 module.exports = mongoose.model('Actor', actorSchema);

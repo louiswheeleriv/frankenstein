@@ -14,8 +14,7 @@ var performanceSchema = mongoose.Schema({
 		actor_role : String,
 		actor_appearance_time : Number,
 		actor_dirty : Boolean,
-		actor_deleted : Boolean,
-		actor_name : String
+		actor_deleted : Boolean
 	}],
 
 	performance_crew : [{
@@ -99,7 +98,7 @@ performanceSchema.methods.markDeleted = function(){
 // Static functions
 
 performanceSchema.statics.findPerformanceById = function(id, callback){
-	this.model('Performance').findById(id, function(performanceSelected){
+	this.model('Performance').findById(id, function(err,performanceSelected){
 		callback(performanceSelected);
 	});
 }
@@ -120,6 +119,13 @@ performanceSchema.statics.getDeletedPerformances = function(callback){
 	this.find({"performance_deleted" : true}, function(err, performances){
 		callback(performances);
 	});
+}
+
+performanceSchema.statics.removeAll = function(callback){
+	this.find({}).remove().exec()
+	if(callback){
+		callback()
+	}
 }
 
 module.exports = mongoose.model('Performance', performanceSchema);

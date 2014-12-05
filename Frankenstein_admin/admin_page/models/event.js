@@ -57,7 +57,7 @@ eventSchema.methods.markDeleted = function(){
 // Static functions
 
 eventSchema.statics.findEventById = function(id, callback){
-	this.model('Event').findById(id, function(eventSelected){
+	this.model('Event').findById(id, function(err,eventSelected){
 		callback(eventSelected);
 	});
 }
@@ -78,6 +78,13 @@ eventSchema.statics.getDeletedEvents = function(callback){
 	this.find({"event_deleted" : true}, function(err, events){
 		callback(events);
 	});
+}
+
+eventSchema.statics.removeAll = function(callback){
+	this.find({}).remove().exec()
+	if(callback){
+		callback()
+	}
 }
 
 module.exports = mongoose.model('Event', eventSchema);

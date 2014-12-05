@@ -59,7 +59,7 @@ stageSchema.methods.markDeleted = function(){
 // Static functions
 
 stageSchema.statics.findStageById = function(id, callback){
-	this.model('Stage').findById(id, function(stageSelected){
+	this.model('Stage').findById(id, function(err, stageSelected){
 		callback(stageSelected);
 	});
 }
@@ -80,6 +80,13 @@ stageSchema.statics.getDeletedStages = function(callback){
 	this.find({"stage_deleted" : true}, function(err, stages){
 		callback(stages);
 	});
+}
+
+stageSchema.statics.removeAll = function(callback){
+	this.find({}).remove().exec()
+	if(callback){
+		callback()
+	}
 }
 
 module.exports = mongoose.model('Stage', stageSchema);
