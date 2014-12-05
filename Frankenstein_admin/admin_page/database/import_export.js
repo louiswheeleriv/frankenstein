@@ -1,5 +1,5 @@
 var pg = require('pg')
-var client = new pg.Client({user: 'machira', database: 'machira', password:'machira'})
+var client = new pg.Client({user: 'macharir', database: 'macharir', password:'macharir'})
 var performances_table = "api_performance"
 var actors_table = "api_actor"
 var crew_table = "api_crew"
